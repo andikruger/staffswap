@@ -21,6 +21,11 @@ const SwapSchema = new mongoose.Schema(
       required: [true, "An endTime is required"],
     },
 
+    qualifications: {
+      type: Array,
+      required: [false, "A qualification is required"],
+    },
+
     duration: {
       type: String,
       required: [false, "A duration is required"],
