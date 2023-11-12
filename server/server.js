@@ -34,7 +34,7 @@ const swaggerOptions = {
   swaggerDefinition: {
     openapi: "3.0.1",
     info: {
-      title: "Shedulr API",
+      title: "StaffSwapp API",
       version: "0.7.0",
     },
     basePath: "/api/v1/",
@@ -60,8 +60,8 @@ const swaggerDocs = swaggerjsdoc(swaggerOptions);
 app.use("/apidocs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
 app.use("/api/v1/user", require("./routes/user.route"));
-app.use("/api/v1/shift", require("./routes/shift.route"));
-app.use("/api/v1/nav", require("./routes/nav.route"));
+//app.use("/api/v1/shift", require("./routes/shift.route"));
+app.use("/api/v1/swap", require("./routes/swap.route"));
 app.listen(port, () => console.log(`Server running on port ${port}`));
 // display database connection
 mongoose.connection.on("connected", () => {
