@@ -1,0 +1,20 @@
+{
+  "links": [
+    {
+      "text": "Home",
+      "link": "/"
+    },
+    {
+      "text": "About",
+      "link": "/about/"
+    },
+    {
+      "text": "Swap",
+      "link": "/swap"
+    },
+    {
+      "text": "Contact",
+      "link": "/contact"
+    }
+  ]
+}
