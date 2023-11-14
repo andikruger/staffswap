@@ -37,7 +37,7 @@ const SwapSchema = new mongoose.Schema(
     },
     // create a list of dates that the user could take over this shift
 
-    swapDates: {
+    exchanges: {
       type: Array,
       required: [false, "A swap date is required"],
     },

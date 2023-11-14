@@ -1,18 +1,284 @@
-import React from "react";
+import { React, useState } from "react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import axios from "axios";
 import "../../index.css";
 import { toast } from "react-toastify";
+
+const CheckboxButton = ({ label, isChecked, onChange }) => {
+  const buttonStyle = {
+    backgroundColor: isChecked ? "#e0211a" : "transparent",
+    borderRadius: "20px",
+    padding: "10px 20px",
+    margin: "8px",
+    color: isChecked ? "white" : "black",
+    border: isChecked ? "none" : "1px solid #ccc", // Add border for unchecked items
+  };
+
+  const handleClick = (event) => {
+    event.preventDefault(); // Prevent the default form submission
+    onChange(label);
+  };
+
+  return (
+    <button
+      className="checkbox-button"
+      style={buttonStyle}
+      onClick={handleClick}
+    >
+      {label}
+    </button>
+  );
+};
+
+const CheckboxList = ({ options, selectedOptions, onChange }) => {
+  return (
+    <div className="checkbox-list">
+      {options.map((option) => (
+        <CheckboxButton
+          key={option}
+          label={option}
+          isChecked={selectedOptions.includes(option)}
+          onChange={onChange}
+        />
+      ))}
+    </div>
+  );
+};
+
+const RadioButton = ({ label, isSelected, onChange }) => {
+  const buttonStyle = {
+    backgroundColor: isSelected ? "#e0211a" : "transparent",
+    borderRadius: "20px",
+    padding: "10px 20px",
+    margin: "8px",
+    color: isSelected ? "white" : "black",
+    border: isSelected ? "none" : "1px solid #ccc",
+  };
+  const handleClick = (event) => {
+    event.preventDefault(); // Prevent the default form submission
+    onChange(label);
+  };
+  return (
+    <button className="radio-button" style={buttonStyle} onClick={handleClick}>
+      {label}
+    </button>
+  );
+};
+
+const RadioButtonList = ({ options, selectedOption, onChange }) => {
+  return (
+    <div className="radio-button-list">
+      {options.map((option) => (
+        <RadioButton
+          key={option}
+          label={option}
+          isSelected={selectedOption === option}
+          onChange={onChange}
+        />
+      ))}
+    </div>
+  );
+};
+
 const NewSwap = () => {
-  function handleSubmit(event) {
+  let submitObject = {
+    userID: "6550721764d6cce9fe822413",
+    name: "",
+    threeLetterCode: "",
+    date: "",
+    startTime: "",
+    endTime: "",
+    duration: "",
+    priority: "",
+    type: "",
+    exchange: "",
+    notes: "",
+    qualifications: [],
+    email: "",
+    phoneNumber: "",
+  };
+  const handleInputChange = (event) => {
+    submitObject[event.target.name] = event.target.value;
+  };
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [selectedOption, setSelectedOption] = useState(null);
+
+  const handleCheckboxChange = (label) => {
+    const updatedOptions = selectedOptions.includes(label)
+      ? selectedOptions.filter((option) => option !== label)
+      : [...selectedOptions, label];
+
+    setSelectedOptions(updatedOptions);
+  };
+  const handleRadioChange = (label) => {
+    setSelectedOption(label);
+  };
+  const qualifications = [
+    "PS B1/B2",
+    "PS B2",
+    "HON DRIVER",
+    "AS Arrival",
+    "Ticketing",
+    "Lounge",
+    "Disruption",
+    "Dispo",
+    "AC",
+    "CA",
+    "KE",
+    "HCC",
+    "ATA",
+    "DM",
+    "SV",
+    "Trainer",
+    "Rampe",
+  ];
+
+  const shiftType = [
+    "FT",
+    "Frühdienst",
+    "Spätdienst",
+    "Tagdienst",
+    "Nachtdienst",
+    "Kurzdienst (Früh)",
+    "Kurzdienst (Spät)",
+    "Kurzdienst (Tag)",
+    "Feiertagsdienst",
+    "Plusdienst",
+    "Selber Dienst, anderer Tag",
+  ];
+  const shiftTimes = [
+    "04:30-10:30",
+    "04:30-14:00",
+    "04:30-14:30",
+    "05:00-11:00",
+    "05:00-13:30",
+    "05:00-15:30",
+    "05:00-16:00",
+    "05:30-10:30",
+    "06:00-11:00",
+    "06:00-12:00",
+    "06:00-14:30",
+    "06:00-17:30",
+    "06:00-18:00",
+    "07:00-13:00",
+    "07:30-13:30",
+    "07:30:17:30",
+    "07:30-18:00",
+    "08:00-13:00",
+    "08:00-14:00",
+    "08:00-14:30",
+    "08:00-15:30",
+    "08:00-18:00",
+    "08:00-20:00",
+    "08:30-13:30",
+    "08:30-20:30",
+    "09:00:15:00",
+    "09:00-18:00",
+    "09:00-21:00",
+    "11:00-21:00",
+    "12:00-21:00",
+    "12:00-23:00",
+    "13:30-23:30",
+    "14:15-23:45",
+    "15:00-21:00",
+    "15:00-23:00",
+    "15:30-21:30",
+    "16:00-21:00",
+    "16:30-22:30",
+    "18:30-05:30",
+  ];
+
+  const [exchanges, setExchanges] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [startTime, setStartTime] = useState("12:00");
+  const [endTime, setEndTime] = useState("13:00");
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
+
+  const handleStartTimeChange = (time) => {
+    setStartTime(time);
+  };
+
+  const handleEndTimeChange = (time) => {
+    setEndTime(time);
+  };
+
+  const handleAddExchange = () => {
+    const newExchange = {
+      date: selectedDate.toISOString().split("T")[0],
+      startTime,
+      endTime,
+    };
+
+    setExchanges([...exchanges, newExchange]);
+
+    // Reset form values
+    setSelectedDate(new Date());
+    setStartTime("12:00");
+    setEndTime("13:00");
+  };
+
+  const handleRemoveExchange = (index) => {
+    const updatedExchanges = [...exchanges];
+    updatedExchanges.splice(index, 1);
+    setExchanges(updatedExchanges);
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.target);
-    const value = Object.fromEntries(data.entries());
-    console.log(value);
-    toast.success("Swap Submitted Successfully", {
-      position: toast.POSITION.TOP_RIGHT,
-    });
-  }
+    try {
+      const [startTime, endTime] = event.target.shiftTime.value.split("-");
+      submitObject.startTime = startTime;
+      submitObject.endTime = endTime;
+      // // calculate duration
+      const start = new Date(`01/01/2023 ${startTime}`);
+      const end = new Date(`01/01/2023 ${endTime}`);
+      const duration = (end - start) / 1000 / 60 / 60;
+      // submitObject.duration = duration;
+
+      if (startTime > endTime) {
+        submitObject.duration = duration + 24;
+      } else {
+        submitObject.duration = duration;
+      }
+
+      const data = new FormData(event.target);
+      const value = Object.fromEntries(data.entries());
+      submitObject = { ...submitObject, ...value };
+
+      submitObject.qualifications = selectedOptions;
+      submitObject.type = selectedOption;
+      submitObject.exchange = exchanges;
+      console.log(submitObject);
+
+      const response = await axios.post(
+        "http://localhost:8000/api/v1/swap/new",
+        submitObject
+      );
+
+      toast.success("Swap Submitted Successfully", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+
+      // Reset form values
+      setSelectedOptions([]);
+      setSelectedOption(null);
+      setExchanges([]);
+      setSelectedDate(new Date());
+      setStartTime("12:00");
+      setEndTime("13:00");
+
+      event.target.reset();
+    } catch (error) {
+      console.log(error);
+      toast.error("Swap Submission Failed", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
+  };
 
   return (
     <>
@@ -42,6 +308,7 @@ const NewSwap = () => {
                   type="text"
                   id="name"
                   name="name"
+                  onChange={handleInputChange}
                   className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
                 />
               </div>
@@ -55,6 +322,7 @@ const NewSwap = () => {
                   type="text"
                   id="threeLetterCode"
                   name="threeLetterCode"
+                  onChange={handleInputChange}
                   className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
                 />
               </div>
@@ -71,6 +339,7 @@ const NewSwap = () => {
                   type="date"
                   id="date"
                   name="date"
+                  onChange={handleInputChange}
                   className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
                 />
               </div>
@@ -83,18 +352,45 @@ const NewSwap = () => {
                 <select
                   id="shiftTime"
                   name="shiftTime"
+                  onChange={handleInputChange}
                   className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
                 >
-                  <option value="morning">Morning</option>
-                  <option value="afternoon">Afternoon</option>
-                  <option value="evening">Evening</option>
+                  <option value="">Select Shift Time</option>
+                  {shiftTimes.map((shiftTime) => (
+                    <option key={shiftTime} value={shiftTime}>
+                      {shiftTime}
+                    </option>
+                  ))}
                 </select>
               </div>
+            </div>
+            {/* Priority */}
+            <div className="mb-4">
+              <label htmlFor="priority" className="block text-sm mb-2">
+                Priority
+              </label>
+              <select
+                id="priority"
+                name="priority"
+                onChange={handleInputChange}
+                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+              >
+                <option value="1">1 - Low</option>
+                <option value="2">2 - Medium</option>
+                <option value="3">3 - High</option>
+              </select>
             </div>
             {/* Type */}
             <div className="mb-4">
               <label className="block text-sm mb-2">Type</label>
-              <div>{/* ... Radio buttons ... */}</div>
+              <div>
+                {/* ... Radio buttons ... */}
+                <RadioButtonList
+                  options={shiftType}
+                  selectedOption={selectedOption}
+                  onChange={handleRadioChange}
+                />
+              </div>
             </div>
 
             {/* Exchange */}
@@ -102,12 +398,55 @@ const NewSwap = () => {
               <label htmlFor="exchange" className="block text-sm mb-2">
                 Exchange
               </label>
-              <input
-                type="text"
-                id="exchange"
-                name="exchange"
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
-              />
+              <div className="mb-4">
+                <label className="block text-sm mb-2">Select Date</label>
+                <input
+                  type="date"
+                  value={selectedDate.toISOString().split("T")[0]}
+                  onChange={(e) => handleDateChange(new Date(e.target.value))}
+                />
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-sm mb-2">Select Start Time</label>
+                <input
+                  type="time"
+                  value={startTime}
+                  onChange={(e) => handleStartTimeChange(e.target.value)}
+                />
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-sm mb-2">Select End Time</label>
+                <input
+                  type="time"
+                  value={endTime}
+                  onChange={(e) => handleEndTimeChange(e.target.value)}
+                />
+              </div>
+
+              <button
+                type="button"
+                onClick={handleAddExchange}
+                className="bg-[#e0211a] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#b41813]"
+              >
+                Add Exchange
+              </button>
+
+              <ul>
+                {exchanges.map((exchange, index) => (
+                  <li key={index}>
+                    {`Date: ${exchange.date}, Start Time: ${exchange.startTime}, End Time: ${exchange.endTime}`}
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveExchange(index)}
+                      className="text-red-500 ml-2"
+                    >
+                      Remove
+                    </button>
+                  </li>
+                ))}
+              </ul>
             </div>
             {/* Notes */}
             <div className="mb-4">
@@ -117,6 +456,7 @@ const NewSwap = () => {
               <textarea
                 id="notes"
                 name="notes"
+                onChange={handleInputChange}
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500 overflow-y-auto"
                 rows="4"
               ></textarea>
@@ -126,7 +466,11 @@ const NewSwap = () => {
               <label className="block text-sm mb-2">
                 Qualifications Required
               </label>
-              <div>{/* ... Checkboxes ... */}</div>
+              <CheckboxList
+                options={qualifications}
+                selectedOptions={selectedOptions}
+                onChange={handleCheckboxChange}
+              />
             </div>
 
             {/* Email */}
@@ -138,6 +482,7 @@ const NewSwap = () => {
                 type="email"
                 id="email"
                 name="email"
+                onChange={handleInputChange}
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
               />
             </div>
@@ -151,6 +496,7 @@ const NewSwap = () => {
                 type="tel"
                 id="phoneNumber"
                 name="phoneNumber"
+                onChange={handleInputChange}
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
               />
             </div>

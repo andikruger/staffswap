@@ -4,7 +4,6 @@ import { useState } from "react";
 import linkData from "../data/links.json";
 
 const NavLinks = () => {
-  console.log(linkData.links);
   return (
     <>
       {linkData.links.map((link) => {

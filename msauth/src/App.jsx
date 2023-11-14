@@ -33,7 +33,7 @@ for (const path of Object.keys(pages)) {
     ErrorBoundary: pages[path]?.ErrorBoundary,
   });
 }
-console.log(routes);
+
 const router = createBrowserRouter(
   routes.map(({ Element, ErrorBoundary, ...rest }) => ({
     ...rest,
