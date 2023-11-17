@@ -3,6 +3,9 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import axios from "axios";
 import "../../index.css";
+import qualificationData from "../../data/qualifications.json";
+import shiftTypeData from "../../data/shifttypes.json";
+import shiftTimesData from "../../data/shifttimes.json";
 import { toast } from "react-toastify";
 
 const CheckboxButton = ({ label, isChecked, onChange }) => {
@@ -91,7 +94,7 @@ const NewSwap = () => {
     endTime: "",
     duration: "",
     priority: "",
-    type: "",
+    shiftType: "",
     exchange: "",
     notes: "",
     qualifications: [],
@@ -114,80 +117,10 @@ const NewSwap = () => {
   const handleRadioChange = (label) => {
     setSelectedOption(label);
   };
-  const qualifications = [
-    "PS B1/B2",
-    "PS B2",
-    "HON DRIVER",
-    "AS Arrival",
-    "Ticketing",
-    "Lounge",
-    "Disruption",
-    "Dispo",
-    "AC",
-    "CA",
-    "KE",
-    "HCC",
-    "ATA",
-    "DM",
-    "SV",
-    "Trainer",
-    "Rampe",
-  ];
+  const qualifications = qualificationData.qualifications;
 
-  const shiftType = [
-    "FT",
-    "Frühdienst",
-    "Spätdienst",
-    "Tagdienst",
-    "Nachtdienst",
-    "Kurzdienst (Früh)",
-    "Kurzdienst (Spät)",
-    "Kurzdienst (Tag)",
-    "Feiertagsdienst",
-    "Plusdienst",
-    "Selber Dienst, anderer Tag",
-  ];
-  const shiftTimes = [
-    "04:30-10:30",
-    "04:30-14:00",
-    "04:30-14:30",
-    "05:00-11:00",
-    "05:00-13:30",
-    "05:00-15:30",
-    "05:00-16:00",
-    "05:30-10:30",
-    "06:00-11:00",
-    "06:00-12:00",
-    "06:00-14:30",
-    "06:00-17:30",
-    "06:00-18:00",
-    "07:00-13:00",
-    "07:30-13:30",
-    "07:30:17:30",
-    "07:30-18:00",
-    "08:00-13:00",
-    "08:00-14:00",
-    "08:00-14:30",
-    "08:00-15:30",
-    "08:00-18:00",
-    "08:00-20:00",
-    "08:30-13:30",
-    "08:30-20:30",
-    "09:00:15:00",
-    "09:00-18:00",
-    "09:00-21:00",
-    "11:00-21:00",
-    "12:00-21:00",
-    "12:00-23:00",
-    "13:30-23:30",
-    "14:15-23:45",
-    "15:00-21:00",
-    "15:00-23:00",
-    "15:30-21:30",
-    "16:00-21:00",
-    "16:30-22:30",
-    "18:30-05:30",
-  ];
+  const shiftType = shiftTypeData.shiftTypes;
+  const shiftTimes = shiftTimesData.shiftTimes;
 
   const [exchanges, setExchanges] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -233,6 +166,7 @@ const NewSwap = () => {
       const [startTime, endTime] = event.target.shiftTime.value.split("-");
       submitObject.startTime = startTime;
       submitObject.endTime = endTime;
+      submitObject.exchanges = exchanges;
       // // calculate duration
       const start = new Date(`01/01/2023 ${startTime}`);
       const end = new Date(`01/01/2023 ${endTime}`);
@@ -250,7 +184,7 @@ const NewSwap = () => {
       submitObject = { ...submitObject, ...value };
 
       submitObject.qualifications = selectedOptions;
-      submitObject.type = selectedOption;
+      submitObject.shiftType = selectedOption;
       submitObject.exchange = exchanges;
       console.log(submitObject);
 
@@ -382,7 +316,7 @@ const NewSwap = () => {
             </div>
             {/* Type */}
             <div className="mb-4">
-              <label className="block text-sm mb-2">Type</label>
+              <label className="block text-sm mb-2">Shift Type</label>
               <div>
                 {/* ... Radio buttons ... */}
                 <RadioButtonList
@@ -450,12 +384,12 @@ const NewSwap = () => {
             </div>
             {/* Notes */}
             <div className="mb-4">
-              <label htmlFor="notes" className="block text-sm mb-2">
-                Notes
+              <label htmlFor="note" className="block text-sm mb-2">
+                Note
               </label>
               <textarea
-                id="notes"
-                name="notes"
+                id="note"
+                name="note"
                 onChange={handleInputChange}
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500 overflow-y-auto"
                 rows="4"

@@ -3,10 +3,14 @@ const Swap = require("../models/swap.model");
 exports.createController = async (req, res) => {
   const {
     userID,
+    name,
+    threeLetterCode,
     date,
     startTime,
     endTime,
     duration,
+    shiftType,
+    exchanges,
     qualifications,
     note,
     swapDates,
@@ -17,10 +21,14 @@ exports.createController = async (req, res) => {
   console.log(req.body);
   const newSwap = new Swap({
     userID,
+    name,
+    threeLetterCode,
     date,
     startTime,
     endTime,
     duration,
+    shiftType,
+    exchanges,
     qualifications,
     note,
     swapDates,
@@ -108,10 +116,14 @@ exports.updateController = async (req, res) => {
   const { id } = req.params;
   const {
     userID,
+    name,
+    threeLetterCode,
     date,
     startTime,
     endTime,
     duration,
+    shiftType,
+    exchanges,
     qualifications,
     note,
     swapDates,
@@ -120,10 +132,14 @@ exports.updateController = async (req, res) => {
   } = req.body;
   const updatedSwap = await Swap.findByIdAndUpdate(id, {
     userID,
+    name,
+    threeLetterCode,
     date,
     startTime,
     endTime,
     duration,
+    shiftType,
+    exchanges,
     qualifications,
     note,
     swapDates,

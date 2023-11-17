@@ -6,6 +6,16 @@ const SwapSchema = new mongoose.Schema(
       type: String,
       required: [true, "A User is required"],
     },
+    name: {
+      type: String,
+      required: [true, "A Name is required"],
+    },
+
+    threeLetterCode: {
+      type: String,
+      required: [true, "A Three Letter Code is required"],
+    },
+
     date: {
       type: Date,
 
@@ -19,6 +29,11 @@ const SwapSchema = new mongoose.Schema(
     endTime: {
       type: String,
       required: [true, "An endTime is required"],
+    },
+
+    shiftType: {
+      type: String,
+      required: [true, "A shiftType is required"],
     },
 
     qualifications: {
