@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import AddButton from "../../components/AddButton";
 import axios from "axios";
 import "../../index.css";
+import { toast } from "react-toastify";
 
 const formatDate = (dateString) => {
   const options = { day: "numeric", month: "numeric", year: "numeric" };
@@ -43,12 +45,21 @@ const Swaps = () => {
     };
 
     fetchSwaps();
+    const toastMessage = sessionStorage.getItem("toast");
+
+    if (toastMessage) {
+      toast(toastMessage, {
+        type: sessionStorage.getItem("toastType"),
+      });
+      sessionStorage.removeItem("toast");
+      sessionStorage.removeItem("toastType");
+    }
   }, []);
 
   return (
     <>
       <Header />
-
+      <AddButton />
       <div
         className="min-h-screen bg-cover bg-center flex items-center justify-center"
         style={{
@@ -67,6 +78,7 @@ const Swaps = () => {
                 <Link
                   to={`/swap/${swap._id}`}
                   style={{ color: "inherit", textDecoration: "none" }}
+                  key={index}
                 >
                   <div
                     key={index}

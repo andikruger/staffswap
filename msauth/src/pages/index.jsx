@@ -2,23 +2,25 @@ import React from "react";
 // import props from react router
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-const HelloWorld = () => {
+const Home = () => {
   return (
     <>
       <Header />
 
       <section className="hero">
-        <div>
-          <h1 className="text-4xl font-bold mb-4">Staff Swap</h1>
-          <p className="text-lg mb-8">
-            Your Marketplace for Seamless Shift Exchanges
-          </p>
-          <a
-            href="#how-it-works"
-            className="bg-blue-500 text-white py-2 px-4 rounded-full hover:bg-blue-700"
-          >
-            How It Works
-          </a>
+        <div className="bg-white p-4 rounded-lg shadow-lg w-3/12 max-w-screen-md overflow-y-auto opacity-80">
+          <div className="opacity-100">
+            <h1 className="text-4xl font-bold mb-4">StaffSwap</h1>
+            <p className="text-lg mb-8">
+              Your Marketplace for Seamless Shift Exchanges
+            </p>
+            <a
+              href="#how-it-works"
+              className="bg-[#e0211a] text-white py-2 px-4 rounded-full hover:bg-[#b41813] no-underline"
+            >
+              How It Works
+            </a>
+          </div>
         </div>
       </section>
 
@@ -28,13 +30,13 @@ const HelloWorld = () => {
           <div className="text-center">
             <div className="bg-white p-6 rounded-lg shadow-md">
               <img
-                src="https://source.unsplash.com/800x600/?office"
+                src="https://images.unsplash.com/photo-1515378960530-7c0da6231fb1?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                 alt="Step 1"
                 className="mx-auto mb-4 rounded-full"
               />
               <h3 className="text-xl font-bold mb-2">Create an Account</h3>
               <p className="text-gray-700">
-                Sign up and join the Staff Swap community.
+                Sign up and join the StaffSwap community.
               </p>
             </div>
           </div>
@@ -42,7 +44,7 @@ const HelloWorld = () => {
           <div className="text-center">
             <div className="bg-white p-6 rounded-lg shadow-md">
               <img
-                src="https://source.unsplash.com/800x600/?work"
+                src="https://images.unsplash.com/photo-1503551723145-6c040742065b-v2?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                 alt="Step 2"
                 className="mx-auto mb-4 rounded-full"
               />
@@ -56,7 +58,7 @@ const HelloWorld = () => {
           <div className="text-center">
             <div className="bg-white p-6 rounded-lg shadow-md">
               <img
-                src="https://source.unsplash.com/800x600/?team"
+                src="https://images.unsplash.com/photo-1452697620382-f6543ead73b5?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                 alt="Step 3"
                 className="mx-auto mb-4 rounded-full"
               />
@@ -69,16 +71,16 @@ const HelloWorld = () => {
         </div>
       </section>
 
-      <section className="bg-blue-500 text-white py-16">
+      <section className="bg-[#e0211a] text-white py-16">
         <div className="container mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-4">Join Staff Swap Today!</h2>
+          <h2 className="text-3xl font-bold mb-4">Join StaffSwap Today!</h2>
           <p className="text-lg mb-8">
-            Experience the convenience of seamless shift exchanges in the Staff
-            Swap community.
+            Experience the convenience of seamless shift exchanges in the
+            StaffSwap community.
           </p>
           <a
             href="#signup"
-            className="bg-white text-blue-500 py-2 px-4 rounded-full hover:bg-gray-200"
+            className="bg-white text-black py-2 px-4 rounded-full hover:bg-gray-400 no-underline"
           >
             Sign Up Now
           </a>
@@ -89,4 +91,4 @@ const HelloWorld = () => {
   );
 };
 
-export default HelloWorld;
+export default Home;

@@ -15,6 +15,10 @@
     {
       "text": "Contact",
       "link": "/contact"
+    },
+    {
+      "text": "Profile",
+      "link": "/profile"
     }
   ]
 }

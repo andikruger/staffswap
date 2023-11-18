@@ -11,7 +11,7 @@ const NavLinks = () => {
           <NavLink
             key={link.text}
             to={link.link}
-            className="text-[#e0211a]  hover:text-[#b41813] no-underline text-xl font-bold"
+            className="text-[#e0211a]  hover:text-[#b41813] no-underline text-xl font-bold p-2"
           >
             {link.text}
           </NavLink>
@@ -28,7 +28,7 @@ const Nav = () => {
   };
   return (
     <>
-      <nav className="w-1/3 flex justify-end pr-4">
+      <nav className="w-1/2 flex justify-end pr-4">
         <div className="hidden w-full justify-between md:flex">
           <NavLinks />
         </div>
@@ -39,7 +39,7 @@ const Nav = () => {
         </div>
       </nav>
       {isOpen && (
-        <div className="flex basis-full flex-col items-center">
+        <div className="flex basis-full flex-col items-center mb-4">
           <NavLinks />
         </div>
       )}

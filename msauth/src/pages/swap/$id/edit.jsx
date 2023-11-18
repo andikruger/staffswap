@@ -1,13 +1,11 @@
 import { React, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
-import DeleteSwapButton from "../../components/DeleteButton";
-import EditSwapButton from "../../components/EditButton";
+import Header from "../../../components/Header";
+import Footer from "../../../components/Footer";
 import axios from "axios";
-import "../../index.css";
-import qualificationData from "../../data/qualifications.json";
-import shiftTypeData from "../../data/shifttypes.json";
+import "../../../index.css";
+import qualificationData from "../../../data/qualifications.json";
+import shiftTypeData from "../../../data/shifttypes.json";
 import { toast } from "react-toastify";
 
 const formatDate = (dateString) => {
@@ -104,7 +102,7 @@ const ShiftTypeList = ({ options, selectedOption }) => {
   );
 };
 
-const SwapDetails = () => {
+const EditSwapDetails = () => {
   const { id } = useParams();
   const [swapDetails, setSwapDetails] = useState({});
   const [selectedOptions, setSelectedOptions] = useState([]);
@@ -156,7 +154,7 @@ const SwapDetails = () => {
         <div className="bg-white p-8 rounded-lg shadow-lg w-11/12 max-w-screen-md overflow-y-auto">
           {/* Your content goes here */}
           <h2 className="text-2xl font-bold mb-4 text-gray-800">
-            Swap Details
+            Edit Swap Details
           </h2>
           <div className="flex mb-4">
             {/* Name */}
@@ -266,21 +264,21 @@ const SwapDetails = () => {
                 ))}
             </ul>
           </div>
-          <div className="mb-4">
-            <label className="block text-sm mb-2">
-              Qualifications Required
-            </label>
-            <QualificationsList
-              options={qualifications}
-              selectedOptions={selectedOptions}
-            />
-          </div>
 
-          {/* Delete Button */}
-          <DeleteSwapButton id={id} />
+          <form>
+            {/* Exchange */}
 
-          {/* Edit Button */}
-          <EditSwapButton id={id} />
+            {/* Qualifications Required */}
+            <div className="mb-4">
+              <label className="block text-sm mb-2">
+                Qualifications Required
+              </label>
+              <QualificationsList
+                options={qualifications}
+                selectedOptions={selectedOptions}
+              />
+            </div>
+          </form>
         </div>
       </div>
 
@@ -289,4 +287,4 @@ const SwapDetails = () => {
   );
 };
 
-export default SwapDetails;
+export default EditSwapDetails;
