@@ -123,7 +123,9 @@ const Swaps = () => {
                 </Link>
               ))
             ) : (
-              <p>No swaps available.</p>
+              <p className="bg-white p-8 rounded-lg shadow-lg m-4 max-w-md">
+                No swaps available.
+              </p>
             )}
           </div>
         )}
