@@ -79,10 +79,11 @@ const Swaps = () => {
                   to={`/swap/${swap._id}`}
                   style={{ color: "inherit", textDecoration: "none" }}
                   key={index}
+                  className=""
                 >
                   <div
                     key={index}
-                    className="bg-white p-8 rounded-lg shadow-lg m-4 max-w-md"
+                    className="bg-white p-8 rounded-lg shadow-lg m-4 max-w-md transition duration-300 ease-in-out hover:bg-gray-200"
                     style={{
                       flexBasis: "100%",
                       borderColor: getPriorityColor(swap.priority),

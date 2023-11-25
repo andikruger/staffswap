@@ -276,11 +276,13 @@ const SwapDetails = () => {
             />
           </div>
 
-          {/* Delete Button */}
-          <DeleteSwapButton id={id} />
+          <div className="flex flex-col items-center">
+            {/* Delete Button */}
+            <DeleteSwapButton id={id} />
 
-          {/* Edit Button */}
-          <EditSwapButton id={id} />
+            {/* Edit Button */}
+            <EditSwapButton id={id} />
+          </div>
         </div>
       </div>
 

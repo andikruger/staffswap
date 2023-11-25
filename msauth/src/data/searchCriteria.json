@@ -1,0 +1,62 @@
+[
+  {
+    "displayName": "Name",
+    "type": "text",
+    "value": "displayName"
+  },
+  {
+    "displayName": "Three Letter Code",
+    "type": "text",
+    "value": "threeLetterCode"
+  },
+  {
+    "displayName": "Date from",
+    "type": "date",
+    "value": "dateFrom"
+  },
+  {
+    "displayName": "Date to",
+    "type": "date",
+    "value": "dateTo"
+  },
+  {
+    "displayName": "Time from",
+    "type": "time",
+    "value": "timeFrom"
+  },
+  {
+    "displayName": "Time to",
+    "type": "time",
+    "value": "timeTo"
+  },
+  {
+    "displayName": "Priority",
+    "type": "select",
+    "value": "priority",
+
+    "options": [
+      {
+        "displayName": "Low",
+        "value": "1"
+      },
+      {
+        "displayName": "Medium",
+        "value": "2"
+      },
+      {
+        "displayName": "High",
+        "value": "3"
+      }
+    ]
+  },
+  {
+    "displayName": "Shift Type",
+    "type": "shiftType",
+    "value": "shiftType"
+  },
+  {
+    "displayName": "Qualifications",
+    "type": "qualifications",
+    "value": "qualifications"
+  }
+]

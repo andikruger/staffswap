@@ -213,7 +213,6 @@ const EditSwap = () => {
     try {
       const data = new FormData(event.target);
       const value = Object.fromEntries(data.entries());
-      console.log("Value", value);
 
       let newShiftTime = value.shiftTime;
       let startTime = newShiftTime.split("-")[0];
@@ -293,6 +292,7 @@ const EditSwap = () => {
                   value={submitObject.name}
                   onChange={handleInputChange}
                   className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+                  readOnly
                 />
               </div>
 
@@ -308,6 +308,7 @@ const EditSwap = () => {
                   value={submitObject.threeLetterCode}
                   onChange={handleInputChange}
                   className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+                  readOnly
                 />
               </div>
             </div>
