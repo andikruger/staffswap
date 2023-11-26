@@ -26,9 +26,19 @@ const SwapSchema = new mongoose.Schema(
       type: String,
       required: [true, "A startTime is required"],
     },
+
+    startTimeNumeric: {
+      type: Number,
+      required: [true, "A startTimeNumeric is required"],
+    },
     endTime: {
       type: String,
       required: [true, "An endTime is required"],
+    },
+
+    endTimeNumeric: {
+      type: Number,
+      required: [true, "An endTimeNumeric is required"],
     },
 
     shiftType: {

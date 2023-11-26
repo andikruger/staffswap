@@ -1,5 +1,16 @@
 const Swap = require("../models/swap.model");
 
+function convertTimeToNumber(timeString) {
+  const [hours, minutes] = timeString.split(":").map(Number);
+
+  if (isNaN(hours) || isNaN(minutes)) {
+    throw new Error("Invalid time format");
+  }
+
+  const timeInHours = hours + minutes / 60;
+  return timeInHours;
+}
+
 exports.createController = async (req, res) => {
   const {
     userID,
@@ -25,7 +36,9 @@ exports.createController = async (req, res) => {
     threeLetterCode,
     date,
     startTime,
+    startTimeNumeric: convertTimeToNumber(startTime),
     endTime,
+    endTimeNumeric: convertTimeToNumber(endTime),
     duration,
     shiftType,
     exchanges,
@@ -136,7 +149,9 @@ exports.updateController = async (req, res) => {
     threeLetterCode,
     date,
     startTime,
+    startTimeNumeric: convertTimeToNumber(startTime),
     endTime,
+    endTimeNumeric: convertTimeToNumber(endTime),
     duration,
     shiftType,
     exchanges,
@@ -179,7 +194,64 @@ function createSearchQuery(obj) {
     }
   }
 
-  if (join == "and") {
+  // Check for "dateTo" in search criteria
+  const dateToIndex = criteria.findIndex((item) => item.field === "dateTo");
+
+  if (dateToIndex !== -1) {
+    const dateToValue = criteria[dateToIndex].value;
+
+    // Remove "dateTo" from criteria
+    criteria.splice(dateToIndex, 1);
+
+    // Add condition for "date" to be less than or equal to the specified date
+    criteria.push({
+      field: "date",
+      value: { $lte: new Date(dateToValue) },
+    });
+  }
+
+  const dateFromIndex = criteria.findIndex((item) => item.field === "dateFrom");
+
+  if (dateFromIndex !== -1) {
+    const dateFromValue = criteria[dateFromIndex].value;
+
+    // Remove "dateTo" from criteria
+    criteria.splice(dateFromIndex, 1);
+
+    // Add condition for "date" to be less than or equal to the specified date
+    criteria.push({
+      field: "date",
+      value: { $gte: new Date(dateFromValue) },
+    });
+  }
+
+  const timeToIndex = criteria.findIndex((item) => item.field === "endTime");
+  if (timeToIndex !== -1) {
+    const timeToValue = criteria[timeToIndex].value;
+    // Remove "timeTo" from criteria
+    criteria.splice(timeToIndex, 1);
+    // Add condition for "endTime" to be less than or equal to the specified time
+    criteria.push({
+      field: "endTimeNumeric",
+      value: { $lte: convertTimeToNumber(timeToValue) },
+    });
+  }
+
+  const timeFromIndex = criteria.findIndex(
+    (item) => item.field === "startTime"
+  );
+  if (timeFromIndex !== -1) {
+    const timeFromValue = criteria[timeFromIndex].value;
+    // Remove "timeTo" from criteria
+    criteria.splice(timeFromIndex, 1);
+    // Add condition for "endTime" to be less than or equal to the specified time
+    criteria.push({
+      field: "startTimeNumeric",
+      value: { $gte: convertTimeToNumber(timeFromValue) },
+    });
+  }
+
+  if (join === "and") {
     let result = {};
 
     for (let index = 0; index < criteria.length; index++) {
@@ -210,7 +282,7 @@ exports.getSearchController = async (req, res, next) => {
   try {
     if (global_join === "and") {
       Swap.find(search_string)
-        .sort("-createdAt")
+        .sort("date")
         .exec((err, swap) => {
           if (err || !swap) {
             return res.status(400).json({
