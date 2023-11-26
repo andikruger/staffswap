@@ -2,7 +2,7 @@
   {
     "displayName": "Name",
     "type": "text",
-    "value": "displayName"
+    "value": "name"
   },
   {
     "displayName": "Three Letter Code",
@@ -22,12 +22,12 @@
   {
     "displayName": "Time from",
     "type": "time",
-    "value": "timeFrom"
+    "value": "startTime"
   },
   {
     "displayName": "Time to",
     "type": "time",
-    "value": "timeTo"
+    "value": "endTime"
   },
   {
     "displayName": "Priority",

@@ -160,3 +160,81 @@ exports.deleteController = async (req, res) => {
     data: deletedSwap,
   });
 };
+
+function createSearchQuery(obj) {
+  let join = obj.globalJoin;
+  let criteria = obj.searchCriteria;
+
+  // if there is a searchCriteria called "threeLetterCode" then change its value to uppercase
+  for (let index = 0; index < criteria.length; index++) {
+    if (criteria[index].field === "threeLetterCode") {
+      criteria[index].value = criteria[index].value.toUpperCase();
+    }
+  }
+
+  // if there is a searchCriteria called "priority" then change its value to an integer
+  for (let index = 0; index < criteria.length; index++) {
+    if (criteria[index].field === "priority") {
+      criteria[index].value = parseInt(criteria[index].value);
+    }
+  }
+
+  if (join == "and") {
+    let result = {};
+
+    for (let index = 0; index < criteria.length; index++) {
+      result[criteria[index].field] = criteria[index].value;
+    }
+    return result;
+  } else {
+    let result = [];
+
+    for (let index = 0; index < criteria.length; index++) {
+      let result_temp = {};
+      result_temp[criteria[index].field] = criteria[index].value;
+      result.push(result_temp);
+    }
+
+    return result;
+  }
+}
+
+exports.getSearchController = async (req, res, next) => {
+  let search_string = atob(decodeURIComponent(req.params.search));
+
+  search_string = JSON.parse(search_string);
+  let global_join = search_string.globalJoin;
+
+  search_string = createSearchQuery(search_string);
+  console.log(search_string);
+  try {
+    if (global_join === "and") {
+      Swap.find(search_string)
+        .sort("-createdAt")
+        .exec((err, swap) => {
+          if (err || !swap) {
+            return res.status(400).json({
+              error: "No Swaps found",
+            });
+          }
+
+          res.json(swap);
+        });
+    } else {
+      Swap.find({ $or: search_string })
+        .sort("-createdAt")
+        .exec((err, swap) => {
+          if (err || !swap) {
+            return res.status(400).json({
+              error: "No Swaps found",
+            });
+          }
+
+          res.json(swap);
+        });
+    }
+  } catch (err) {
+    console.error("No Swaps found");
+    next(err);
+  }
+};

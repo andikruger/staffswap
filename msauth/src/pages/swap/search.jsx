@@ -2,148 +2,21 @@ import React, { useState, useMemo, useCallback, useEffect } from "react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import SearchInputField from "../../components/SearchInputField";
-import axios from "axios";
+
 import "../../index.css";
-import qualificationData from "../../data/qualifications.json";
-import shiftTypeData from "../../data/shifttypes.json";
 import searchCriteria from "../../data/searchCriteria.json";
-import shiftTimesData from "../../data/shifttimes.json";
-import { toast } from "react-toastify";
-
-const getType = (input) => {
-  //find the name of the type in the searchCriteria.json file and return the type
-  const type = searchCriteria.find((item) => item.displayName === input);
-  return type.type;
-};
-
-const shiftType = shiftTypeData.shiftTypes;
-const qualifications = qualificationData.qualifications;
 
 const SearchSwap = React.memo(() => {
   const [searchValues, setSearchValues] = useState([{ field: "", value: "" }]);
   const [selectedTypes, setSelectedTypes] = useState(
     Array(searchValues.length).fill("")
   );
-
-  const [selectedOptions, setSelectedOptions] = useState([]);
-  const [selectedOption, setSelectedOption] = useState(null);
-
-  useEffect(() => {
-    console.log("SearchSwap rendered");
-  }, [searchValues, selectedOption, selectedOptions]);
-  const CheckboxButton = useMemo(
-    () =>
-      ({ label, isChecked, onChange }) => {
-        const buttonStyle = {
-          backgroundColor: isChecked ? "#e0211a" : "transparent",
-          borderRadius: "20px",
-          padding: "10px 20px",
-          margin: "8px",
-          color: isChecked ? "white" : "black",
-          border: isChecked ? "none" : "1px solid #ccc",
-        };
-
-        const handleClick = (event) => {
-          event.preventDefault();
-          onChange(label);
-        };
-
-        return (
-          <button
-            className="checkbox-button"
-            style={buttonStyle}
-            onClick={handleClick}
-          >
-            {label}
-          </button>
-        );
-      },
-    []
-  );
-
-  const CheckboxList = useMemo(
-    () =>
-      ({ options, selectedOptions, onChange }) => {
-        return (
-          <div className="checkbox-list">
-            {options.map((option) => (
-              <CheckboxButton
-                key={option}
-                label={option}
-                isChecked={selectedOptions.includes(option)}
-                onChange={onChange}
-              />
-            ))}
-          </div>
-        );
-      },
-    [CheckboxButton]
-  );
-
-  const RadioButton = useMemo(
-    () =>
-      ({ label, isSelected, onChange }) => {
-        const buttonStyle = {
-          backgroundColor: isSelected ? "#e0211a" : "transparent",
-          borderRadius: "20px",
-          padding: "10px 20px",
-          margin: "8px",
-          color: isSelected ? "white" : "black",
-          border: isSelected ? "none" : "1px solid #ccc",
-        };
-        const handleClick = (event) => {
-          event.preventDefault();
-          onChange(label);
-        };
-        return (
-          <button
-            className="radio-button"
-            style={buttonStyle}
-            onClick={handleClick}
-          >
-            {label}
-          </button>
-        );
-      },
-    []
-  );
-
-  const RadioButtonList = useMemo(
-    () =>
-      ({ options, selectedOption, onChange }) => {
-        return (
-          <div className="radio-button-list">
-            {options.map((option) => (
-              <RadioButton
-                key={option}
-                label={option}
-                isSelected={selectedOption === option}
-                onChange={onChange}
-              />
-            ))}
-          </div>
-        );
-      },
-    [RadioButton]
-  );
-
-  const handleCheckboxChange = useCallback(
-    (label) => {
-      const updatedOptions = selectedOptions.includes(label)
-        ? selectedOptions.filter((option) => option !== label)
-        : [...selectedOptions, label];
-      setSelectedOptions(updatedOptions);
-    },
-    [selectedOptions]
-  );
-
-  const handleRadioChange = useCallback((label) => {
-    setSelectedOption(label);
-  }, []);
+  const [selectedName, setSelectedName] = useState("");
 
   const handleInputChange = useCallback(
     (e, index) => {
       const { name, value } = e.target;
+
       const list = [...searchValues];
       list[index][name] = value;
       setSearchValues(list);
@@ -154,18 +27,18 @@ const SearchSwap = React.memo(() => {
       const types = [...selectedTypes];
       types[index] = selectedType;
       setSelectedTypes(types);
+
+      const selectedName = searchCriteria.find(
+        (item) => item.value === value
+      )?.displayName;
+      setSelectedName(selectedName);
     },
-    [searchValues, selectedTypes, searchCriteria]
+    [searchValues, selectedTypes, selectedName, searchCriteria]
   );
 
   const handleAddClick = useCallback(() => {
     setSearchValues([...searchValues, { field: "", value: "" }]);
   }, [searchValues]);
-
-  const handleSubmit = useCallback(async (event) => {
-    event.preventDefault();
-    // Add your form submission logic here
-  }, []);
 
   const handleRemoveClick = useCallback(
     (index) => {
@@ -175,6 +48,71 @@ const SearchSwap = React.memo(() => {
     },
     [searchValues]
   );
+
+  const handleSubmit = useCallback(
+    async (event) => {
+      event.preventDefault();
+
+      // Retrieve data from sessionStorage
+      const formData = {
+        globalJoin: document.getElementById("join").value,
+        searchCriteria: searchValues.map((searchValue, index) => {
+          const selectedType = selectedTypes[index];
+
+          return {
+            field: searchValue.field,
+            value: sessionStorage.getItem(`value_${index}`) || "",
+            type: selectedType,
+          };
+        }),
+      };
+
+      // if there is a an element in the array "field": "shiftType" make its value that what is in the sessionStorage search_shiftType
+
+      if (formData.searchCriteria.some((item) => item.field === "shiftType")) {
+        formData.searchCriteria.find(
+          (item) => item.field === "shiftType"
+        ).value = sessionStorage.getItem("search_shiftType");
+      }
+
+      // if there is a an element in the array "field": "qualifications" make its value that what is in the sessionStorage search_qualifications
+
+      if (
+        formData.searchCriteria.some((item) => item.field === "qualifications")
+      ) {
+        // split the string into an array split by the comma
+        const qualifications = sessionStorage.getItem("search_qualifications");
+
+        formData.searchCriteria.find(
+          (item) => item.field === "qualifications"
+        ).value = qualifications;
+      }
+
+      // if there is a an element in the array "field": "threeLetterCode" make its value uppercase
+
+      if (
+        formData.searchCriteria.some((item) => item.field === "threeLetterCode")
+      ) {
+        formData.searchCriteria
+          .find((item) => item.field === "threeLetterCode")
+          .value.toUpperCase();
+      }
+
+      let searchQuery = encodeURIComponent(btoa(JSON.stringify(formData)));
+
+      // Redirect to the search results page
+      window.location.href = `/swap/result/${searchQuery}`;
+
+      // Log the form data to the console
+      console.log("Form Data:", formData);
+      console.log(JSON.stringify(formData));
+
+      // Clear sessionStorage
+      sessionStorage.clear();
+    },
+    [searchValues, selectedTypes]
+  );
+
   return (
     <>
       <Header />
@@ -250,7 +188,7 @@ const SearchSwap = React.memo(() => {
                       </label>
 
                       {/* Pass the selectedType to the SearchInputField */}
-                      <SearchInputField type={selectedTypes[i]} />
+                      <SearchInputField type={selectedTypes[i]} index={i} />
                     </div>
                   </div>
 
@@ -280,88 +218,6 @@ const SearchSwap = React.memo(() => {
             })}
 
             {/* END */}
-
-            {/* Type */}
-            {/* <div className="mb-4">
-              <label className="block text-sm mb-2">Shift Type</label>
-              <div>
-                
-                <RadioButtonList
-                  options={shiftType}
-                  selectedOption={selectedOption}
-                  onChange={handleRadioChange}
-                />
-              </div>
-            </div> */}
-
-            {/* Exchange */}
-            {/* <div className="mb-4">
-              <label htmlFor="exchange" className="block text-sm mb-2">
-                Exchange
-              </label>
-              <div className="mb-4">
-                <label className="block text-sm mb-2">Select Date</label>
-                <input
-                  type="date"
-                  value={selectedDate.toISOString().split("T")[0]}
-                  onChange={(e) => handleDateChange(new Date(e.target.value))}
-                />
-              </div>
-
-              <div className="mb-4">
-                <label className="block text-sm mb-2">Select Start Time</label>
-                <input
-                  type="time"
-                  value={startTime}
-                  onChange={(e) => handleStartTimeChange(e.target.value)}
-                />
-              </div>
-
-              <div className="mb-4">
-                <label className="block text-sm mb-2">Select End Time</label>
-                <input
-                  type="time"
-                  value={endTime}
-                  onChange={(e) => handleEndTimeChange(e.target.value)}
-                />
-              </div>
-
-              <button
-                type="button"
-                onClick={handleAddExchange}
-                className="bg-[#e0211a] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#b41813]"
-              >
-                Add Exchange
-              </button>
-
-              <ul>
-                {exchanges.map((exchange, index) => (
-                  <li key={index}>
-                    {`Date: ${exchange.date}, Start Time: ${exchange.startTime}, End Time: ${exchange.endTime}`}
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveExchange(index)}
-                      className="text-red-500 ml-2"
-                    >
-                      Remove
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div> */}
-            {/* Notes */}
-
-            {/* Qualifications Required */}
-            {/* <div className="mb-4">
-              <label className="block text-sm mb-2">
-                Qualifications Required
-              </label>
-              <CheckboxList
-                options={qualifications}
-                selectedOptions={selectedOptions}
-                onChange={handleCheckboxChange}
-              />
-            </div> */}
 
             <button
               type="submit"

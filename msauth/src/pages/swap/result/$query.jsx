@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
-import AddButton from "../../components/AddButton";
-import SearchButton from "../../components/SearchButton";
+import { Link, useParams } from "react-router-dom";
+import Header from "../../../components/Header";
+import Footer from "../../../components/Footer";
+import AddButton from "../../../components/AddButton";
+import SearchButton from "../../../components/SearchButton";
 import axios from "axios";
-import "../../index.css";
+import "../../../index.css";
 import { toast } from "react-toastify";
 
 const formatDate = (dateString) => {
@@ -27,6 +27,7 @@ const getPriorityColor = (priority) => {
 };
 
 const Swaps = () => {
+  const { query } = useParams();
   const [swaps, setSwaps] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -34,12 +35,15 @@ const Swaps = () => {
   useEffect(() => {
     const fetchSwaps = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/v1/swap");
-        setSwaps(response.data.data);
-        console.log("Swaps:", response.data.data);
+        const response = await axios.get(
+          `http://localhost:8000/api/v1/swap/search/${query}`
+        );
+
+        setSwaps(response.data);
       } catch (error) {
         console.error("Error fetching swaps:", error);
         setError("Error fetching swaps");
+        toast("Error fetching swaps", { type: "error" });
       } finally {
         setLoading(false); // Set loading to false regardless of success or error
       }
@@ -61,7 +65,6 @@ const Swaps = () => {
     <>
       <Header />
       <AddButton />
-      <SearchButton />
       <div
         className="min-h-screen bg-cover bg-center flex items-center justify-center"
         style={{
@@ -69,10 +72,13 @@ const Swaps = () => {
             'url("https://source.unsplash.com/1600x900/?aviation")',
         }}
       >
+        <SearchButton />
         {loading ? (
           <p>Loading swaps...</p>
         ) : error ? (
-          <p>{error}</p>
+          <p className="bg-white p-8 rounded-lg shadow-lg m-4 max-w-md">
+            {error}
+          </p>
         ) : (
           <div className="flex flex-wrap justify-center">
             {Array.isArray(swaps) && swaps.length > 0 ? (

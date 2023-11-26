@@ -48,3 +48,30 @@
 .add-button-container:hover .add-icon {
   color: white;
 }
+
+.search-button-container {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  border-radius: 50%;
+  background-color: #e0211a;
+  padding: 15px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  z-index: 999;
+  transition: background-color 0.3s;
+}
+
+.search-button-container:hover {
+  background-color: #b41813;
+}
+
+.search-icon {
+  color: white;
+  font-size: 32px;
+  transition: color 0.3s;
+}
+
+.search-button-container:hover .add-icon {
+  color: white;
+}
