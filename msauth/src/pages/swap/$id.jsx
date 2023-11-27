@@ -1,9 +1,11 @@
 import { React, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import DeleteSwapButton from "../../components/DeleteButton";
 import EditSwapButton from "../../components/EditButton";
+import MatchButton from "../../components/MatchButton";
 import axios from "axios";
 import "../../index.css";
 import qualificationData from "../../data/qualifications.json";
@@ -296,6 +298,9 @@ const SwapDetails = () => {
 
             {/* Edit Button */}
             <EditSwapButton id={id} />
+
+            {/* Match Button */}
+            <MatchButton id={id} />
           </div>
         </div>
       </div>

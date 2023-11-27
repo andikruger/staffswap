@@ -1,4 +1,5 @@
 import { React, useState } from "react";
+import { Helmet } from "react-helmet";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import axios from "axios";
@@ -216,6 +217,13 @@ const NewSwap = () => {
 
   return (
     <>
+      <Helmet>
+        <title>StaffSwap | New Swap</title>
+        <meta name="description" content="StaffSwap" />
+        <meta name="keywords" content="StaffSwap" />
+        <meta name="author" content="StaffSwap" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </Helmet>
       <Header />
 
       <div
@@ -342,8 +350,9 @@ const NewSwap = () => {
               </div>
 
               <div className="mb-4">
-                <label className="block text-sm mb-2">Select Start Time</label>
+                <label className="block text-sm mb-2 ">Select Start Time</label>
                 <input
+                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
                   type="time"
                   value={startTime}
                   onChange={(e) => handleStartTimeChange(e.target.value)}
@@ -353,6 +362,7 @@ const NewSwap = () => {
               <div className="mb-4">
                 <label className="block text-sm mb-2">Select End Time</label>
                 <input
+                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
                   type="time"
                   value={endTime}
                   onChange={(e) => handleEndTimeChange(e.target.value)}
