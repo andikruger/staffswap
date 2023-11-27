@@ -10,6 +10,13 @@ import axios from "axios";
 import "../../../index.css";
 import { toast } from "react-toastify";
 
+function removeElementsWithMatchingThreeLetterCode(arr, targetThreeLetterCode) {
+  console.log("arr", arr);
+  return arr.filter(
+    (element) => element.threeLetterCode !== targetThreeLetterCode
+  );
+}
+
 const formatDate = (dateString) => {
   const options = { day: "numeric", month: "numeric", year: "numeric" };
   return new Date(dateString).toLocaleDateString(undefined, options);
@@ -32,99 +39,137 @@ function findMatches(obj, arr) {
     );
   };
 
-  // Iterate through the exchanges of the object
-  for (const exchange of obj.exchanges) {
+  // Check if the shiftType is "Selber Dienst, anderer Tag"
+  if (obj.shiftType === "Selber Dienst, anderer Tag") {
     // Iterate through the array of potential matches
     for (const swap of arr) {
-      // Check if the dates are not the same
-      if (obj.date !== swap.date) {
-        // Convert exchange and swap start/end times to Date objects using formatTime
-        const exchangeStartTime = formatTime(exchange.startTime);
-        const exchangeEndTime = formatTime(exchange.endTime);
-        const swapStartTime = formatTime(swap.startTime);
-        const swapEndTime = formatTime(swap.endTime);
-
-        // Calculate the start time with leeway
-        const startTimeWithLeeway = new Date(exchangeStartTime);
-        startTimeWithLeeway.setHours(startTimeWithLeeway.getHours() - 1);
-
-        // Calculate the end time with leeway
-        const endTimeWithLeeway = new Date(exchangeEndTime);
-        endTimeWithLeeway.setHours(endTimeWithLeeway.getHours() + 1);
-
-        // Check if the potential match's start time falls within the exchange's time range with leeway
+      // Check if the dates are different and threeLetterCode values are different
+      if (
+        obj.date !== swap.date &&
+        obj.threeLetterCode !== swap.threeLetterCode
+      ) {
+        // Check if startTime, endTime, and qualifications match
         if (
-          startTimeWithLeeway <= swapStartTime &&
-          swapStartTime <= exchangeEndTime
+          obj.startTime === swap.startTime &&
+          obj.endTime === swap.endTime &&
+          qualificationsMatch(obj.qualifications, swap.qualifications)
         ) {
-          // Check if the potential match's end time falls within the exchange's time range with leeway
+          // Create a match object with quality and verdict
+          const match = {
+            swap: swap,
+            quality: 1, // Since it's an exact match
+            verdict: {
+              hours: "Exact duration",
+              leewayConsidered: false, // Leeway is not considered for this case
+            },
+          };
+
+          // Add the match to the Set
+          matches.add(JSON.stringify(match));
+        }
+      }
+    }
+  } else {
+    // Iterate through the exchanges of the object
+    for (const exchange of obj.exchanges) {
+      // Iterate through the array of potential matches
+      for (const swap of arr) {
+        // Check if the dates are not the same and threeLetterCode values are different
+        if (
+          obj.date !== swap.date &&
+          exchange.threeLetterCode !== swap.threeLetterCode
+        ) {
+          // Convert exchange and swap start/end times to Date objects using formatTime
+          const exchangeStartTime = formatTime(exchange.startTime);
+          const exchangeEndTime = formatTime(exchange.endTime);
+          const swapStartTime = formatTime(swap.startTime);
+          const swapEndTime = formatTime(swap.endTime);
+
+          // Calculate the start time with leeway
+          const startTimeWithLeeway = new Date(exchangeStartTime);
+          startTimeWithLeeway.setHours(startTimeWithLeeway.getHours() - 1);
+
+          // Calculate the end time with leeway
+          const endTimeWithLeeway = new Date(exchangeEndTime);
+          endTimeWithLeeway.setHours(endTimeWithLeeway.getHours() + 1);
+
+          // Check if the potential match's start time falls within the exchange's time range with leeway
           if (
-            startTimeWithLeeway <= swapEndTime &&
-            swapEndTime <= endTimeWithLeeway
+            startTimeWithLeeway <= swapStartTime &&
+            swapStartTime <= exchangeEndTime
           ) {
-            // Check if qualifications match
-            const qualificationsMatched = qualificationsMatch(
-              obj.qualifications,
-              swap.qualifications
-            );
-
-            if (qualificationsMatched) {
-              // Calculate the quality of the match
-              let quality = 0;
-
-              // Check if the start time matches exactly
-              if (+exchangeStartTime === +swapStartTime) {
-                quality += 1;
-              } else {
-                quality -= 0.5; // Starts an hour earlier
-              }
-
-              // Check if the end time matches exactly
-              if (+exchangeEndTime === +swapEndTime) {
-                quality += 1;
-              } else {
-                quality -= 0.5; // Ends an hour later
-              }
-
-              // Check if the duration matches exactly
-              if (+exchange.duration === +swap.duration) {
-                quality += 1;
-              } else {
-                quality -= 0.5; // Duration mismatch
-              }
-
-              // Calculate the difference in hours between the swap and the exchange
-              const hoursDifference = Math.abs(
-                (swapEndTime - swapStartTime) / (60 * 60 * 1000) -
-                  (exchangeEndTime - exchangeStartTime) / (60 * 60 * 1000)
+            // Check if the potential match's end time falls within the exchange's time range with leeway
+            if (
+              startTimeWithLeeway <= swapEndTime &&
+              swapEndTime <= endTimeWithLeeway
+            ) {
+              // Check if qualifications match
+              const qualificationsMatched = qualificationsMatch(
+                obj.qualifications,
+                swap.qualifications
               );
 
-              // Determine if the swap has more or fewer hours
-              const hoursVerdict =
-                hoursDifference === 0
-                  ? "Exact duration"
-                  : swapEndTime - swapStartTime >
-                    exchangeEndTime - exchangeStartTime
-                  ? "More hours"
-                  : "Fewer hours";
+              if (qualificationsMatched) {
+                // Calculate the quality of the match
+                let quality = 0;
 
-              // Determine if leeway was considered
-              const leewayConsidered =
-                swapStartTime >= startTimeWithLeeway &&
-                swapEndTime <= endTimeWithLeeway;
+                // Check if the start time matches exactly
+                if (+exchangeStartTime === +swapStartTime) {
+                  quality += 1;
+                } else {
+                  quality -= 0.5; // Starts an hour earlier
+                }
 
-              // Create a match object with quality and verdict
-              const match = {
-                swap: swap,
-                quality: quality,
-                verdict: {
-                  hours: hoursVerdict,
-                  leewayConsidered: leewayConsidered,
-                },
-              };
+                // Check if the end time matches exactly
+                if (+exchangeEndTime === +swapEndTime) {
+                  quality += 1;
+                } else {
+                  quality -= 0.5; // Ends an hour later
+                }
 
-              // Add the match to the Set
-              matches.add(JSON.stringify(match));
+                // Check if the duration matches exactly
+                if (+exchange.duration === +swap.duration) {
+                  quality += 1;
+                } else {
+                  quality -= 0.5; // Duration mismatch
+                }
+
+                // Calculate the difference in hours between the swap and the exchange
+                const hoursDifference = Math.abs(
+                  (swapEndTime - swapStartTime) / (60 * 60 * 1000) -
+                    (exchangeEndTime - exchangeStartTime) / (60 * 60 * 1000)
+                );
+
+                // Determine if the swap has more or fewer hours
+                const hoursVerdict =
+                  hoursDifference === 0
+                    ? "Exact duration"
+                    : swapEndTime - swapStartTime >
+                      exchangeEndTime - exchangeStartTime
+                    ? "More hours"
+                    : "Fewer hours";
+
+                // Determine if leeway was considered
+                const leewayConsidered =
+                  swapStartTime >= startTimeWithLeeway &&
+                  swapEndTime <= endTimeWithLeeway;
+
+                // Check if threeLetterCode values are different
+                if (exchange.threeLetterCode !== swap.threeLetterCode) {
+                  // Create a match object with quality and verdict
+                  const match = {
+                    swap: swap,
+                    quality: quality,
+                    verdict: {
+                      hours: hoursVerdict,
+                      leewayConsidered: leewayConsidered,
+                    },
+                  };
+
+                  // Add the match to the Set
+                  matches.add(JSON.stringify(match));
+                }
+              }
             }
           }
         }
@@ -157,6 +202,32 @@ const getPriorityColor = (priority) => {
   }
 };
 
+function getStyle(verdict) {
+  let style = "";
+
+  // Add styles based on match.verdict.hours
+  switch (verdict.hours) {
+    case "Exact duration":
+      style += "exact-duration ";
+      break;
+    case "Fewer hours":
+      style += "fewer-hours ";
+      break;
+    case "More hours":
+      style += "more-hours ";
+      break;
+    default:
+      break;
+  }
+
+  // Add styles based on match.verdict.leewayConsidered
+  if (verdict.leewayConsidered) {
+    style += "leeway-considered";
+  }
+
+  return style.trim(); // Trim any extra spaces
+}
+
 const Swaps = () => {
   const { id } = useParams();
   const [swaps, setSwaps] = useState([]);
@@ -180,10 +251,14 @@ const Swaps = () => {
           setIndividualSwap(individualSwapResponse.data.data);
           console.log("Individual swap:", individualSwapResponse.data.data);
 
+          let filteredSwaps = removeElementsWithMatchingThreeLetterCode(
+            response.data.data,
+            individualSwapResponse.data.data.threeLetterCode
+          );
           // find matches
           const matches = findMatches(
             individualSwapResponse.data.data,
-            response.data.data
+            filteredSwaps
           );
           console.log("Matches:", matches);
           setMatches(matches);
@@ -285,7 +360,12 @@ const Swaps = () => {
                     </div>
                     {/* ... other swap details ... */}
 
-                    <p className="">{match.verdict.hours}</p>
+                    <p className={getStyle(match.verdict)}>
+                      {match.verdict.hours}{" "}
+                      {match.verdict.leewayConsidered
+                        ? "(Leeway Considered)"
+                        : ""}
+                    </p>
                   </div>
                 </Link>
               ))

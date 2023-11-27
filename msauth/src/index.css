@@ -75,3 +75,23 @@
 .search-button-container:hover .add-icon {
   color: white;
 }
+
+/* Add your other styles */
+
+.exact-duration {
+  color: green; /* Adjust the color as needed */
+}
+
+.fewer-hours {
+  color: red; /* Adjust the color as needed */
+}
+
+.more-hours {
+  color: blue; /* Adjust the color as needed */
+}
+
+.leeway-considered {
+  font-style: italic;
+}
+
+/* Add more styles if needed */
