@@ -11,7 +11,6 @@ import "../../../index.css";
 import { toast } from "react-toastify";
 
 function removeElementsWithMatchingThreeLetterCode(arr, targetThreeLetterCode) {
-  console.log("arr", arr);
   return arr.filter(
     (element) => element.threeLetterCode !== targetThreeLetterCode
   );
@@ -157,6 +156,8 @@ function findMatches(obj, arr) {
                 // Check if threeLetterCode values are different
                 if (exchange.threeLetterCode !== swap.threeLetterCode) {
                   // Create a match object with quality and verdict
+
+                  console.log("houresdiffernce", hoursDifference);
                   const match = {
                     swap: swap,
                     quality: quality,
