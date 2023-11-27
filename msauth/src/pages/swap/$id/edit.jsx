@@ -263,6 +263,13 @@ const EditSwap = () => {
 
   return (
     <>
+      <Helmet>
+        <title>StaffSwap | Edit Swap</title>
+        <meta name="description" content="StaffSwap" />
+        <meta name="keywords" content="StaffSwap" />
+        <meta name="author" content="StaffSwap" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </Helmet>
       <Header />
 
       <div

@@ -5,11 +5,11 @@ import "../index.css";
 
 const SearchButton = () => {
   return (
-    <div className="search-button-container">
-      <Link to="/swap/search">
+    <Link to="/swap/search">
+      <div className="search-button-container">
         <FaSearch className="search-icon" />
-      </Link>
-    </div>
+      </div>
+    </Link>
   );
 };
 

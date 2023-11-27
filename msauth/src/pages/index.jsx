@@ -1,10 +1,17 @@
 import React from "react";
-// import props from react router
+import { Helmet } from "react-helmet";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 const Home = () => {
   return (
     <>
+      <Helmet>
+        <title>StaffSwap</title>
+        <meta name="description" content="StaffSwap" />
+        <meta name="keywords" content="StaffSwap" />
+        <meta name="author" content="StaffSwap" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </Helmet>
       <Header />
 
       <section className="hero">

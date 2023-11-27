@@ -177,96 +177,79 @@ exports.deleteController = async (req, res) => {
 };
 
 function createSearchQuery(obj) {
-  let join = obj.globalJoin;
-  let criteria = obj.searchCriteria;
+  const join = obj.globalJoin;
+  const criteria = obj.searchCriteria;
 
-  // if there is a searchCriteria called "threeLetterCode" then change its value to uppercase
-  for (let index = 0; index < criteria.length; index++) {
-    if (criteria[index].field === "threeLetterCode") {
-      criteria[index].value = criteria[index].value.toUpperCase();
+  // Helper function to convert time string to numeric value
+  const convertTimeToNumber = (timeString) => {
+    const [hours, minutes] = timeString.split(":").map(Number);
+    return hours + minutes / 60;
+  };
+
+  // Apply transformations to specific fields
+  criteria.forEach((item) => {
+    if (item.field === "threeLetterCode") {
+      item.value = item.value.toUpperCase();
+    } else if (item.field === "priority") {
+      item.value = parseInt(item.value);
+    }
+  });
+
+  // Handle date range conditions
+  const dateFromItem = criteria.find((item) => item.field === "dateFrom");
+  const dateToItem = criteria.find((item) => item.field === "dateTo");
+
+  if (dateFromItem || dateToItem) {
+    const dateRangeCondition = {};
+
+    if (dateFromItem) {
+      dateRangeCondition.$gte = new Date(dateFromItem.value);
+    }
+
+    if (dateToItem) {
+      // Adjust the time to the end of the day
+      const adjustedDateTo = new Date(dateToItem.value + "T23:59:59");
+      dateRangeCondition.$lte = adjustedDateTo;
+    }
+
+    criteria.push({
+      field: "date",
+      value: dateRangeCondition,
+    });
+
+    // Remove date conditions from criteria
+    if (dateFromItem) {
+      criteria.splice(criteria.indexOf(dateFromItem), 1);
+    }
+
+    if (dateToItem) {
+      criteria.splice(criteria.indexOf(dateToItem), 1);
     }
   }
 
-  // if there is a searchCriteria called "priority" then change its value to an integer
-  for (let index = 0; index < criteria.length; index++) {
-    if (criteria[index].field === "priority") {
-      criteria[index].value = parseInt(criteria[index].value);
+  // Handle timeTo and timeFrom conditions
+  const handleTimeCondition = (field, operator) => {
+    const timeItem = criteria.find((item) => item.field === field);
+    if (timeItem) {
+      const timeValue = timeItem.value;
+      criteria.splice(criteria.indexOf(timeItem), 1);
+      criteria.push({
+        field: `${field}Numeric`,
+        value: { [operator]: convertTimeToNumber(timeValue) },
+      });
     }
-  }
+  };
 
-  // Check for "dateTo" in search criteria
-  const dateToIndex = criteria.findIndex((item) => item.field === "dateTo");
+  handleTimeCondition("endTime", "$lte");
+  handleTimeCondition("startTime", "$gte");
 
-  if (dateToIndex !== -1) {
-    const dateToValue = criteria[dateToIndex].value;
-
-    // Remove "dateTo" from criteria
-    criteria.splice(dateToIndex, 1);
-
-    // Add condition for "date" to be less than or equal to the specified date
-    criteria.push({
-      field: "date",
-      value: { $lte: new Date(dateToValue) },
-    });
-  }
-
-  const dateFromIndex = criteria.findIndex((item) => item.field === "dateFrom");
-
-  if (dateFromIndex !== -1) {
-    const dateFromValue = criteria[dateFromIndex].value;
-
-    // Remove "dateTo" from criteria
-    criteria.splice(dateFromIndex, 1);
-
-    // Add condition for "date" to be less than or equal to the specified date
-    criteria.push({
-      field: "date",
-      value: { $gte: new Date(dateFromValue) },
-    });
-  }
-
-  const timeToIndex = criteria.findIndex((item) => item.field === "endTime");
-  if (timeToIndex !== -1) {
-    const timeToValue = criteria[timeToIndex].value;
-    // Remove "timeTo" from criteria
-    criteria.splice(timeToIndex, 1);
-    // Add condition for "endTime" to be less than or equal to the specified time
-    criteria.push({
-      field: "endTimeNumeric",
-      value: { $lte: convertTimeToNumber(timeToValue) },
-    });
-  }
-
-  const timeFromIndex = criteria.findIndex(
-    (item) => item.field === "startTime"
-  );
-  if (timeFromIndex !== -1) {
-    const timeFromValue = criteria[timeFromIndex].value;
-    // Remove "timeTo" from criteria
-    criteria.splice(timeFromIndex, 1);
-    // Add condition for "endTime" to be less than or equal to the specified time
-    criteria.push({
-      field: "startTimeNumeric",
-      value: { $gte: convertTimeToNumber(timeFromValue) },
-    });
-  }
-
+  // Build the final result based on join value
   if (join === "and") {
-    let result = {};
-
-    for (let index = 0; index < criteria.length; index++) {
-      result[criteria[index].field] = criteria[index].value;
-    }
+    const result = {};
+    criteria.forEach((item) => (result[item.field] = item.value));
     return result;
   } else {
-    let result = [];
-
-    for (let index = 0; index < criteria.length; index++) {
-      let result_temp = {};
-      result_temp[criteria[index].field] = criteria[index].value;
-      result.push(result_temp);
-    }
-
+    const result = criteria.map((item) => ({ [item.field]: item.value }));
     return result;
   }
 }
@@ -294,7 +277,7 @@ exports.getSearchController = async (req, res, next) => {
         });
     } else {
       Swap.find({ $or: search_string })
-        .sort("-createdAt")
+        .sort("date")
         .exec((err, swap) => {
           if (err || !swap) {
             return res.status(400).json({

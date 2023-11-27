@@ -5,11 +5,11 @@ import "../index.css";
 
 const AddButton = () => {
   return (
-    <div className="add-button-container">
-      <Link to="/swap/new">
+    <Link to="/swap/new">
+      <div className="add-button-container">
         <FaPlus className="add-icon" />
-      </Link>
-    </div>
+      </div>
+    </Link>
   );
 };
 

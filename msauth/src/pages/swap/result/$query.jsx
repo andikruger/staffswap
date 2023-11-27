@@ -63,6 +63,20 @@ const Swaps = () => {
 
   return (
     <>
+      <Helmet>
+        <title>StaffSwap | Results</title>
+        <meta name="description" content="StaffSwap" />
+        <meta name="keywords" content="StaffSwap" />
+        <meta name="author" content="StaffSwap" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </Helmet>
+      <Helmet>
+        <title>StaffSwap</title>
+        <meta name="description" content="StaffSwap" />
+        <meta name="keywords" content="StaffSwap" />
+        <meta name="author" content="StaffSwap" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </Helmet>
       <Header />
       <AddButton />
       <div
