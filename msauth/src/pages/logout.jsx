@@ -8,11 +8,13 @@ const Logout = () => {
   const { instance, accounts } = useMsal();
 
   const handleLogout = () => {
-    instance.logout({
-      account: accounts[0], // You may need to adjust this based on your application's needs
-      postLogoutRedirectUri: "/", // Redirect to home page after logout
-    });
-    sessionStorage.removeItem("WecomeToast");
+    // instance.logout({
+    //   account: accounts[0], // You may need to adjust this based on your application's needs
+    //   postLogoutRedirectUri: "/", // Redirect to home page after logout
+    // });
+    // sessionStorage.removeItem("WecomeToast");
+    sessionStorage.clear();
+    window.location.href = "/";
   };
 
   useEffect(() => {

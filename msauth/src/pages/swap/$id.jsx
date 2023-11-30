@@ -107,10 +107,12 @@ const ShiftTypeList = ({ options, selectedOption }) => {
 };
 
 const SwapDetails = () => {
+  let userID = sessionStorage.getItem("user");
   const { id } = useParams();
   const [swapDetails, setSwapDetails] = useState({});
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
+  const [user, setUser] = useState(null);
   useEffect(() => {
     const fetchSwapDetails = async () => {
       try {
@@ -130,7 +132,8 @@ const SwapDetails = () => {
     };
 
     fetchSwapDetails(); // Fetch swap details when the component mounts
-
+    setUser(sessionStorage.getItem("user"));
+    console.log("user", user);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]); // Include id as a dependency to re-fetch when id changes
 
@@ -292,16 +295,17 @@ const SwapDetails = () => {
             />
           </div>
 
-          <div className="flex flex-col items-center">
-            {/* Delete Button */}
-            <DeleteSwapButton id={id} />
-
-            {/* Edit Button */}
-            <EditSwapButton id={id} />
-
-            {/* Match Button */}
-            <MatchButton id={id} />
-          </div>
+          {/* only display buttons if userID = swap.userID */}
+          {userID === swapDetails.userID && (
+            <div className="flex justify-between">
+              <DeleteSwapButton id={id} />
+              <EditSwapButton id={id} />
+            </div>
+          )}
+          {/* only display match button if userID != swap.userID */}
+          {userID !== swapDetails.userID && (
+            <MatchButton id={id} swapDetails={swapDetails} />
+          )}
         </div>
       </div>
 

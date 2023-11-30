@@ -33,6 +33,8 @@ const Home = () => {
           sessionStorage.setItem("uuid", hash);
           // redirect to the profile page
           window.location.href = "/profile";
+        } else {
+          sessionStorage.setItem("user", res.data.data._id);
         }
       })
       .catch((err) => {

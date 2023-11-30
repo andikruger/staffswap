@@ -1,17 +1,27 @@
 const User = require("../models/user.model");
-const sendEmail = require("../utils/sendEmail");
+// const sendEmail = require("../utils/sendEmail");
 const crypto = require("crypto");
 exports.registerController = async (req, res) => {
   const { threeLetterCode, userID } = req.body;
+  console.log(req.body);
   const newUser = new User({
     threeLetterCode,
     userID,
   });
-  await newUser.save();
-  res.status(201).json({
-    message: "User created successfully",
-    data: newUser,
-  });
+
+  try {
+    await newUser.save();
+    res.status(201).json({
+      message: "User created successfully",
+      data: newUser,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      message: "User not created",
+      data: newUser,
+    });
+  }
 };
 
 exports.getAllController = async (req, res) => {

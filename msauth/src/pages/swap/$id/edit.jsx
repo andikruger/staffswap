@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import axios from "axios";
@@ -9,7 +9,6 @@ import qualificationData from "../../../data/qualifications.json";
 import shiftTypeData from "../../../data/shifttypes.json";
 import shiftTimesData from "../../../data/shifttimes.json";
 import { toast } from "react-toastify";
-import { Edit } from "lucide-react";
 
 const CheckboxButton = ({ label, isChecked, onChange }) => {
   const buttonStyle = {
@@ -89,8 +88,10 @@ const RadioButtonList = ({ options, selectedOption, onChange }) => {
 
 const EditSwap = () => {
   const [submitObject, setSubmitObject] = useState({});
+  const [creator, setCreator] = useState(null);
 
   const { id } = useParams();
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchSwapDetails = async () => {
       try {
@@ -105,7 +106,7 @@ const EditSwap = () => {
         setExchanges(response.data.data.exchanges);
         let formatedDate = response.data.data.date.split("T")[0];
         setDateFormated(formatedDate);
-        console.log(formatedDate);
+        setCreator(response.data.data.userID);
       } catch (error) {
         console.error("Error fetching swap details:", error);
         toast.error("Error fetching swap details", {
@@ -117,7 +118,17 @@ const EditSwap = () => {
     fetchSwapDetails(); // Fetch swap details when the component mounts
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]); // Include id as a dependency to re-fetch when id changes
+  }, [id, navigate]); // Include id and navigate as dependencies to re-fetch when they change
+
+  if (creator === sessionStorage.getItem("user")) {
+    console.log(creator === sessionStorage.getItem("user"));
+  } else {
+    console.log(creator === sessionStorage.getItem("user"));
+    console.log(
+      `creator: ${creator} - sessionStorage: ${sessionStorage.getItem("user")}`
+    );
+    navigate("/swap");
+  }
 
   const handleInputChange = (event) => {
     if (event.target.name === "shiftTime") {
@@ -252,7 +263,7 @@ const EditSwap = () => {
       });
 
       setSubmitObject(tempObj); // Add this line
-      console.log(submitObject);
+
       // Rest of your code...
     } catch (error) {
       console.log(error);
