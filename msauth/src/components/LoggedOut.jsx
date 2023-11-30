@@ -1,56 +1,7 @@
-import React, { useEffect } from "react";
 import { Helmet } from "react-helmet";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import { toast } from "react-toastify";
-import { useMsal, MsalProvider } from "@azure/msal-react";
-import sha256 from "crypto-js/sha256";
-import axios from "axios";
-const Home = () => {
-  const { instance, accounts } = useMsal();
-  // log instance and accounts to console
-
-  console.log("username", accounts[0].username);
-  console.log("name", accounts[0].name);
-
-  const checkIfNewUser = () => {
-    // hash accounts[0].username with SHA256
-    // then check if the hash exists in the database
-    // if it doesn't, then create a new user redirect to the profile page
-
-    // create a sha256 hash of the username
-    const hash = sha256(accounts[0].username).toString();
-
-    // check if the hash exists in the database api endpoint http://localhost:8000/api/v1/user/username/:hash
-    axios
-      .get(`http://localhost:8000/api/v1/user/username/${hash}`)
-      .then((res) => {
-        console.log("res", res);
-        // if it doesn't, then create a new user redirect to the profile page
-        if (!res.data.data) {
-          // create a new user
-          sessionStorage.setItem("newUser", "true");
-          sessionStorage.setItem("uuid", hash);
-          // redirect to the profile page
-          window.location.href = "/profile";
-        }
-      })
-      .catch((err) => {
-        console.log("err", err);
-      });
-  };
-
-  // Display a toast notification on successful log in
-  useEffect(() => {
-    if (
-      accounts.length > 0 &&
-      sessionStorage.getItem("WecomeToast") !== "true"
-    ) {
-      toast.success(`Welcome ${accounts[0].name}`);
-    }
-    sessionStorage.setItem("WecomeToast", "true");
-    checkIfNewUser();
-  }, [accounts]);
+import Header from "./Header";
+import Footer from "./Footer";
+const LoggedOut = ({ handleClick }) => {
   return (
     <>
       <Helmet>
@@ -69,12 +20,12 @@ const Home = () => {
             <p className="text-lg mb-8">
               Your Marketplace for Seamless Shift Exchanges
             </p>
-            <a
-              href="#how-it-works"
+            <button
               className="bg-[#e0211a] text-white py-2 px-4 rounded-full hover:bg-[#b41813] no-underline"
+              onClick={handleClick}
             >
-              How It Works
-            </a>
+              Log In
+            </button>
           </div>
         </div>
       </section>
@@ -146,4 +97,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default LoggedOut;

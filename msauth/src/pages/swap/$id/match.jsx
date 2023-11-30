@@ -307,9 +307,13 @@ const Swaps = () => {
         }}
       >
         {loading ? (
-          <p>Loading swaps...</p>
+          <p className="bg-white p-8 rounded-lg shadow-lg m-4 max-w-md">
+            Loading swaps...
+          </p>
         ) : error ? (
-          <p>{error}</p>
+          <p className="bg-white p-8 rounded-lg shadow-lg m-4 max-w-md">
+            {error}
+          </p>
         ) : (
           <div className="flex flex-wrap justify-center">
             {Array.isArray(matches) && matches.length > 0 ? (

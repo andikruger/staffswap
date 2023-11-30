@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
@@ -8,6 +8,7 @@ import qualificationData from "../../data/qualifications.json";
 import shiftTypeData from "../../data/shifttypes.json";
 import shiftTimesData from "../../data/shifttimes.json";
 import { toast } from "react-toastify";
+import { useMsal, MsalProvider } from "@azure/msal-react";
 
 const CheckboxButton = ({ label, isChecked, onChange }) => {
   const buttonStyle = {
@@ -85,11 +86,38 @@ const RadioButtonList = ({ options, selectedOption, onChange }) => {
   );
 };
 
+const getUserData = async () => {
+  try {
+    let userID = sessionStorage.getItem("uuid");
+    console.log("userID", userID);
+    const response = await axios
+      .get(`http://localhost:8000/api/v1/user/username/${userID}`)
+      .then((res) => {
+        console.log("res", res);
+        return res.data.data;
+      });
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
 const NewSwap = () => {
+  const { instance, accounts } = useMsal();
+  const [threeLetterCode, setThreeLetterCode] = useState("");
+  const [userData, setUserData] = useState({});
+  useEffect(() => {
+    let userData = getUserData();
+    userData.then((data) => {
+      console.log("data", data);
+      setUserData(data);
+      setThreeLetterCode(data.threeLetterCode); // Set the threeLetterCode state
+    });
+  }, [getUserData]);
+  console.log("userData", userData);
   let submitObject = {
-    userID: "6550721764d6cce9fe822413",
-    name: "",
-    threeLetterCode: "",
+    userID: userData._id,
+    name: accounts[0].name,
+    threeLetterCode: userData.threeLetterCode,
     date: "",
     startTime: "",
     endTime: "",
@@ -250,7 +278,8 @@ const NewSwap = () => {
                   type="text"
                   id="name"
                   name="name"
-                  onChange={handleInputChange}
+                  value={accounts[0].name}
+                  readOnly
                   className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
                 />
               </div>
@@ -264,7 +293,8 @@ const NewSwap = () => {
                   type="text"
                   id="threeLetterCode"
                   name="threeLetterCode"
-                  onChange={handleInputChange}
+                  value={userData.threeLetterCode}
+                  readOnly
                   className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
                 />
               </div>
@@ -280,6 +310,7 @@ const NewSwap = () => {
                 <input
                   type="date"
                   id="date"
+                  min={new Date().toISOString().split("T")[0]}
                   name="date"
                   onChange={handleInputChange}
                   className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
@@ -343,7 +374,9 @@ const NewSwap = () => {
               <div className="mb-4">
                 <label className="block text-sm mb-2">Select Date</label>
                 <input
+                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
                   type="date"
+                  min={new Date().toISOString().split("T")[0]}
                   value={selectedDate.toISOString().split("T")[0]}
                   onChange={(e) => handleDateChange(new Date(e.target.value))}
                 />

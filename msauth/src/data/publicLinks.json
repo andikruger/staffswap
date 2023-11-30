@@ -8,21 +8,19 @@
       "text": "About",
       "link": "/about/"
     },
-    {
-      "text": "Swap",
-      "link": "/swap"
-    },
+
     {
       "text": "Contact",
       "link": "/contact"
     },
     {
-      "text": "Profile",
-      "link": "/profile"
+      "text": "Login",
+      "link": "/Login"
     },
+
     {
-      "text": "Logout",
-      "link": "/logout"
+      "text": "Sign Up",
+      "link": "/SignUp"
     }
   ]
 }
