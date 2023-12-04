@@ -37,7 +37,7 @@ const Swaps = () => {
     const fetchSwaps = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/v1/swap/search/${query}`
+          `https://staffswap-backend.onrender.com/:8000/api/v1/swap/search/${query}`
         );
 
         setSwaps(response.data);

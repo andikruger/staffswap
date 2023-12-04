@@ -240,14 +240,16 @@ const Swaps = () => {
   useEffect(() => {
     const fetchSwaps = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/v1/swap");
+        const response = await axios.get(
+          "https://staffswap-backend.onrender.com/:8000/api/v1/swap"
+        );
         setSwaps(response.data.data);
         console.log("Swaps:", response.data.data);
 
         // Fetch individual swap if ID is provided
         if (id) {
           const individualSwapResponse = await axios.get(
-            `http://localhost:8000/api/v1/swap/${id}`
+            `https://staffswap-backend.onrender.com/:8000/api/v1/swap/${id}`
           );
           setIndividualSwap(individualSwapResponse.data.data);
           console.log("Individual swap:", individualSwapResponse.data.data);

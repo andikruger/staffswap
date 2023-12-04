@@ -21,9 +21,11 @@ const Home = () => {
     // create a sha256 hash of the username
     const hash = sha256(accounts[0].username).toString();
 
-    // check if the hash exists in the database api endpoint http://localhost:8000/api/v1/user/username/:hash
+    // check if the hash exists in the database api endpoint https://staffswap-backend.onrender.com/:8000/api/v1/user/username/:hash
     axios
-      .get(`http://localhost:8000/api/v1/user/username/${hash}`)
+      .get(
+        `https://staffswap-backend.onrender.com/:8000/api/v1/user/username/${hash}`
+      )
       .then((res) => {
         console.log("res", res);
         // if it doesn't, then create a new user redirect to the profile page

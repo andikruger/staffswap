@@ -60,7 +60,9 @@ const Profile = () => {
   useEffect(() => {
     let uuid = sha256(accounts[0].username).toString();
     axios
-      .get(`http://localhost:8000/api/v1/user/username/${uuid}`)
+      .get(
+        `https://staffswap-backend.onrender.com/:8000/api/v1/user/username/${uuid}`
+      )
       .then((res) => {
         let data = res.data.data;
 
@@ -100,7 +102,10 @@ const Profile = () => {
 
       if (!userExists) {
         axios
-          .post("http://localhost:8000/api/v1/user/register", submitObject)
+          .post(
+            "https://staffswap-backend.onrender.com/:8000/api/v1/user/register",
+            submitObject
+          )
           .then((res) => {
             toast.success("Profile updated successfully", {
               position: toast.POSITION.TOP_RIGHT,
@@ -115,7 +120,7 @@ const Profile = () => {
       } else {
         axios
           .put(
-            `http://localhost:8000/api/v1/user/update/${user._id}`,
+            `https://staffswap-backend.onrender.com/:8000/api/v1/user/update/${user._id}`,
             submitObject
           )
           .then((res) => {
