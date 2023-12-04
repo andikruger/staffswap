@@ -54,7 +54,7 @@ const SearchSwap = React.memo(() => {
     async (event) => {
       event.preventDefault();
 
-      // Retrieve data from sessionStorage
+      // Retrieve data from localStorage
       const formData = {
         globalJoin: document.getElementById("join").value,
         searchCriteria: searchValues.map((searchValue, index) => {
@@ -62,27 +62,27 @@ const SearchSwap = React.memo(() => {
 
           return {
             field: searchValue.field,
-            value: sessionStorage.getItem(`value_${index}`) || "",
+            value: localStorage.getItem(`value_${index}`) || "",
             type: selectedType,
           };
         }),
       };
 
-      // if there is a an element in the array "field": "shiftType" make its value that what is in the sessionStorage search_shiftType
+      // if there is a an element in the array "field": "shiftType" make its value that what is in the localStorage search_shiftType
 
       if (formData.searchCriteria.some((item) => item.field === "shiftType")) {
         formData.searchCriteria.find(
           (item) => item.field === "shiftType"
-        ).value = sessionStorage.getItem("search_shiftType");
+        ).value = localStorage.getItem("search_shiftType");
       }
 
-      // if there is a an element in the array "field": "qualifications" make its value that what is in the sessionStorage search_qualifications
+      // if there is a an element in the array "field": "qualifications" make its value that what is in the localStorage search_qualifications
 
       if (
         formData.searchCriteria.some((item) => item.field === "qualifications")
       ) {
         // split the string into an array split by the comma
-        const qualifications = sessionStorage.getItem("search_qualifications");
+        const qualifications = localStorage.getItem("search_qualifications");
 
         formData.searchCriteria.find(
           (item) => item.field === "qualifications"
@@ -108,8 +108,8 @@ const SearchSwap = React.memo(() => {
       console.log("Form Data:", formData);
       console.log(JSON.stringify(formData));
 
-      // Clear sessionStorage
-      sessionStorage.clear();
+      // Clear localStorage
+      localStorage.clear();
     },
     [searchValues, selectedTypes]
   );

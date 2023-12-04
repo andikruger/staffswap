@@ -51,14 +51,14 @@ const Swaps = () => {
     };
 
     fetchSwaps();
-    const toastMessage = sessionStorage.getItem("toast");
+    const toastMessage = localStorage.getItem("toast");
 
     if (toastMessage) {
       toast(toastMessage, {
-        type: sessionStorage.getItem("toastType"),
+        type: localStorage.getItem("toastType"),
       });
-      sessionStorage.removeItem("toast");
-      sessionStorage.removeItem("toastType");
+      localStorage.removeItem("toast");
+      localStorage.removeItem("toastType");
     }
   }, []);
 

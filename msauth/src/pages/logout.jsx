@@ -14,6 +14,7 @@ const Logout = () => {
     // });
     // sessionStorage.removeItem("WecomeToast");
     sessionStorage.clear();
+    localStorage.clear();
     window.location.href = "/";
   };
 

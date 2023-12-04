@@ -2,11 +2,12 @@ const User = require("../models/user.model");
 // const sendEmail = require("../utils/sendEmail");
 const crypto = require("crypto");
 exports.registerController = async (req, res) => {
-  const { threeLetterCode, userID } = req.body;
+  const { threeLetterCode, userID, role } = req.body;
   console.log(req.body);
   const newUser = new User({
     threeLetterCode,
     userID,
+    role,
   });
 
   try {
@@ -50,7 +51,7 @@ exports.getByUsernameController = async (req, res) => {
 };
 
 exports.updateController = async (req, res, next) => {
-  const { userID, threeLetterCode } = req.body;
+  const { userID, threeLetterCode, role } = req.body;
   let id = req.params.id;
   try {
     User.findOne({ _id: id }, (err, user) => {
@@ -67,8 +68,13 @@ exports.updateController = async (req, res, next) => {
       if (!userID) {
         user.userID = user.userID;
       } else {
-        let userIdHash = crypto.Hash("sha256").update(userID).digest("hex");
         user.userID = userID;
+      }
+
+      if (!role) {
+        user.role = user.role;
+      } else {
+        user.role = role;
       }
 
       user.save((err, updatedUser) => {

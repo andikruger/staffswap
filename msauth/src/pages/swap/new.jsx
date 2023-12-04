@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import axios from "axios";
+import sha256 from "crypto-js/sha256";
 import "../../index.css";
 import qualificationData from "../../data/qualifications.json";
 import shiftTypeData from "../../data/shifttypes.json";
@@ -86,33 +87,33 @@ const RadioButtonList = ({ options, selectedOption, onChange }) => {
   );
 };
 
-const getUserData = async () => {
-  try {
-    let userID = sessionStorage.getItem("uuid");
-    console.log("userID", userID);
-    const response = await axios
-      .get(`http://localhost:8000/api/v1/user/username/${userID}`)
-      .then((res) => {
-        console.log("res", res);
-        return res.data.data;
-      });
-    return response;
-  } catch (error) {
-    console.log(error);
-  }
-};
 const NewSwap = () => {
   const { instance, accounts } = useMsal();
   const [threeLetterCode, setThreeLetterCode] = useState("");
   const [userData, setUserData] = useState({});
+  const [userID, setUserID] = useState("");
   useEffect(() => {
-    let userData = getUserData();
-    userData.then((data) => {
-      console.log("data", data);
-      setUserData(data);
-      setThreeLetterCode(data.threeLetterCode); // Set the threeLetterCode state
-    });
-  }, [getUserData]);
+    // Assuming accounts[0].username is available
+    const newUserID = sha256(accounts[0].username).toString();
+    setUserID(newUserID);
+
+    // get data from the database using axios with catch
+    axios
+      .get(`http://localhost:8000/api/v1/user/username/${newUserID}`)
+      .then((res) => {
+        let data = res.data.data;
+
+        setUserData(data);
+        setThreeLetterCode(data.threeLetterCode); // Set the threeLetterCode state
+
+        console.log("userData", data);
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+    localStorage.clear();
+  }, [accounts]);
+
   console.log("userData", userData);
   let submitObject = {
     userID: userData._id,

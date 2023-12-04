@@ -75,7 +75,7 @@ const publicRouter = createBrowserRouter(
 // const App = () => {
 //   return <RouterProvider router={router} />;
 // };
-
+console.log("router", router);
 const WrapperView = () => {
   const { instance } = useMsal();
   const activeAccount = instance.getActiveAccount();

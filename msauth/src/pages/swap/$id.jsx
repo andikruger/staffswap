@@ -134,6 +134,7 @@ const SwapDetails = () => {
     fetchSwapDetails(); // Fetch swap details when the component mounts
     setUser(sessionStorage.getItem("user"));
     console.log("user", user);
+    localStorage.clear();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]); // Include id as a dependency to re-fetch when id changes
 
@@ -299,6 +300,7 @@ const SwapDetails = () => {
           {userID === swapDetails.userID && (
             <div className="flex justify-between">
               <DeleteSwapButton id={id} />
+              <MatchButton id={id} swapDetails={swapDetails} />
               <EditSwapButton id={id} />
             </div>
           )}

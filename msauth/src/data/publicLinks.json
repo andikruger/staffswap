@@ -16,11 +16,6 @@
     {
       "text": "Login",
       "link": "/Login"
-    },
-
-    {
-      "text": "Sign Up",
-      "link": "/SignUp"
     }
   ]
 }

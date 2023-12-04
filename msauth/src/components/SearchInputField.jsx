@@ -13,8 +13,8 @@ const SearchInputField = ({ type, index }) => {
       const { name, value } = e.target;
       setSearchValues({ ...searchValues, [name]: value });
 
-      // Store the individual value in sessionStorage
-      sessionStorage.setItem(`${name}_${index}`, value);
+      // Store the individual value in localStorage
+      localStorage.setItem(`${name}_${index}`, value);
     },
     [searchValues, index]
   );
@@ -24,15 +24,15 @@ const SearchInputField = ({ type, index }) => {
   const handleQualificationChange = (label) => {
     setSelectedQualification(label);
 
-    // Store the selected option in sessionStorage
-    sessionStorage.setItem(`search_qualifications`, label);
+    // Store the selected option in localStorage
+    localStorage.setItem(`search_qualifications`, label);
   };
 
   const handleShiftTypeChange = (label) => {
     setSelectedShiftType(label);
 
-    // Store the selected option in sessionStorage
-    sessionStorage.setItem(`search_shiftType`, label);
+    // Store the selected option in localStorage
+    localStorage.setItem(`search_shiftType`, label);
   };
   const QualificationButton = ({ label, isChecked, onChange }) => {
     const buttonStyle = {

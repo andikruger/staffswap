@@ -52,6 +52,7 @@ const Home = () => {
     }
     sessionStorage.setItem("WecomeToast", "true");
     checkIfNewUser();
+    localStorage.clear();
   }, [accounts]);
   return (
     <>

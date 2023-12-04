@@ -20,7 +20,7 @@ const UserSchema = new mongoose.Schema(
     role: {
       type: String,
 
-      default: "Junior Agent",
+      required: [true, "Please provide a role"],
     },
   },
   {

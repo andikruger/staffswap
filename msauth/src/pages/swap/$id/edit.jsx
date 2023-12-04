@@ -116,7 +116,7 @@ const EditSwap = () => {
     };
 
     fetchSwapDetails(); // Fetch swap details when the component mounts
-
+    localStorage.clear();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, navigate]); // Include id and navigate as dependencies to re-fetch when they change
 

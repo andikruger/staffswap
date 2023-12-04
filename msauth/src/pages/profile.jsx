@@ -1,34 +1,17 @@
 import { React, useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
+import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import axios from "axios";
 import sha256 from "crypto-js/sha256";
 import "../index.css";
 import roleData from "../data/roles.json";
-import { useMsal, MsalProvider } from "@azure/msal-react";
+import { useMsal } from "@azure/msal-react";
 
 import { toast } from "react-toastify";
 
 const roles = roleData.roles;
-
-const uuid = sessionStorage.getItem("uuid");
-
-// get the user data from the database
-
-const getUserData = async () => {
-  try {
-    const response = await axios
-      .get(`http://localhost:8000/api/v1/user/username/${uuid}`)
-      .then((res) => {
-        console.log("res", res);
-        return res.data.data;
-      });
-    return response;
-  } catch (error) {
-    console.log(error);
-  }
-};
 
 const RadioButton = ({ label, isSelected, onChange }) => {
   const buttonStyle = {
@@ -65,19 +48,32 @@ const RadioButtonList = ({ options, selectedOption, onChange }) => {
   );
 };
 const Profile = () => {
+  const navigate = useNavigate();
   const [threeLetterCode, setThreeLetterCode] = useState("");
-
+  const [user, setUser] = useState(null);
+  const [userExists, setUserExists] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
   const { instance, accounts } = useMsal();
-  useEffect(() => {
-    let userData = getUserData();
-    userData.then((data) => {
-      console.log("data", data);
-      setThreeLetterCode(data.threeLetterCode);
-      setSelectedOption(data.role);
-    });
-  }, [getUserData]);
 
+  // get the user data from the database
+
+  useEffect(() => {
+    let uuid = sha256(accounts[0].username).toString();
+    axios
+      .get(`http://localhost:8000/api/v1/user/username/${uuid}`)
+      .then((res) => {
+        let data = res.data.data;
+
+        setThreeLetterCode(data.threeLetterCode);
+        setSelectedOption(data.role);
+        setUser(data);
+        setUserExists(true);
+      });
+    localStorage.clear();
+  }, []);
+
+  console.log("user", user);
+  console.log("userExists", userExists);
   const handleRadioChange = (label) => {
     setSelectedOption(label);
   };
@@ -92,7 +88,7 @@ const Profile = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      let userID = sessionStorage.getItem("uuid");
+      let userID = sha256(accounts[0].username).toString();
 
       let submitObject = {
         threeLetterCode: threeLetterCode,
@@ -102,20 +98,38 @@ const Profile = () => {
 
       console.log("submitObject", submitObject);
 
-      axios
-        .post("http://localhost:8000/api/v1/user/register", submitObject)
-        .then((res) => {
-          console.log("res", res);
-          toast.success("Profile updated successfully", {
-            position: toast.POSITION.TOP_RIGHT,
+      if (!userExists) {
+        axios
+          .post("http://localhost:8000/api/v1/user/register", submitObject)
+          .then((res) => {
+            toast.success("Profile updated successfully", {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          })
+          .catch((err) => {
+            console.log("err", err);
+            toast.error("Profile update failed", {
+              position: toast.POSITION.TOP_RIGHT,
+            });
           });
-        })
-        .catch((err) => {
-          console.log("err", err);
-          toast.error("Profile update failed", {
-            position: toast.POSITION.TOP_RIGHT,
+      } else {
+        axios
+          .put(
+            `http://localhost:8000/api/v1/user/update/${user._id}`,
+            submitObject
+          )
+          .then((res) => {
+            toast.success("Profile updated successfully", {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          })
+          .catch((err) => {
+            console.log("err", err);
+            toast.error("Profile update failed", {
+              position: toast.POSITION.TOP_RIGHT,
+            });
           });
-        });
+      }
     } catch (error) {
       console.log(error);
       toast.error("Profile update did not work", {
@@ -198,6 +212,12 @@ const Profile = () => {
               Update Profile
             </button>
           </form>
+          <button
+            onClick={() => navigate("/swap/my")} // Use navigate to redirect to "/my"
+            className="bg-[#e0211a] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#b41813] mt-4"
+          >
+            Go to My Swaps
+          </button>
         </div>
       </div>
 

@@ -58,6 +58,7 @@ const Swaps = () => {
       sessionStorage.removeItem("toast");
       sessionStorage.removeItem("toastType");
     }
+    localStorage.clear();
   }, []);
 
   return (

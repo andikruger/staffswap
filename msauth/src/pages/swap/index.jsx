@@ -47,6 +47,7 @@ const Swaps = () => {
     };
 
     fetchSwaps();
+    localStorage.clear();
     const toastMessage = sessionStorage.getItem("toast");
 
     if (toastMessage) {
