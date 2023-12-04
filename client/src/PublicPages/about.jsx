@@ -6,7 +6,7 @@ const HelloWorld = () => {
   return (
     <>
       <Helmet>
-        <title>StaffSwap | Contact</title>
+        <title>StaffSwap | About</title>
         <meta name="description" content="StaffSwap" />
         <meta name="keywords" content="StaffSwap" />
         <meta name="author" content="StaffSwap" />
@@ -14,7 +14,7 @@ const HelloWorld = () => {
       </Helmet>
       <Header />
       <div className="flex items-center justify-center h-screen">
-        <div className="text-4xl font-bold text-blue-500">Contact</div>
+        <div className="text-4xl font-bold text-blue-500">About</div>
       </div>
     </>
   );
