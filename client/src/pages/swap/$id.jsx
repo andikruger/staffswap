@@ -118,7 +118,7 @@ const SwapDetails = () => {
       try {
         // Fetch swap details from the API
         const response = await axios.get(
-          `https://lucky-red-robe.cyclic.app:8000/api/v1/swap/${id}`
+          `https://staffswap-backend.onrender.com/api/v1/swap/${id}`
         );
         setSwapDetails(response.data.data);
         setSelectedOption(response.data.data.shiftType);

@@ -21,10 +21,10 @@ const Home = () => {
     // create a sha256 hash of the username
     const hash = sha256(accounts[0].username).toString();
 
-    // check if the hash exists in the database api endpoint https://lucky-red-robe.cyclic.app:8000/api/v1/user/username/:hash
+    // check if the hash exists in the database api endpoint https://staffswap-backend.onrender.com/api/v1/user/username/:hash
     axios
       .get(
-        `https://lucky-red-robe.cyclic.app:8000/api/v1/user/username/${hash}`
+        `https://staffswap-backend.onrender.com/api/v1/user/username/${hash}`
       )
       .then((res) => {
         console.log("res", res);
