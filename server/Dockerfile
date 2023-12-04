@@ -8,5 +8,7 @@ RUN npm install -qyg nodemon@2.0.7
 RUN npm install -qy
 # Copy app to container
 COPY . .
+# Expose port 8000
+EXPOSE 8000:8000
 # Run the "dev" script in package.json
 CMD ["npm", "run", "start"]
