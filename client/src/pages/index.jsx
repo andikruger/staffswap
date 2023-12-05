@@ -141,7 +141,7 @@ const Home = () => {
             StaffSwap community.
           </p>
           <a
-            href="/Login"
+            href="/login"
             className="bg-white text-black py-2 px-4 rounded-full hover:bg-gray-400 no-underline"
           >
             Sign Up Now

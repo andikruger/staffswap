@@ -88,7 +88,7 @@ const Home = () => {
             StaffSwap community.
           </p>
           <a
-            href="/Login"
+            href="/login"
             className="bg-white text-black py-2 px-4 rounded-full hover:bg-gray-400 no-underline"
           >
             Sign Up Now
@@ -96,7 +96,7 @@ const Home = () => {
           {/* or log in */}
           <p className="text-lg mb-8">or</p>
           <a
-            href="/Login"
+            href="/login"
             className="bg-white text-black py-2 px-4 rounded-full hover:bg-gray-400 no-underline"
           >
             Log In
