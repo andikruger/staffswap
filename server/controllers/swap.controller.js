@@ -257,6 +257,7 @@ function createSearchQuery(obj) {
 exports.getSearchController = async (req, res, next) => {
   let search_string = atob(decodeURIComponent(req.params.search));
 
+  console.log(search_string);
   search_string = JSON.parse(search_string);
   let global_join = search_string.globalJoin;
 
