@@ -97,7 +97,7 @@ const EditSwap = () => {
       try {
         // Fetch swap details from the API
         const response = await axios.get(
-          `https://staffswap-backend.onrender.com/api/v1/swap/${id}`
+          `https://lucky-red-robe.cyclic.app/api/v1/swap/${id}`
         );
         setSubmitObject(response.data.data);
 
@@ -254,7 +254,7 @@ const EditSwap = () => {
       setSubmitObject(tempObj);
 
       const response = await axios.put(
-        `https://staffswap-backend.onrender.com/api/v1/swap/${id}`,
+        `https://lucky-red-robe.cyclic.app/api/v1/swap/${id}`,
         tempObj
       );
 

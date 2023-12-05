@@ -100,7 +100,7 @@ const NewSwap = () => {
     // get data from the database using axios with catch
     axios
       .get(
-        `https://staffswap-backend.onrender.com/api/v1/user/username/${newUserID}`
+        `https://lucky-red-robe.cyclic.app/api/v1/user/username/${newUserID}`
       )
       .then((res) => {
         let data = res.data.data;
@@ -221,7 +221,7 @@ const NewSwap = () => {
       console.log(submitObject);
 
       const response = await axios.post(
-        "https://staffswap-backend.onrender.com/api/v1/swap/new",
+        "https://lucky-red-robe.cyclic.app/api/v1/swap/new",
         submitObject
       );
 

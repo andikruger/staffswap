@@ -60,9 +60,7 @@ const Profile = () => {
   useEffect(() => {
     let uuid = sha256(accounts[0].username).toString();
     axios
-      .get(
-        `https://staffswap-backend.onrender.com/api/v1/user/username/${uuid}`
-      )
+      .get(`https://lucky-red-robe.cyclic.app/api/v1/user/username/${uuid}`)
       .then((res) => {
         let data = res.data.data;
 
@@ -103,7 +101,7 @@ const Profile = () => {
       if (!userExists) {
         axios
           .post(
-            "https://staffswap-backend.onrender.com/api/v1/user/register",
+            "https://lucky-red-robe.cyclic.app/api/v1/user/register",
             submitObject
           )
           .then((res) => {
@@ -120,7 +118,7 @@ const Profile = () => {
       } else {
         axios
           .put(
-            `https://staffswap-backend.onrender.com/api/v1/user/update/${user._id}`,
+            `https://lucky-red-robe.cyclic.app/api/v1/user/update/${user._id}`,
             submitObject
           )
           .then((res) => {
