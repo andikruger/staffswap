@@ -14,7 +14,7 @@ const HelloWorld = () => {
       </Helmet>
       <Header />
       <div className="flex items-center justify-center h-screen">
-        <div className="text-4xl font-bold text-blue-500">About</div>
+        <div className="text-4xl font-bold text-[#e0211a]">About</div>
       </div>
     </>
   );
