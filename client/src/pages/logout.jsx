@@ -33,7 +33,7 @@ const Logout = () => {
       </Helmet>
       <Header />
       <div className="flex items-center justify-center h-screen">
-        <div className="text-4xl font-bold text-blue-500">Logging you out</div>
+        <div className="text-4xl font-bold text-[#e0211a]">Logging you out</div>
       </div>
     </>
   );
