@@ -8,6 +8,7 @@ import EditSwapButton from "../../components/EditButton";
 import MatchButton from "../../components/MatchButton";
 import axios from "axios";
 import "../../index.css";
+import * as CryptoJS from "crypto-js";
 import qualificationData from "../../data/qualifications.json";
 import shiftTypeData from "../../data/shifttypes.json";
 import { toast } from "react-toastify";
@@ -112,6 +113,8 @@ const SwapDetails = () => {
   const [swapDetails, setSwapDetails] = useState({});
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [phone, setPhone] = useState(null);
   const [user, setUser] = useState(null);
   useEffect(() => {
     const fetchSwapDetails = async () => {
@@ -123,6 +126,20 @@ const SwapDetails = () => {
         setSwapDetails(response.data.data);
         setSelectedOption(response.data.data.shiftType);
         setSelectedOptions(response.data.data.qualifications);
+        if (response.data.data.email) {
+          let email = CryptoJS.AES.decrypt(
+            response.data.data.email,
+            "5LBMOi7Lf1G/yF+VnMbk24PPRgGPE6jzFYNhKeq95ko="
+          );
+          setEmail(email.toString(CryptoJS.enc.Utf8));
+        }
+        if (response.data.data.phoneNumber) {
+          let phone = CryptoJS.AES.decrypt(
+            response.data.data.phoneNumber,
+            "5LBMOi7Lf1G/yF+VnMbk24PPRgGPE6jzFYNhKeq95ko="
+          );
+          setPhone(phone.toString(CryptoJS.enc.Utf8));
+        }
       } catch (error) {
         console.error("Error fetching swap details:", error);
         toast.error("Error fetching swap details", {
@@ -294,6 +311,23 @@ const SwapDetails = () => {
               options={qualifications}
               selectedOptions={selectedOptions}
             />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="note" className="block text-sm mb-2">
+              Email
+            </label>
+            <p className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500">
+              {email || "No email provided"}
+            </p>
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="note" className="block text-sm mb-2">
+              Phone Number
+            </label>
+            <p className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500">
+              {phone || "No Phone Number provided"}
+            </p>
           </div>
 
           {/* only display buttons if userID = swap.userID */}

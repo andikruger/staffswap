@@ -81,6 +81,21 @@ const SwapSchema = new mongoose.Schema(
       required: [false, "An email is required"],
       // match regex for email
     },
+    displayEmail: {
+      type: Boolean,
+      required: [false, "A displayEmail is required"],
+      default: false,
+    },
+    phoneNumber: {
+      type: String,
+      required: [false, "A phone is required"],
+      // match regex for phone
+    },
+    displayPhoneNumber: {
+      type: Boolean,
+      required: [false, "A displayPhoneNumber is required"],
+      default: false,
+    },
   },
   {
     timestamps: true,

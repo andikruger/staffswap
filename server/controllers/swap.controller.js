@@ -29,10 +29,18 @@ exports.createController = async (req, res) => {
     priority,
     status,
     email,
+    phoneNumber,
   } = req.body;
   let encryptedEmail = "";
+  let encryptedPhoneNumber = "";
   if (email) {
     encryptedEmail = CryptoJS.AES.encrypt(email, process.env.EMAIL_SECRET);
+  }
+  if (phoneNumber) {
+    encryptedPhoneNumber = CryptoJS.AES.encrypt(
+      phoneNumber,
+      process.env.PHONE_SECRET
+    );
   }
 
   console.log("Swap created");
@@ -55,6 +63,7 @@ exports.createController = async (req, res) => {
     priority,
     status,
     email: encryptedEmail,
+    phoneNumber: encryptedPhoneNumber,
   });
   await newSwap.save();
   res.status(201).json({
