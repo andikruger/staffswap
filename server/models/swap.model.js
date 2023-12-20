@@ -76,6 +76,11 @@ const SwapSchema = new mongoose.Schema(
       required: [false, "A status is required"],
       default: "Pending",
     },
+    email: {
+      type: String,
+      required: [false, "An email is required"],
+      // match regex for email
+    },
   },
   {
     timestamps: true,

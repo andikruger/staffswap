@@ -1,4 +1,5 @@
 const Swap = require("../models/swap.model");
+const CryptoJS = require("crypto-js");
 
 function convertTimeToNumber(timeString) {
   const [hours, minutes] = timeString.split(":").map(Number);
@@ -27,7 +28,13 @@ exports.createController = async (req, res) => {
     swapDates,
     priority,
     status,
+    email,
   } = req.body;
+  let encryptedEmail = "";
+  if (email) {
+    encryptedEmail = CryptoJS.AES.encrypt(email, process.env.EMAIL_SECRET);
+  }
+
   console.log("Swap created");
   console.log(req.body);
   const newSwap = new Swap({
@@ -47,6 +54,7 @@ exports.createController = async (req, res) => {
     swapDates,
     priority,
     status,
+    email: encryptedEmail,
   });
   await newSwap.save();
   res.status(201).json({
