@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import DeleteSwapButton from "../../components/DeleteButton";
+import ChatButton from "../../components/ChatButton";
 import EditSwapButton from "../../components/EditButton";
 import MatchButton from "../../components/MatchButton";
 import axios from "axios";
@@ -126,19 +127,27 @@ const SwapDetails = () => {
         setSwapDetails(response.data.data);
         setSelectedOption(response.data.data.shiftType);
         setSelectedOptions(response.data.data.qualifications);
-        if (response.data.data.email) {
+        if (response.data.data.email && response.data.data.displayEmail) {
           let email = CryptoJS.AES.decrypt(
             response.data.data.email,
             "5LBMOi7Lf1G/yF+VnMbk24PPRgGPE6jzFYNhKeq95ko="
           );
           setEmail(email.toString(CryptoJS.enc.Utf8));
         }
-        if (response.data.data.phoneNumber) {
+
+        if (
+          response.data.data.phoneNumber &&
+          response.data.data.displayPhoneNumber
+        ) {
+          console.log("condition met");
           let phone = CryptoJS.AES.decrypt(
             response.data.data.phoneNumber,
             "5LBMOi7Lf1G/yF+VnMbk24PPRgGPE6jzFYNhKeq95ko="
           );
+          console.log("phone", phone);
           setPhone(phone.toString(CryptoJS.enc.Utf8));
+        } else {
+          console.log("condition not met");
         }
       } catch (error) {
         console.error("Error fetching swap details:", error);
@@ -190,12 +199,13 @@ const SwapDetails = () => {
         }}
       >
         {/* White rounded box */}
-        <div className="bg-white p-8 rounded-lg shadow-lg w-11/12 max-w-screen-md overflow-y-auto">
+        <div className="bg-white p-8 my-4 rounded-lg shadow-lg w-11/12 max-w-screen-md overflow-y-auto">
           {/* Your content goes here */}
           <h2 className="text-2xl font-bold mb-4 text-gray-800">
             Swap Details
           </h2>
-          <div className="flex mb-4">
+          {/* Name and Three Letter Code in a column for smaller screens */}
+          <div className="flex flex-col sm:flex-row mb-4">
             {/* Name */}
             <div className="w-full sm:w-1/2 mb-2 sm:mb-0 sm:mr-2">
               <label htmlFor="name" className="block text-sm mb-2">
@@ -223,7 +233,8 @@ const SwapDetails = () => {
             </div>
           </div>
 
-          <div className="flex mb-4">
+          {/* Date and Shift Time in a column for smaller screens */}
+          <div className="flex flex-col sm:flex-row mb-4">
             {/* Date */}
             <div className="w-full sm:w-1/2 mb-2 sm:mb-0 sm:mr-2">
               <label htmlFor="date" className="block text-sm mb-2">
@@ -237,7 +248,7 @@ const SwapDetails = () => {
               </p>
             </div>
 
-            {/* Shift time */}
+            {/* Shift Time */}
             <div className="w-full sm:w-1/2 ml-0 sm:ml-2">
               <label htmlFor="shiftTime" className="block text-sm mb-2">
                 Shift Time
@@ -330,17 +341,21 @@ const SwapDetails = () => {
             </p>
           </div>
 
-          {/* only display buttons if userID = swap.userID */}
+          {/* Display buttons if userID = swap.userID */}
           {userID === swapDetails.userID && (
-            <div className="flex justify-between">
+            <div className="flex flex-col sm:flex-row justify-between">
               <DeleteSwapButton id={id} />
               <MatchButton id={id} swapDetails={swapDetails} />
               <EditSwapButton id={id} />
             </div>
           )}
-          {/* only display match button if userID != swap.userID */}
+
+          {/* Display match button if userID != swap.userID */}
           {userID !== swapDetails.userID && (
-            <MatchButton id={id} swapDetails={swapDetails} />
+            <div className="flex flex-col sm:flex-row justify-between">
+              <ChatButton id={id} swapDetails={swapDetails} />
+              <MatchButton id={id} swapDetails={swapDetails} />
+            </div>
           )}
         </div>
       </div>

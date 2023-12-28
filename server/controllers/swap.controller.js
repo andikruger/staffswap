@@ -29,17 +29,21 @@ exports.createController = async (req, res) => {
     priority,
     status,
     email,
+    displayEmail,
     phoneNumber,
+    displayPhoneNumber,
   } = req.body;
   let encryptedEmail = "";
   let encryptedPhoneNumber = "";
   if (email) {
     encryptedEmail = CryptoJS.AES.encrypt(email, process.env.EMAIL_SECRET);
   }
+
   if (phoneNumber) {
+    // encrypt phone number
     encryptedPhoneNumber = CryptoJS.AES.encrypt(
       phoneNumber,
-      process.env.PHONE_SECRET
+      process.env.EMAIL_SECRET
     );
   }
 
@@ -63,7 +67,9 @@ exports.createController = async (req, res) => {
     priority,
     status,
     email: encryptedEmail,
+    displayEmail,
     phoneNumber: encryptedPhoneNumber,
+    displayPhoneNumber,
   });
   await newSwap.save();
   res.status(201).json({
@@ -143,45 +149,77 @@ exports.getNextMonthController = async (req, res) => {
 };
 
 exports.updateController = async (req, res) => {
-  const { id } = req.params;
-  const {
-    userID,
-    name,
-    threeLetterCode,
-    date,
-    startTime,
-    endTime,
-    duration,
-    shiftType,
-    exchanges,
-    qualifications,
-    note,
-    swapDates,
-    priority,
-    status,
-  } = req.body;
-  const updatedSwap = await Swap.findByIdAndUpdate(id, {
-    userID,
-    name,
-    threeLetterCode,
-    date,
-    startTime,
-    startTimeNumeric: convertTimeToNumber(startTime),
-    endTime,
-    endTimeNumeric: convertTimeToNumber(endTime),
-    duration,
-    shiftType,
-    exchanges,
-    qualifications,
-    note,
-    swapDates,
-    priority,
-    status,
-  });
-  res.status(200).json({
-    message: "Swap updated successfully",
-    data: updatedSwap,
-  });
+  try {
+    const { id } = req.params;
+    const {
+      userID,
+      name,
+      threeLetterCode,
+      date,
+      startTime,
+      endTime,
+      duration,
+      shiftType,
+      exchanges,
+      qualifications,
+      note,
+      swapDates,
+      priority,
+      status,
+      email,
+      displayEmail,
+      phoneNumber,
+      displayPhoneNumber,
+    } = req.body;
+
+    let encryptedEmail = "";
+    let encryptedPhoneNumber = "";
+
+    if (email) {
+      encryptedEmail = CryptoJS.AES.encrypt(
+        email,
+        process.env.EMAIL_SECRET
+      ).toString();
+    }
+
+    if (phoneNumber) {
+      encryptedPhoneNumber = CryptoJS.AES.encrypt(
+        phoneNumber,
+        process.env.EMAIL_SECRET
+      ).toString();
+    }
+
+    const updatedSwap = await Swap.findByIdAndUpdate(id, {
+      userID,
+      name,
+      threeLetterCode,
+      date,
+      startTime,
+      startTimeNumeric: convertTimeToNumber(startTime),
+      endTime,
+      endTimeNumeric: convertTimeToNumber(endTime),
+      duration,
+      shiftType,
+      exchanges,
+      qualifications,
+      note,
+      swapDates,
+      priority,
+      status,
+      email: encryptedEmail,
+      displayEmail,
+      phoneNumber: encryptedPhoneNumber,
+      displayPhoneNumber,
+    });
+
+    res.status(200).json({
+      message: "Swap updated successfully",
+      data: updatedSwap,
+    });
+  } catch (error) {
+    console.error("Error updating swap:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };
 
 exports.deleteController = async (req, res) => {

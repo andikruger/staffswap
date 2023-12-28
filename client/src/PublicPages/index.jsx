@@ -20,7 +20,7 @@ const Home = () => {
             <h1 className="text-2xl md:text-4xl font-bold mb-2 md:mb-4">
               StaffSwap
             </h1>
-            <p className="text-sm md:text-lg mb-4">
+            <p className="text-sm md:text-lg mb-4 px-2">
               Your Marketplace for Seamless Shift Exchanges
             </p>
             <a

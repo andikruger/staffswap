@@ -102,7 +102,7 @@ const WrapperView = () => {
           //   </button> */}
           // </div>
           <>
-            <RouterProvider router={router} />;
+            <RouterProvider router={router} />
           </>
         ) : (
           <h5>Not logged in</h5>

@@ -87,11 +87,84 @@ const RadioButtonList = ({ options, selectedOption, onChange }) => {
   );
 };
 
+const DisplayPhoneNumber = ({ label, isChecked, onChange }) => {
+  const checkboxStyle = {
+    backgroundColor: isChecked ? "#e0211a" : "transparent",
+    borderRadius: "4px",
+    padding: "8px",
+    margin: "8px",
+    color: isChecked ? "white" : "black",
+    border: isChecked ? "none" : "1px solid #ccc",
+  };
+
+  const handleClick = () => {
+    onChange(!isChecked);
+    console.log("PhoneNumber", isChecked);
+  };
+
+  return (
+    <div className="checkbox" onClick={handleClick} style={checkboxStyle}>
+      {label}
+    </div>
+  );
+};
+
+const DisplayPhoneNumberComponent = ({
+  displayPhoneNumber,
+  setDisplayPhoneNumber,
+}) => {
+  return (
+    <div className="checkbox-list">
+      <DisplayPhoneNumber
+        label="Display Phone Number"
+        isChecked={displayPhoneNumber}
+        onChange={setDisplayPhoneNumber}
+      />
+    </div>
+  );
+};
+
+const DisplayEmail = ({ label, isChecked, onChange }) => {
+  const checkboxStyle = {
+    backgroundColor: isChecked ? "#e0211a" : "transparent",
+    borderRadius: "4px",
+    padding: "8px",
+    margin: "8px",
+    color: isChecked ? "white" : "black",
+    border: isChecked ? "none" : "1px solid #ccc",
+  };
+
+  const handleClick = () => {
+    onChange(!isChecked);
+  };
+
+  return (
+    <div className="checkbox" onClick={handleClick} style={checkboxStyle}>
+      {label}
+    </div>
+  );
+};
+
+const DisplayEmailComponent = ({ displayEmail, setDisplayEmail }) => {
+  return (
+    <div className="rounded-3xl">
+      <DisplayEmail
+        label="Display Email"
+        isChecked={displayEmail}
+        onChange={setDisplayEmail}
+      />
+    </div>
+  );
+};
+
 const NewSwap = () => {
   const { instance, accounts } = useMsal();
   const [threeLetterCode, setThreeLetterCode] = useState("");
   const [userData, setUserData] = useState({});
   const [userID, setUserID] = useState("");
+  const [displayEmail, setDisplayEmail] = useState(false);
+  const [displayPhoneNumber, setDisplayPhoneNumber] = useState(false);
+
   useEffect(() => {
     // Assuming accounts[0].username is available
     const newUserID = sha256(accounts[0].username).toString();
@@ -107,8 +180,6 @@ const NewSwap = () => {
 
         setUserData(data);
         setThreeLetterCode(data.threeLetterCode); // Set the threeLetterCode state
-
-        console.log("userData", data);
       })
       .catch((err) => {
         console.log("err", err);
@@ -116,7 +187,6 @@ const NewSwap = () => {
     localStorage.clear();
   }, [accounts]);
 
-  console.log("userData", userData);
   let submitObject = {
     userID: userData._id,
     name: accounts[0].name,
@@ -132,6 +202,8 @@ const NewSwap = () => {
     qualifications: [],
     email: "",
     phoneNumber: "",
+    displayEmail: false,
+    displayPhoneNumber: false,
   };
   const handleInputChange = (event) => {
     submitObject[event.target.name] = event.target.value;
@@ -218,12 +290,19 @@ const NewSwap = () => {
       submitObject.qualifications = selectedOptions;
       submitObject.shiftType = selectedOption;
       submitObject.exchange = exchanges;
+      submitObject.displayEmail = displayEmail;
+      submitObject.displayPhoneNumber = displayPhoneNumber;
       console.log(submitObject);
 
       const response = await axios.post(
         "https://lucky-red-robe.cyclic.app/api/v1/swap/new",
         submitObject
       );
+
+      // const response = await axios.post(
+      //   "http://localhost:8000/api/v1/swap/new",
+      //   submitObject
+      // );
 
       toast.success("Swap Submitted Successfully", {
         position: toast.POSITION.TOP_RIGHT,
@@ -265,13 +344,13 @@ const NewSwap = () => {
         }}
       >
         {/* White rounded box */}
-        <div className="bg-white p-8 rounded-lg shadow-lg w-11/12 max-w-screen-md overflow-y-auto">
+        <div className="bg-white my-4 p-8 rounded-lg shadow-lg w-11/12 max-w-screen-md overflow-y-auto">
           {/* Your content goes here */}
           <h2 className="text-2xl font-bold mb-4 text-gray-800">New Swap</h2>
           <form onSubmit={handleSubmit}>
             {/* Add your form fields here */}
             {/* Name and Three Letter Code in the same line for larger screens */}
-            <div className="flex mb-4">
+            <div className="flex flex-col mb-4 sm:flex-row">
               {/* Name */}
               <div className="w-full sm:w-1/2 mb-2 sm:mb-0 sm:mr-2">
                 <label htmlFor="name" className="block text-sm mb-2">
@@ -288,7 +367,7 @@ const NewSwap = () => {
               </div>
 
               {/* Three Letter Code */}
-              <div className="w-full sm:w-1/2 ml-0 sm:ml-2">
+              <div className="w-full sm:w-1/2 sm:ml-2">
                 <label htmlFor="threeLetterCode" className="block text-sm mb-2">
                   Three Letter Code
                 </label>
@@ -302,9 +381,8 @@ const NewSwap = () => {
                 />
               </div>
             </div>
-
             {/* Date and time */}
-            <div className="flex mb-4">
+            <div className="flex flex-col sm:flex-row mb-4">
               {/* Date */}
               <div className="w-full sm:w-1/2 mb-2 sm:mb-0 sm:mr-2">
                 <label htmlFor="date" className="block text-sm mb-2">
@@ -340,6 +418,7 @@ const NewSwap = () => {
                 </select>
               </div>
             </div>
+
             {/* Priority */}
             <div className="mb-4">
               <label htmlFor="priority" className="block text-sm mb-2">
@@ -469,6 +548,14 @@ const NewSwap = () => {
               />
             </div>
 
+            {/* Display Email Checkbox */}
+            <div className="mb-4">
+              <DisplayEmailComponent
+                displayEmail={displayEmail}
+                setDisplayEmail={setDisplayEmail}
+              />
+            </div>
+
             {/* Phone Number */}
             <div className="mb-4">
               <label htmlFor="phoneNumber" className="block text-sm mb-2">
@@ -480,6 +567,14 @@ const NewSwap = () => {
                 name="phoneNumber"
                 onChange={handleInputChange}
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+              />
+            </div>
+
+            {/* Display Phone Number Checkbox */}
+            <div className="mb-4">
+              <DisplayPhoneNumberComponent
+                displayPhoneNumber={displayPhoneNumber}
+                setDisplayPhoneNumber={setDisplayPhoneNumber}
               />
             </div>
 

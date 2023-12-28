@@ -71,7 +71,7 @@ const Home = () => {
             <h1 className="text-2xl md:text-4xl font-bold mb-2 md:mb-4">
               StaffSwap
             </h1>
-            <p className="text-sm md:text-lg mb-4">
+            <p className="text-sm md:text-lg mb-4 px-2">
               Your Marketplace for Seamless Shift Exchanges
             </p>
             <a
@@ -86,7 +86,8 @@ const Home = () => {
 
       <section id="how-it-works" className="container mx-auto my-16">
         <h2 className="text-2xl font-bold mb-8">How It Works</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          {/* Step 1 */}
           <div className="text-center">
             <div className="bg-white p-6 rounded-lg shadow-md">
               <img
@@ -101,6 +102,7 @@ const Home = () => {
             </div>
           </div>
 
+          {/* Step 2 */}
           <div className="text-center">
             <div className="bg-white p-6 rounded-lg shadow-md">
               <img
@@ -115,6 +117,7 @@ const Home = () => {
             </div>
           </div>
 
+          {/* Step 3 */}
           <div className="text-center">
             <div className="bg-white p-6 rounded-lg shadow-md">
               <img
@@ -125,6 +128,21 @@ const Home = () => {
               <h3 className="text-xl font-bold mb-2">Swap and Confirm</h3>
               <p className="text-gray-700">
                 Browse available shifts, swap, and confirm the exchange.
+              </p>
+            </div>
+          </div>
+
+          {/* Step 4 - Contact Staff Planning */}
+          <div className="text-center">
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <img
+                src="https://images.unsplash.com/photo-1452697620382-f6543ead73b5?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                alt="Contact Staff Planning"
+                className="mx-auto mb-4 rounded-full"
+              />
+              <h3 className="text-xl font-bold mb-2">Contact Staff Planning</h3>
+              <p className="text-gray-700">
+                Reach out to staff planning for assistance.
               </p>
             </div>
           </div>

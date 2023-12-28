@@ -5,10 +5,12 @@ import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import axios from "axios";
 import "../../../index.css";
+import * as CryptoJS from "crypto-js";
 import qualificationData from "../../../data/qualifications.json";
 import shiftTypeData from "../../../data/shifttypes.json";
 import shiftTimesData from "../../../data/shifttimes.json";
 import { toast } from "react-toastify";
+import { useMsal, MsalProvider } from "@azure/msal-react";
 
 const CheckboxButton = ({ label, isChecked, onChange }) => {
   const buttonStyle = {
@@ -85,10 +87,83 @@ const RadioButtonList = ({ options, selectedOption, onChange }) => {
     </div>
   );
 };
+const DisplayPhoneNumber = ({ label, isChecked, onChange }) => {
+  const checkboxStyle = {
+    backgroundColor: isChecked ? "#e0211a" : "transparent",
+    borderRadius: "4px",
+    padding: "8px",
+    margin: "8px",
+    color: isChecked ? "white" : "black",
+    border: isChecked ? "none" : "1px solid #ccc",
+  };
 
+  const handleClick = () => {
+    onChange(!isChecked);
+    console.log("PhoneNumber", isChecked);
+  };
+
+  return (
+    <div className="checkbox" onClick={handleClick} style={checkboxStyle}>
+      {label}
+    </div>
+  );
+};
+
+const DisplayPhoneNumberComponent = ({
+  displayPhoneNumber,
+  setDisplayPhoneNumber,
+}) => {
+  return (
+    <div className="checkbox-list">
+      <DisplayPhoneNumber
+        label="Display Phone Number"
+        isChecked={displayPhoneNumber}
+        onChange={setDisplayPhoneNumber}
+      />
+    </div>
+  );
+};
+
+const DisplayEmail = ({ label, isChecked, onChange }) => {
+  const checkboxStyle = {
+    backgroundColor: isChecked ? "#e0211a" : "transparent",
+    borderRadius: "4px",
+    padding: "8px",
+    margin: "8px",
+    color: isChecked ? "white" : "black",
+    border: isChecked ? "none" : "1px solid #ccc",
+  };
+
+  const handleClick = () => {
+    onChange(!isChecked);
+  };
+
+  return (
+    <div className="checkbox" onClick={handleClick} style={checkboxStyle}>
+      {label}
+    </div>
+  );
+};
+
+const DisplayEmailComponent = ({ displayEmail, setDisplayEmail }) => {
+  return (
+    <div className="rounded-3xl">
+      <DisplayEmail
+        label="Display Email"
+        isChecked={displayEmail}
+        onChange={setDisplayEmail}
+      />
+    </div>
+  );
+};
 const EditSwap = () => {
+  const [phoneNumber, setPhoneNumber] = useState(null);
+  const [email, setEmail] = useState(null);
+  const { instance, accounts } = useMsal();
   const [submitObject, setSubmitObject] = useState({});
   const [creator, setCreator] = useState(null);
+  const [displayEmail, setDisplayEmail] = useState(false);
+  const [displayPhoneNumber, setDisplayPhoneNumber] = useState(false);
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -99,7 +174,28 @@ const EditSwap = () => {
         const response = await axios.get(
           `https://lucky-red-robe.cyclic.app/api/v1/swap/${id}`
         );
+        if (response.data.data.email) {
+          let emailTemp = CryptoJS.AES.decrypt(
+            response.data.data.email,
+            "5LBMOi7Lf1G/yF+VnMbk24PPRgGPE6jzFYNhKeq95ko="
+          );
+          emailTemp = emailTemp.toString(CryptoJS.enc.Utf8);
+          setEmail(emailTemp);
+        }
+        if (response.data.data.phoneNumber) {
+          let phoneNumberTemp = CryptoJS.AES.decrypt(
+            response.data.data.phoneNumber,
+            "5LBMOi7Lf1G/yF+VnMbk24PPRgGPE6jzFYNhKeq95ko="
+          );
+          phoneNumberTemp = phoneNumberTemp.toString(CryptoJS.enc.Utf8);
+          setPhoneNumber(phoneNumberTemp);
+        }
+
+        console.log("response.data.data", response.data.data);
+
         setSubmitObject(response.data.data);
+        setDisplayEmail(response.data.data.displayEmail);
+        setDisplayPhoneNumber(response.data.data.displayPhoneNumber);
 
         setSelectedOption(response.data.data.shiftType);
         setSelectedOptions(response.data.data.qualifications);
@@ -107,6 +203,7 @@ const EditSwap = () => {
         let formatedDate = response.data.data.date.split("T")[0];
         setDateFormated(formatedDate);
         setCreator(response.data.data.userID);
+        console.log("phoneNUmber", response.data.data.phoneNumber);
       } catch (error) {
         console.error("Error fetching swap details:", error);
         toast.error("Error fetching swap details", {
@@ -159,6 +256,9 @@ const EditSwap = () => {
       let formatedDate = event.target.value.split("T")[0];
       setDateFormated(formatedDate);
       setSubmitObject({ ...submitObject, date: formatedDate });
+    } else if (event.target.name === "phoneNumber") {
+      // Handle phone number changes
+      setPhoneNumber(event.target.value);
     } else {
       const { name, value } = event.target;
       setSubmitObject({ ...submitObject, [name]: value });
@@ -249,14 +349,23 @@ const EditSwap = () => {
         startTime,
         endTime,
         duration: tempDuration,
+        displayEmail,
+        displayPhoneNumber,
       };
 
       setSubmitObject(tempObj);
+
+      console.log("tempObj", tempObj);
 
       const response = await axios.put(
         `https://lucky-red-robe.cyclic.app/api/v1/swap/${id}`,
         tempObj
       );
+
+      // const response = await axios.put(
+      //   `http://localhost:8000/api/v1/swap/${id}`,
+      //   tempObj
+      // );
 
       toast.success("Swap updated successfully", {
         position: toast.POSITION.TOP_RIGHT,
@@ -292,13 +401,14 @@ const EditSwap = () => {
         }}
       >
         {/* White rounded box */}
-        <div className="bg-white p-8 rounded-lg shadow-lg w-11/12 max-w-screen-md overflow-y-auto">
+        <div className="bg-white my-4 p-8 rounded-lg shadow-lg w-11/12 max-w-screen-md overflow-y-auto">
           {/* Your content goes here */}
           <h2 className="text-2xl font-bold mb-4 text-gray-800">Update Swap</h2>
           <form onSubmit={handleSubmit}>
             {/* Add your form fields here */}
             {/* Name and Three Letter Code in the same line for larger screens */}
-            <div className="flex mb-4">
+            {/* Name and Three Letter Code in a column for smaller screens */}
+            <div className="flex flex-col sm:flex-row mb-4">
               {/* Name */}
               <div className="w-full sm:w-1/2 mb-2 sm:mb-0 sm:mr-2">
                 <label htmlFor="name" className="block text-sm mb-2">
@@ -332,8 +442,8 @@ const EditSwap = () => {
               </div>
             </div>
 
-            {/* Date and time */}
-            <div className="flex mb-4">
+            {/* Date and Time in a column for smaller screens */}
+            <div className="flex flex-col sm:flex-row mb-4">
               {/* Date */}
               <div className="w-full sm:w-1/2 mb-2 sm:mb-0 sm:mr-2">
                 <label htmlFor="date" className="block text-sm mb-2">
@@ -370,6 +480,7 @@ const EditSwap = () => {
                 </select>
               </div>
             </div>
+
             {/* Priority */}
             <div className="mb-4">
               <label htmlFor="priority" className="block text-sm mb-2">
@@ -493,9 +604,18 @@ const EditSwap = () => {
                 type="email"
                 id="email"
                 name="email"
-                value={submitObject.email}
+                value={email}
+                readOnly
                 onChange={handleInputChange}
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+              />
+            </div>
+
+            {/* Display Email Checkbox */}
+            <div className="mb-4">
+              <DisplayEmailComponent
+                displayEmail={displayEmail}
+                setDisplayEmail={setDisplayEmail}
               />
             </div>
 
@@ -508,9 +628,17 @@ const EditSwap = () => {
                 type="tel"
                 id="phoneNumber"
                 name="phoneNumber"
-                value={submitObject.phoneNumber}
+                value={phoneNumber}
                 onChange={handleInputChange}
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+              />
+            </div>
+
+            {/* Display Phone Number Checkbox */}
+            <div className="mb-4">
+              <DisplayPhoneNumberComponent
+                displayPhoneNumber={displayPhoneNumber}
+                setDisplayPhoneNumber={setDisplayPhoneNumber}
               />
             </div>
 

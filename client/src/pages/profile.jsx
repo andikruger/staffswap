@@ -221,6 +221,21 @@ const Profile = () => {
           >
             Go to My Swaps
           </button>
+          <div className="mt-4">
+            <p className="text-sm text-gray-500">
+              <strong>Note:</strong> You can only swap with other users with the
+              same role as you.
+            </p>
+          </div>
+
+          {/* Add a chat button navigate to /chat */}
+
+          <button
+            onClick={() => navigate("/chat")} // Use navigate to redirect to "/chat"
+            className="bg-[#e0211a] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#b41813] mt-4"
+          >
+            Go to Chat
+          </button>
         </div>
       </div>
 
