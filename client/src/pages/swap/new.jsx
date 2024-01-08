@@ -461,10 +461,15 @@ const NewSwap = () => {
               <div className="mb-4">
                 <label className="block text-sm mb-2">Select Date</label>
                 <input
-                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+                  className="appearance-none w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
                   type="date"
                   min={new Date().toISOString().split("T")[0]}
                   value={selectedDate.toISOString().split("T")[0]}
+                  defaultValue={
+                    new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
+                      .toISOString()
+                      .split("T")[0]
+                  }
                   onChange={(e) => handleDateChange(new Date(e.target.value))}
                 />
               </div>
@@ -472,7 +477,7 @@ const NewSwap = () => {
               <div className="mb-4">
                 <label className="block text-sm mb-2 ">Select Start Time</label>
                 <input
-                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+                  className="appearance-none w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
                   type="time"
                   value={startTime}
                   onChange={(e) => handleStartTimeChange(e.target.value)}
@@ -482,7 +487,7 @@ const NewSwap = () => {
               <div className="mb-4">
                 <label className="block text-sm mb-2">Select End Time</label>
                 <input
-                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+                  className="appearance-none w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
                   type="time"
                   value={endTime}
                   onChange={(e) => handleEndTimeChange(e.target.value)}
