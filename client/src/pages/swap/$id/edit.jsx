@@ -455,7 +455,7 @@ const EditSwap = () => {
                   name="date"
                   value={dateFormated}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+                  className="appearance-none w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
                 />
               </div>
 
@@ -469,7 +469,7 @@ const EditSwap = () => {
                   name="shiftTime"
                   value={`${submitObject.startTime}-${submitObject.endTime}`}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+                  className="appearance-none w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
                 >
                   <option value="">Select Shift Time</option>
                   {shiftTimes.map((shiftTime) => (
@@ -491,7 +491,7 @@ const EditSwap = () => {
                 name="priority"
                 value={submitObject.priority}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+                className="appearance-none w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
               >
                 <option value="1">1 - Low</option>
                 <option value="2">2 - Medium</option>
