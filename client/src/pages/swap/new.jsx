@@ -393,6 +393,11 @@ const NewSwap = () => {
                   id="date"
                   min={new Date().toISOString().split("T")[0]}
                   name="date"
+                  defaultValue={
+                    new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
+                      .toISOString()
+                      .split("T")[0]
+                  }
                   onChange={handleInputChange}
                   className="appearance-none w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
                 />
