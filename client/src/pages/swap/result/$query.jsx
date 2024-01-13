@@ -127,6 +127,12 @@ const Swaps = () => {
                       <strong>Three Letter Code:</strong> {swap.threeLetterCode}
                     </div>
                     <div>
+                      <strong>Wish:</strong>{" "}
+                      <p className="bg-[#e0211a] text-white rounded-full px-3 py-1 text-sm font-semibold m-1">
+                        {swap.shiftWish}
+                      </p>
+                    </div>
+                    <div>
                       <strong>Note:</strong> {swap.note}
                     </div>
 
