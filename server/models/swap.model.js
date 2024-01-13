@@ -41,9 +41,9 @@ const SwapSchema = new mongoose.Schema(
       required: [true, "An endTimeNumeric is required"],
     },
 
-    shiftType: {
+    shiftWish: {
       type: String,
-      required: [true, "A shiftType is required"],
+      required: [true, "A shiftWish is required"],
     },
 
     qualifications: {
