@@ -120,6 +120,7 @@ const Swaps = () => {
                     <div>
                       <strong>Three Letter Code:</strong> {swap.threeLetterCode}
                     </div>
+
                     <div>
                       <strong>Note:</strong> {swap.note}
                     </div>

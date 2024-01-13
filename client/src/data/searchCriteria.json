@@ -27,8 +27,8 @@
 
   {
     "displayName": "Shift Wish",
-    "type": "shiftType",
-    "value": "shiftType"
+    "type": "shiftWish",
+    "value": "shiftWish"
   },
   {
     "displayName": "Qualifications",

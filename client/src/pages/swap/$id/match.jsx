@@ -38,8 +38,8 @@ function findMatches(obj, arr) {
     );
   };
 
-  // Check if the shiftType is "Selber Dienst, anderer Tag"
-  if (obj.shiftType === "Selber Dienst, anderer Tag") {
+  // Check if the shiftWish is "Selber Dienst, anderer Tag"
+  if (obj.shiftWish === "Selber Dienst, anderer Tag") {
     // Iterate through the array of potential matches
     for (const swap of arr) {
       // Check if the dates are different and threeLetterCode values are different

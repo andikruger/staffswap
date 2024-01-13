@@ -11,7 +11,7 @@ import axios from "axios";
 import "../../index.css";
 import * as CryptoJS from "crypto-js";
 import qualificationData from "../../data/qualifications.json";
-import shiftTypeData from "../../data/shifttypes.json";
+import shiftWishData from "../../data/shiftWishes.json";
 import { toast } from "react-toastify";
 
 const formatDate = (dateString) => {
@@ -74,7 +74,7 @@ const QualificationsList = ({ options, selectedOptions, onChange }) => {
   );
 };
 
-const ShiftType = ({ label, isSelected }) => {
+const ShiftWish = ({ label, isSelected }) => {
   const buttonStyle = {
     backgroundColor: isSelected ? "#e0211a" : "transparent",
     borderRadius: "20px",
@@ -94,11 +94,11 @@ const ShiftType = ({ label, isSelected }) => {
   );
 };
 
-const ShiftTypeList = ({ options, selectedOption }) => {
+const ShiftWishList = ({ options, selectedOption }) => {
   return (
     <div className="radio-button-list">
       {options.map((option) => (
-        <ShiftType
+        <ShiftWish
           key={option}
           label={option}
           isSelected={selectedOption === option}
@@ -125,7 +125,7 @@ const SwapDetails = () => {
           `https://lucky-red-robe.cyclic.app/api/v1/swap/${id}`
         );
         setSwapDetails(response.data.data);
-        setSelectedOption(response.data.data.shiftType);
+        setSelectedOption(response.data.data.shiftWish);
         setSelectedOptions(response.data.data.qualifications);
         if (response.data.data.email && response.data.data.displayEmail) {
           let email = CryptoJS.AES.decrypt(
@@ -166,7 +166,7 @@ const SwapDetails = () => {
 
   const qualifications = qualificationData.qualifications;
 
-  const shiftType = shiftTypeData.shiftTypes;
+  const shiftWish = shiftWishData.shiftWishes;
 
   const [exchanges, setExchanges] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -270,11 +270,11 @@ const SwapDetails = () => {
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm mb-2">Type</label>
+            <label className="block text-sm mb-2">Shift Wish</label>
             <div>
               {/* ... Radio buttons ... */}
-              <ShiftTypeList
-                options={shiftType}
+              <ShiftWishList
+                options={shiftWish}
                 selectedOption={selectedOption}
               />
             </div>

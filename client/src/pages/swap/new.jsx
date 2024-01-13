@@ -6,7 +6,7 @@ import axios from "axios";
 import sha256 from "crypto-js/sha256";
 import "../../index.css";
 import qualificationData from "../../data/qualifications.json";
-import shiftTypeData from "../../data/shifttypes.json";
+import shiftWishData from "../../data/shiftWishes.json";
 import shiftTimesData from "../../data/shifttimes.json";
 import { toast } from "react-toastify";
 import { useMsal, MsalProvider } from "@azure/msal-react";
@@ -196,7 +196,7 @@ const NewSwap = () => {
     endTime: "",
     duration: "",
     priority: "",
-    shiftType: "",
+    shiftWish: "",
     exchange: "",
     notes: "",
     qualifications: [],
@@ -223,7 +223,7 @@ const NewSwap = () => {
   };
   const qualifications = qualificationData.qualifications;
 
-  const shiftType = shiftTypeData.shiftTypes;
+  const shiftWish = shiftWishData.shiftWishes;
   const shiftTimes = shiftTimesData.shiftTimes;
 
   const [exchanges, setExchanges] = useState([]);
@@ -288,7 +288,7 @@ const NewSwap = () => {
       submitObject = { ...submitObject, ...value };
 
       submitObject.qualifications = selectedOptions;
-      submitObject.shiftType = selectedOption;
+      submitObject.shiftWish = selectedOption;
       submitObject.exchange = exchanges;
       submitObject.displayEmail = displayEmail;
       submitObject.displayPhoneNumber = displayPhoneNumber;
@@ -446,7 +446,7 @@ const NewSwap = () => {
               <div>
                 {/* ... Radio buttons ... */}
                 <RadioButtonList
-                  options={shiftType}
+                  options={shiftWish}
                   selectedOption={selectedOption}
                   onChange={handleRadioChange}
                 />

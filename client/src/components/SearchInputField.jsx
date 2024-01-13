@@ -1,11 +1,11 @@
 import React, { useState, useCallback } from "react";
 import searchCriteria from "../data/searchCriteria.json";
 import qualificationData from "../data/qualifications.json";
-import shiftTypeData from "../data/shifttypes.json";
+import shiftWishData from "../data/shiftWishes.json";
 
 const SearchInputField = ({ type, index }) => {
   const [selectedQualification, setSelectedQualification] = useState(null);
-  const [selectedShiftType, setSelectedShiftType] = useState(null);
+  const [selectedShiftWish, setSelectedShiftWish] = useState(null);
   const [searchValues, setSearchValues] = useState([{ type: type, value: "" }]);
 
   const handleInputChange = useCallback(
@@ -19,7 +19,7 @@ const SearchInputField = ({ type, index }) => {
     [searchValues, index]
   );
 
-  const shiftType = shiftTypeData.shiftTypes;
+  const shiftWish = shiftWishData.shiftWishes;
   const qualifications = qualificationData.qualifications;
   const handleQualificationChange = (label) => {
     setSelectedQualification(label);
@@ -28,11 +28,11 @@ const SearchInputField = ({ type, index }) => {
     localStorage.setItem(`search_qualifications`, label);
   };
 
-  const handleShiftTypeChange = (label) => {
-    setSelectedShiftType(label);
+  const handleShiftWishChange = (label) => {
+    setSelectedShiftWish(label);
 
     // Store the selected option in localStorage
-    localStorage.setItem(`search_shiftType`, label);
+    localStorage.setItem(`search_shiftWish`, label);
   };
   const QualificationButton = ({ label, isChecked, onChange }) => {
     const buttonStyle = {
@@ -75,7 +75,7 @@ const SearchInputField = ({ type, index }) => {
     );
   };
 
-  const ShiftType = ({ label, isSelected, onChange }) => {
+  const ShiftWish = ({ label, isSelected, onChange }) => {
     const buttonStyle = {
       backgroundColor: isSelected ? "#e0211a" : "transparent",
       borderRadius: "20px",
@@ -99,14 +99,14 @@ const SearchInputField = ({ type, index }) => {
     );
   };
 
-  const ShiftTypeList = ({ options, selectedShiftType, onChange }) => {
+  const ShiftWishList = ({ options, selectedShiftWish, onChange }) => {
     return (
       <div className="radio-button-list">
         {options.map((option) => (
-          <ShiftType
+          <ShiftWish
             key={option}
             label={option}
-            isSelected={selectedShiftType === option}
+            isSelected={selectedShiftWish === option}
             onChange={onChange}
           />
         ))}
@@ -166,16 +166,16 @@ const SearchInputField = ({ type, index }) => {
         </select>
       );
 
-    case "shiftType":
+    case "shiftWish":
       return (
         <div className="mb-4">
           <label className="block text-sm mb-2">Shift Wish</label>
           <div>
             {/* ... Radio buttons ... */}
-            <ShiftTypeList
-              options={shiftType}
-              selectedShiftType={selectedShiftType}
-              onChange={handleShiftTypeChange}
+            <ShiftWishList
+              options={shiftWish}
+              selectedShiftWish={selectedShiftWish}
+              onChange={handleShiftWishChange}
             />
           </div>
         </div>

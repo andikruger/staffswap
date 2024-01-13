@@ -68,12 +68,12 @@ const SearchSwap = React.memo(() => {
         }),
       };
 
-      // if there is a an element in the array "field": "shiftType" make its value that what is in the localStorage search_shiftType
+      // if there is a an element in the array "field": "shiftWish" make its value that what is in the localStorage search_shiftWish
 
-      if (formData.searchCriteria.some((item) => item.field === "shiftType")) {
+      if (formData.searchCriteria.some((item) => item.field === "shiftWish")) {
         formData.searchCriteria.find(
-          (item) => item.field === "shiftType"
-        ).value = localStorage.getItem("search_shiftType");
+          (item) => item.field === "shiftWish"
+        ).value = localStorage.getItem("search_shiftWish");
       }
 
       // if there is a an element in the array "field": "qualifications" make its value that what is in the localStorage search_qualifications

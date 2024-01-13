@@ -7,7 +7,7 @@ import axios from "axios";
 import "../../../index.css";
 import * as CryptoJS from "crypto-js";
 import qualificationData from "../../../data/qualifications.json";
-import shiftTypeData from "../../../data/shifttypes.json";
+import shiftWishData from "../../../data/shiftWishes.json";
 import shiftTimesData from "../../../data/shifttimes.json";
 import { toast } from "react-toastify";
 import { useMsal, MsalProvider } from "@azure/msal-react";
@@ -197,7 +197,7 @@ const EditSwap = () => {
         setDisplayEmail(response.data.data.displayEmail);
         setDisplayPhoneNumber(response.data.data.displayPhoneNumber);
 
-        setSelectedOption(response.data.data.shiftType);
+        setSelectedOption(response.data.data.shiftWish);
         setSelectedOptions(response.data.data.qualifications);
         setExchanges(response.data.data.exchanges);
         let formatedDate = response.data.data.date.split("T")[0];
@@ -280,7 +280,7 @@ const EditSwap = () => {
   };
   const qualifications = qualificationData.qualifications;
 
-  const shiftType = shiftTypeData.shiftTypes;
+  const shiftWish = shiftWishData.shiftWishes;
   const shiftTimes = shiftTimesData.shiftTimes;
 
   const [exchanges, setExchanges] = useState([]);
@@ -344,7 +344,7 @@ const EditSwap = () => {
       const tempObj = {
         ...value,
         qualifications: selectedOptions,
-        shiftType: selectedOption,
+        shiftWish: selectedOption,
         exchanges: exchanges,
         startTime,
         endTime,
@@ -504,7 +504,7 @@ const EditSwap = () => {
               <div>
                 {/* ... Radio buttons ... */}
                 <RadioButtonList
-                  options={shiftType}
+                  options={shiftWish}
                   selectedOption={selectedOption}
                   onChange={handleRadioChange}
                 />
