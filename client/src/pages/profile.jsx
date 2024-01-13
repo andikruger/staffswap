@@ -197,7 +197,7 @@ const Profile = () => {
 
             {/* Role */}
             <div className="mb-4">
-              <label className="block text-sm mb-2">Shift Type</label>
+              <label className="block text-sm mb-2">Role</label>
               <div>
                 {/* ... Radio buttons ... */}
                 <RadioButtonList

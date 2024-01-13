@@ -500,7 +500,7 @@ const EditSwap = () => {
             </div>
             {/* Type */}
             <div className="mb-4">
-              <label className="block text-sm mb-2">Shift Type</label>
+              <label className="block text-sm mb-2">Shift Wish</label>
               <div>
                 {/* ... Radio buttons ... */}
                 <RadioButtonList

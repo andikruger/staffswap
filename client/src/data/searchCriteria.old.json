@@ -50,9 +50,9 @@
     ]
   },
   {
-    "displayName": "Shift Type",
-    "type": "shiftType",
-    "value": "shiftType"
+    "displayName": "Shift Wish",
+    "type": "shiftWish",
+    "value": "shiftWish"
   },
   {
     "displayName": "Qualifications",
