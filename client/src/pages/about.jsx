@@ -17,10 +17,13 @@ const About = () => {
           content="StaffSwap, shift exchange, work platform"
         />
         <meta name="author" content="StaffSwap" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        />
       </Helmet>
       <Header />
-      <div className="flex flex-col items-center justify-center h-screen">
+      <div className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6 md:p-8">
         <div className="text-4xl font-bold text-[#e0211a] mb-6">
           About Staff Swap
         </div>
