@@ -53,7 +53,7 @@ const swaggerOptions = {
       },
     ],
   },
-  apis: ["./docs/users.docs.js"],
+  apis: ["./docs/swaps.docs.js"],
 };
 
 const swaggerDocs = swaggerjsdoc(swaggerOptions);

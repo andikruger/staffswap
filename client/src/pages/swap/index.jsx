@@ -36,7 +36,7 @@ const Swaps = () => {
     const fetchSwaps = async () => {
       try {
         const response = await axios.get(
-          "https://lucky-red-robe.cyclic.app/api/v1/swap"
+          "https://lucky-red-robe.cyclic.app/swap"
         );
         setSwaps(response.data.data);
         console.log("Swaps:", response.data.data);
