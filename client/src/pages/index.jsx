@@ -21,9 +21,9 @@ const Home = () => {
     // create a sha256 hash of the username
     const hash = sha256(accounts[0].username).toString();
 
-    // check if the hash exists in the database api endpoint https://lucky-red-robe.cyclic.app/api/v1/user/username/:hash
+    // check if the hash exists in the database api endpoint https://lucky-red-robe.cyclic.app/user/username/:hash
     axios
-      .get(`https://lucky-red-robe.cyclic.app/api/v1/user/username/${hash}`)
+      .get(`https://lucky-red-robe.cyclic.app/user/username/${hash}`)
       .then((res) => {
         console.log("res", res);
         // if it doesn't, then create a new user redirect to the profile page
