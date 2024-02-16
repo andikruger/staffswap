@@ -56,17 +56,19 @@ const Swaps = () => {
   function displaySwaps() {
     if (view === "list") {
       return (
-        <ul>
-          {Array.isArray(swaps) && swaps.length > 0 ? (
-            swaps.map((swap, index) => (
-              <li key={index}>
-                <SwapList swap={swap} />
-              </li>
-            ))
-          ) : (
-            <p>No swaps available.</p>
-          )}
-        </ul>
+        <div className="pt-4">
+          <ul>
+            {Array.isArray(swaps) && swaps.length > 0 ? (
+              swaps.map((swap, index) => (
+                <li key={index}>
+                  <SwapList swap={swap} />
+                </li>
+              ))
+            ) : (
+              <p>No swaps available.</p>
+            )}
+          </ul>
+        </div>
       );
     } else {
       return (
