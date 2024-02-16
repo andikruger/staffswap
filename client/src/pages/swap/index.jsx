@@ -4,8 +4,9 @@ import { Helmet } from "react-helmet";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import AddButton from "../../components/AddButton";
+import ChangeViewButton from "../../components/ChangeViewButton";
 import SearchButton from "../../components/SearchButton";
-import SwapCard from "../../components/SwapCard";
+import SwapList from "../../components/SwapList";
 import axios from "axios";
 import "../../index.css";
 import { toast } from "react-toastify";
@@ -54,7 +55,8 @@ const Swaps = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Helmet>
       <Header />
-      <AddButton />
+      {/* <AddButton /> */}
+      <ChangeViewButton />
       <SearchButton />
       <div
         className="min-h-screen bg-cover bg-center flex items-center justify-center"
@@ -72,14 +74,20 @@ const Swaps = () => {
             {error}
           </p>
         ) : (
-          <div className="flex flex-wrap justify-center">
-            {Array.isArray(swaps) && swaps.length > 0 ? (
-              swaps.map((swap, index) => <SwapCard key={index} swap={swap} />)
-            ) : (
-              <p className="bg-white p-8 rounded-lg shadow-lg m-4 max-w-md">
-                No swaps available.
-              </p>
-            )}
+          <div className="">
+            <ul className="pt-4">
+              {Array.isArray(swaps) && swaps.length > 0 ? (
+                swaps.map((swap, index) => (
+                  <li key={index}>
+                    <SwapList swap={swap} />
+                  </li>
+                ))
+              ) : (
+                <p className="bg-white p-8 rounded-lg shadow-lg m-4">
+                  No swaps available.
+                </p>
+              )}
+            </ul>
           </div>
         )}
       </div>
