@@ -4,8 +4,10 @@ import { Link, useParams } from "react-router-dom";
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import AddButton from "../../../components/AddButton";
+import ChangeViewButton from "../../../components/ChangeViewButton";
 import SearchButton from "../../../components/SearchButton";
 import SwapCard from "../../../components/SwapCard";
+import SwapList from "../../../components/SwapList";
 import axios from "axios";
 import "../../../index.css";
 import { toast } from "react-toastify";
@@ -15,6 +17,7 @@ const Swaps = () => {
   const [swaps, setSwaps] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [view, setView] = useState(localStorage.getItem("view") || "grid");
 
   useEffect(() => {
     const fetchSwaps = async () => {
@@ -45,24 +48,64 @@ const Swaps = () => {
     }
   }, []);
 
+  useEffect(() => {
+    localStorage.setItem("view", view);
+  }, [view]);
+
+  const toggleView = () => {
+    setView((prevView) => (prevView === "grid" ? "list" : "grid"));
+  };
+
+  function displaySwaps() {
+    if (view === "list") {
+      return (
+        <ul>
+          {Array.isArray(swaps) && swaps.length > 0 ? (
+            swaps.map((swap, index) => (
+              <li key={index}>
+                <SwapList swap={swap} />
+              </li>
+            ))
+          ) : (
+            <p>No swaps available.</p>
+          )}
+        </ul>
+      );
+    } else {
+      return (
+        <div className="flex flex-wrap justify-center">
+          {Array.isArray(swaps) && swaps.length > 0 ? (
+            swaps.map((swap, index) => (
+              <SwapCard key={index} swap={swap} index={index} />
+            ))
+          ) : (
+            <p className="bg-white p-8 rounded-lg shadow-lg m-4 max-w-md">
+              No swaps available.
+            </p>
+          )}
+        </div>
+      );
+    }
+  }
+
   return (
     <>
       <Helmet>
-        <title>StaffSwap | Results</title>
-        <meta name="description" content="StaffSwap" />
-        <meta name="keywords" content="StaffSwap" />
-        <meta name="author" content="StaffSwap" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      </Helmet>
-      <Helmet>
-        <title>StaffSwap</title>
+        <title>StaffSwap | All Swaps</title>
         <meta name="description" content="StaffSwap" />
         <meta name="keywords" content="StaffSwap" />
         <meta name="author" content="StaffSwap" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Helmet>
       <Header />
-      <AddButton />
+      <div className="flex flex-col items-center">
+        <ChangeViewButton
+          toggleView={toggleView}
+          icon={view === "grid" ? "list" : "grid"}
+        />
+        <AddButton />
+      </div>
+      <SearchButton />
       <div
         className="min-h-screen bg-cover bg-center flex items-center justify-center"
         style={{
@@ -70,25 +113,16 @@ const Swaps = () => {
             'url("https://source.unsplash.com/1600x900/?aviation")',
         }}
       >
-        <SearchButton />
         {loading ? (
-          <p>Loading swaps...</p>
+          <p className="bg-white p-8 rounded-lg shadow-lg m-4 max-w-md">
+            Loading swaps...
+          </p>
         ) : error ? (
           <p className="bg-white p-8 rounded-lg shadow-lg m-4 max-w-md">
             {error}
           </p>
         ) : (
-          <div className="flex flex-wrap justify-center">
-            {Array.isArray(swaps) && swaps.length > 0 ? (
-              swaps.map((swap, index) => (
-                <SwapCard key={index} swap={swap} index={index} />
-              ))
-            ) : (
-              <p className="bg-white p-8 rounded-lg shadow-lg m-4 max-w-md">
-                No swaps available.
-              </p>
-            )}
-          </div>
+          <div className="">{displaySwaps()}</div>
         )}
       </div>
 
