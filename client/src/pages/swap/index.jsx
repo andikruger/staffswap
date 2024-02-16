@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import AddButton from "../../components/AddButton";
 import ChangeViewButton from "../../components/ChangeViewButton";
 import SearchButton from "../../components/SearchButton";
 import SwapList from "../../components/SwapList";
@@ -48,6 +49,10 @@ const Swaps = () => {
     localStorage.setItem("view", view);
   }, [view]);
 
+  const toggleView = () => {
+    setView((prevView) => (prevView === "grid" ? "list" : "grid"));
+  };
+
   function displaySwaps() {
     if (view === "list") {
       return (
@@ -80,10 +85,6 @@ const Swaps = () => {
     }
   }
 
-  const toggleView = () => {
-    setView((prevView) => (prevView === "grid" ? "list" : "grid"));
-  };
-
   return (
     <>
       <Helmet>
@@ -94,10 +95,13 @@ const Swaps = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Helmet>
       <Header />
-      <ChangeViewButton
-        toggleView={toggleView}
-        icon={localStorage.getItem("view")}
-      />
+      <div className="flex flex-col items-center">
+        <ChangeViewButton
+          toggleView={toggleView}
+          icon={view === "grid" ? "list" : "grid"}
+        />
+        <AddButton />
+      </div>
       <SearchButton />
       <div
         className="min-h-screen bg-cover bg-center flex items-center justify-center"
