@@ -1,33 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { BsGridFill } from "react-icons/bs";
+import React from "react";
 import { FaList } from "react-icons/fa";
-import "../index.css";
+import { BsGridFill } from "react-icons/bs";
 
-const ChangeViewButton = () => {
-  const [isGrid, setIsGrid] = useState(false);
-
-  useEffect(() => {
-    // Retrieve the view state from local storage on component mount
-    const storedView = localStorage.getItem("view");
-    setIsGrid(storedView === "grid");
-  }, []);
-
-  const toggleView = () => {
-    const newView = !isGrid ? "grid" : "list";
-    setIsGrid(!isGrid);
-    // Store the updated view state in local storage
-    localStorage.setItem("view", newView);
-  };
-
-  return (
-    <div className="add-button-container">
-      {isGrid ? (
-        <BsGridFill className="add-icon" onClick={toggleView} />
-      ) : (
-        <FaList className="add-icon" onClick={toggleView} />
-      )}
-    </div>
-  );
+const ChangeViewButton = ({ toggleView, isListView, icon }) => {
+  function displayIcon(icon) {
+    if (icon === "grid") {
+      return <BsGridFill className="add-icon" onClick={toggleView} />;
+    } else {
+      return <FaList className="add-icon" onClick={toggleView} />;
+    }
+  }
+  return <div className="add-button-container">{displayIcon(icon)}</div>;
 };
 
 export default ChangeViewButton;
