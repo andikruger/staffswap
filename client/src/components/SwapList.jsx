@@ -58,14 +58,15 @@ const SwapList = ({ swap }) => {
           </div>
 
           {/* Shift Wish */}
-          <div className="flex items-center">
-            <p className="text-sm text-black mr-2">Shift Wish:</p>
-            <p className="text-sm text-black">{swap.shiftWish}</p>
-          </div>
-        </div>
-        <div className="flex flex-col md:flex-row">
-          {/* qualifications */}
           <div className="flex items-center mb-2 md:mb-0 md:mr-8">
+            <p className="text-sm text-black mr-2">Shift Wish:</p>
+            <p className="bg-[#e0211a] text-white rounded-full px-3 py-1 text-sm font-semibold m-1">
+              {swap.shiftWish}
+            </p>
+          </div>
+
+          {/* Qualifications */}
+          <div className="flex flex-wrap items-center mb-2 md:mb-0 md:mr-8">
             {Array.isArray(swap.qualifications) &&
               swap.qualifications.map((qualification, i) => (
                 <span
@@ -76,7 +77,9 @@ const SwapList = ({ swap }) => {
                 </span>
               ))}
           </div>
-          <div className="flex items-center justify-end">
+
+          {/* Note */}
+          <div className="flex items-center">
             <p className="text-sm text-black mr-2">Note:</p>
             <p className="text-sm text-black">{swap.note}</p>
           </div>
