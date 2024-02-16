@@ -1,69 +1,67 @@
 const express = require("express");
-const mongoose = require("mongoose");
-const app = express();
-const bodyParser = require("body-parser");
 const cors = require("cors");
-require("dotenv").config({ path: "./config/config.env" });
-const swaggerjsdoc = require("swagger-jsdoc");
-const swaggerUI = require("swagger-ui-express");
+const { Server } = require("socket.io");
+const http = require("http");
+const dotenv = require("dotenv");
+const usersRouter = require("./routes/user.route.js");
+const chatsRouter = require("./routes/chats.route.js");
+const swapRouter = require("./routes/swap.route.js");
 
-// use monogoose to connect to mongodb
+const connectToDB = require("./db.js");
 
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+dotenv.config();
+const PORT = process.env.PORT || 5000;
+const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:3000";
+
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: CLIENT_URL,
+  },
 });
-
-app.use(bodyParser.json());
-app.use(
-  cors({
-    origin: "*",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-  })
-);
-
-const port = process.env.PORT || 8000;
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
-app.get("/", (req, res) => {
-  res.redirect("/apidocs");
+app.use("/user", usersRouter);
+app.use("/chats", chatsRouter);
+app.use("/swap", swapRouter);
+
+server.listen(PORT, () => {
+  // eslint-disable-next-line no-console
+  console.log(`Server listening on port ${PORT}`);
 });
 
-const swaggerOptions = {
-  swaggerDefinition: {
-    openapi: "3.0.1",
-    info: {
-      title: "StaffSwapp API",
-      version: "0.7.0",
-    },
-    basePath: "/api/v1/",
-    components: {
-      securitySchemes: {
-        bearerAuth: {
-          type: "http",
-          scheme: "bearer",
-          bearerFormat: "JWT",
-        },
-      },
-    },
-    security: [
-      {
-        bearerAuth: [],
-      },
-    ],
-  },
-  apis: ["./docs/swaps.docs.js"],
-};
+connectToDB();
 
-const swaggerDocs = swaggerjsdoc(swaggerOptions);
-app.use("/apidocs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
+io.on("connection", (socket) => {
+  socket.on("subscribe chats", (userId) => {
+    socket.join(userId);
+  });
 
-app.use("/user", require("./routes/user.route"));
+  socket.on("create chat", (userId) => {
+    socket.to(userId).emit("chat created");
+  });
 
-app.use("/swap", require("./routes/swap.route"));
-app.listen(port, () => console.log(`Server running on port ${port}`));
-// display database connection
-mongoose.connection.on("connected", () => {
-  console.log("Mongoose is connected");
+  socket.on("delete chat", (userId) => {
+    socket.to(userId).emit("chat deleted");
+  });
+
+  socket.on("add member", (userId) => {
+    socket.to(userId).emit("member added");
+  });
+
+  socket.on("subscribe chat messages", (chatId) => {
+    socket.join(chatId);
+  });
+
+  socket.on("unsubscribe chat messages", (chatId) => {
+    socket.leave(chatId);
+  });
+
+  socket.on("send message", (chatId, message) => {
+    socket.to(chatId).emit("receive message", message);
+  });
 });

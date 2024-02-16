@@ -23,7 +23,7 @@ const Swaps = () => {
     const fetchSwaps = async () => {
       try {
         const response = await axios.get(
-          `https://lucky-red-robe.cyclic.app/swap/search/${query}`
+          `http://localhost:8000/swap/search/${query}`
         );
 
         setSwaps(response.data);

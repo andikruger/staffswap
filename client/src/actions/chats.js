@@ -1,4 +1,5 @@
 import * as api from "../api";
+import { toast } from "react-toastify";
 import {
   CREATE_CHAT,
   DELETE_CHAT,
@@ -10,6 +11,7 @@ import {
 
 export const fetchChats = () => async (dispatch) => {
   try {
+    console.log("fetchChats");
     const { data: chats } = await api.getChats();
     dispatch({ type: FETCH_CHATS, payload: chats });
   } catch (error) {
@@ -26,16 +28,18 @@ export const fetchChat = (chatId) => async (dispatch) => {
   }
 };
 
-export const createPrivateChat = (email, socket) => async (dispatch) => {
-  try {
-    const { data: chat } = await api.createPrivateChat(email);
-    chat.members.map((member) => socket.createChat(member.id));
-    dispatch({ type: CREATE_CHAT, payload: chat });
-  } catch (error) {
-    console.log(error);
-    alert("User not found");
-  }
-};
+export const createPrivateChat =
+  (creatorId, partnerId, socket) => async (dispatch) => {
+    try {
+      const { data: chat } = await api.createPrivateChat(creatorId, partnerId);
+      chat.members.map((member) => socket.createChat(member.id));
+      dispatch({ type: CREATE_CHAT, payload: chat });
+      toast.success("Chat created successfully");
+    } catch (error) {
+      console.log(JSON);
+      toast.error("Chat already exists");
+    }
+  };
 
 export const deleteChat = (chatId, socket) => async (dispatch) => {
   try {

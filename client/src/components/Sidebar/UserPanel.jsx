@@ -5,12 +5,13 @@ import { createPrivateChat } from "../../actions/chats";
 import { SocketContext } from "../../context/Socket";
 import { getInitials } from "../../utils/functions";
 import { AiOutlinePlus, AiOutlineUser, AiOutlineLogout } from "react-icons/ai";
-
+import { useMsal, MsalProvider } from "@azure/msal-react";
 function UserPanel() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth);
+  const { instance, accounts } = useMsal();
   const socket = useContext(SocketContext);
-
+  const userName = accounts[0].name;
   const [menuOpen, setMenuOpen] = useState(false);
   const [openAddPrivate, setOpenAddPrivate] = useState(false);
   const [newPrivateEmail, setNewPrivateEmail] = useState("");
@@ -49,39 +50,12 @@ function UserPanel() {
       <div className="flex items-center">
         <img
           src={`https://api.dicebear.com/7.x/initials/svg?seed=${getInitials(
-            user.name
+            userName
           )}`}
           alt="User Avatar"
           className="w-8 h-8 rounded-full"
         />
         <h5 className="text-xl font-bold ml-2">Chats</h5>
-      </div>
-      <div className="flex items-center">
-        <button
-          className="p-2 focus:outline-none hover:bg-gray-100"
-          onClick={openAddMenu}
-        >
-          <AiOutlinePlus className="h-6 w-6" />
-        </button>
-        {menuOpen && (
-          <div className="ml-2">
-            <button
-              className="flex items-center p-2 focus:outline-none hover:bg-gray-100"
-              onClick={openAddPrivateDialog}
-            >
-              <AiOutlineUser className="h-6 w-6" />
-              <span className="ml-2">Private</span>
-            </button>
-          </div>
-        )}
-        <div className="ml-2">
-          <button
-            className="p-2 focus:outline-none hover:bg-gray-100"
-            onClick={logOut}
-          >
-            <AiOutlineLogout className="h-6 w-6" />
-          </button>
-        </div>
       </div>
 
       {openAddPrivate && (

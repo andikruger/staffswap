@@ -49,6 +49,7 @@ const RadioButtonList = ({ options, selectedOption, onChange }) => {
 };
 const Profile = () => {
   const navigate = useNavigate();
+  const [name, setName] = useState("");
   const [threeLetterCode, setThreeLetterCode] = useState("");
   const [user, setUser] = useState(null);
   const [userExists, setUserExists] = useState(false);
@@ -59,16 +60,15 @@ const Profile = () => {
 
   useEffect(() => {
     let uuid = sha256(accounts[0].username).toString();
-    axios
-      .get(`https://lucky-red-robe.cyclic.app/user/username/${uuid}`)
-      .then((res) => {
-        let data = res.data.data;
+    axios.get(`http://localhost:8000/user/username/${uuid}`).then((res) => {
+      let data = res.data.data;
 
-        setThreeLetterCode(data.threeLetterCode);
-        setSelectedOption(data.role);
-        setUser(data);
-        setUserExists(true);
-      });
+      setName(data.name);
+      setThreeLetterCode(data.threeLetterCode);
+      setSelectedOption(data.role);
+      setUser(data);
+      setUserExists(true);
+    });
     localStorage.clear();
   }, []);
 
@@ -89,8 +89,10 @@ const Profile = () => {
     event.preventDefault();
     try {
       let userID = sha256(accounts[0].username).toString();
+      let name = accounts[0].name;
 
       let submitObject = {
+        name: name,
         threeLetterCode: threeLetterCode,
         role: selectedOption,
         userID: userID,
@@ -100,7 +102,7 @@ const Profile = () => {
 
       if (!userExists) {
         axios
-          .post("https://lucky-red-robe.cyclic.app/user/register", submitObject)
+          .post("http://localhost:8000/user/register", submitObject)
           .then((res) => {
             toast.success("Profile updated successfully", {
               position: toast.POSITION.TOP_RIGHT,
@@ -114,10 +116,7 @@ const Profile = () => {
           });
       } else {
         axios
-          .put(
-            `https://lucky-red-robe.cyclic.app/user/update/${user._id}`,
-            submitObject
-          )
+          .put(`http://localhost:8000/user/update/${user.id}`, submitObject)
           .then((res) => {
             toast.success("Profile updated successfully", {
               position: toast.POSITION.TOP_RIGHT,
@@ -171,7 +170,6 @@ const Profile = () => {
                 id="text"
                 name="name"
                 value={accounts[0].name}
-                readOnly
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
               />
             </div>

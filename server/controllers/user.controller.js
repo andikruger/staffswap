@@ -2,9 +2,10 @@ const User = require("../models/user.model");
 // const sendEmail = require("../utils/sendEmail");
 const crypto = require("crypto");
 exports.registerController = async (req, res) => {
-  const { threeLetterCode, userID, role } = req.body;
+  const { name, threeLetterCode, userID, role } = req.body;
   console.log(req.body);
   const newUser = new User({
+    name,
     threeLetterCode,
     userID,
     role,

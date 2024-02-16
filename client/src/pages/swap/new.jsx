@@ -172,7 +172,7 @@ const NewSwap = () => {
 
     // get data from the database using axios with catch
     axios
-      .get(`https://lucky-red-robe.cyclic.app/user/username/${newUserID}`)
+      .get(`http://localhost:8000/user/username/${newUserID}`)
       .then((res) => {
         let data = res.data.data;
 
@@ -186,7 +186,7 @@ const NewSwap = () => {
   }, [accounts]);
 
   let submitObject = {
-    userID: userData._id,
+    userID: userData.id,
     name: accounts[0].name,
     threeLetterCode: userData.threeLetterCode,
     date: "",
@@ -293,7 +293,7 @@ const NewSwap = () => {
       console.log(submitObject);
 
       const response = await axios.post(
-        "https://lucky-red-robe.cyclic.app/swap/new",
+        "http://localhost:8000/swap/new",
         submitObject
       );
 

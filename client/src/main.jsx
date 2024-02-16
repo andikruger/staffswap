@@ -1,5 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
+import SocketProvider from "./context/Socket";
+import store from "./store/index";
 import App from "./App.jsx";
 import "./index.css";
 import { PublicClientApplication, EventType } from "@azure/msal-browser";
@@ -23,6 +26,10 @@ msalInstance.addEventCallback((event) => {
 });
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <App instance={msalInstance} />
+    <Provider store={store}>
+      <SocketProvider>
+        <App instance={msalInstance} />
+      </SocketProvider>
+    </Provider>
   </React.StrictMode>
 );

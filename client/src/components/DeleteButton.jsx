@@ -21,9 +21,9 @@ const DeleteSwapButton = ({ id }) => {
 
     // Redirect to "/swap"
     navigateTo("/swap");
-    // use the link https://lucky-red-robe.cyclic.app/swap/${id} to delete the swap with axios.delete method handle the error and success with toast
+    // use the link http://localhost:8000/swap/${id} to delete the swap with axios.delete method handle the error and success with toast
     axios
-      .delete(`https://lucky-red-robe.cyclic.app/swap/${id}`)
+      .delete(`http://localhost:8000/swap/${id}`)
       .then((response) => {
         console.log(response);
         toast.success("Swap deleted successfully", {

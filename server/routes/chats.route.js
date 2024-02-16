@@ -1,28 +1,26 @@
-import express from 'express'
-import { auth } from '../middleware/auth.js'
-import {
+const express = require("express");
+const auth = require("../middleware/auth.js");
+const {
   getChats,
   getChat,
   createPrivateChat,
   createMessage,
   deleteChat,
   addMember,
-} from '../controllers/chat.controller.js'
-import idValidator from '../middleware/idValidator.js'
+} = require("../controllers/chat.controller.js");
+const { idValidator } = require("../middleware/idValidator.js");
 
-const router = express.Router()
+const router = express.Router();
 
-router.use(auth)
+router.get("/", getChats);
+router.get("/:chatId", idValidator, getChat);
 
-router.get('/', getChats)
-router.get('/:chatId', idValidator, getChat)
+router.post("/private", createPrivateChat);
 
-router.post('/private', createPrivateChat)
+router.post("/:chatId", idValidator, createMessage);
 
-router.post('/:chatId', idValidator, createMessage)
+router.put("/:chatId/add-member", idValidator, addMember);
 
-router.put('/:chatId/add-member', idValidator, addMember)
+router.delete("/:chatId", idValidator, deleteChat);
 
-router.delete('/:chatId', idValidator, deleteChat)
-
-export default router
+module.exports = router;

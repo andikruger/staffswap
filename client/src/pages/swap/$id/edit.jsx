@@ -171,9 +171,7 @@ const EditSwap = () => {
     const fetchSwapDetails = async () => {
       try {
         // Fetch swap details from the API
-        const response = await axios.get(
-          `https://lucky-red-robe.cyclic.app/swap/${id}`
-        );
+        const response = await axios.get(`http://localhost:8000/swap/${id}`);
         if (response.data.data.email) {
           let emailTemp = CryptoJS.AES.decrypt(
             response.data.data.email,
@@ -358,7 +356,7 @@ const EditSwap = () => {
       console.log("tempObj", tempObj);
 
       const response = await axios.put(
-        `https://lucky-red-robe.cyclic.app/swap/${id}`,
+        `http://localhost:8000/swap/${id}`,
         tempObj
       );
 

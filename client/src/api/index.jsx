@@ -12,8 +12,8 @@ function parseJwt(token) {
   return JSON.parse(window.atob(base64));
 }
 
-const API = axios.create({ baseURL: process.env.REACT_APP_SERVER_URL });
-
+//const API = axios.create({ baseURL: process.env.REACT_APP_SERVER_URL });
+const API = axios.create({ baseURL: "http://localhost:8000" });
 API.interceptors.request.use((req) => {
   const userData = localStorage.getItem("userData");
 
@@ -42,8 +42,8 @@ export const validateUser = (userData) =>
 // CHATS
 export const getChats = () => API.get("/chats");
 export const getChat = (chatId) => API.get(`/chats/${chatId}`);
-export const createPrivateChat = (email) =>
-  API.post("/chats/private", { email });
+export const createPrivateChat = (creatorId, partnerId) =>
+  API.post("/chats/private", { creatorId, partnerId });
 export const createMessage = (chatId, text) =>
   API.post(`/chats/${chatId}`, { text });
 

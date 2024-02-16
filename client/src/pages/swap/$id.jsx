@@ -121,9 +121,7 @@ const SwapDetails = () => {
     const fetchSwapDetails = async () => {
       try {
         // Fetch swap details from the API
-        const response = await axios.get(
-          `https://lucky-red-robe.cyclic.app/swap/${id}`
-        );
+        const response = await axios.get(`http://localhost:8000/swap/${id}`);
         setSwapDetails(response.data.data);
         setSelectedOption(response.data.data.shiftWish);
         setSelectedOptions(response.data.data.qualifications);
@@ -204,6 +202,7 @@ const SwapDetails = () => {
           <h2 className="text-2xl font-bold mb-4 text-gray-800">
             Swap Details
           </h2>
+          <p className="text-sm mb-4 text-gray-800">{swapDetails.userID}</p>
           {/* Name and Three Letter Code in a column for smaller screens */}
           <div className="flex flex-col sm:flex-row mb-4">
             {/* Name */}
@@ -353,7 +352,7 @@ const SwapDetails = () => {
           {/* Display match button if userID != swap.userID */}
           {userID !== swapDetails.userID && (
             <div className="flex flex-col sm:flex-row justify-between">
-              <ChatButton id={id} swapDetails={swapDetails} />
+              <ChatButton creatorId={userID} partnerId={swapDetails.userID} />
               <MatchButton id={id} swapDetails={swapDetails} />
             </div>
           )}

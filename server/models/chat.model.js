@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+const mongoose = require("mongoose");
 
 const memberSchema = mongoose.Schema({
   _id: {
@@ -9,7 +9,7 @@ const memberSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-})
+});
 
 const messageSchema = mongoose.Schema(
   {
@@ -23,7 +23,7 @@ const messageSchema = mongoose.Schema(
     },
   },
   { timestamps: true }
-)
+);
 
 const chatSchema = mongoose.Schema(
   {
@@ -35,8 +35,8 @@ const chatSchema = mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ['private'],
-      default: 'private',
+      enum: ["private"],
+      default: "private",
     },
     members: {
       type: [memberSchema],
@@ -51,8 +51,8 @@ const chatSchema = mongoose.Schema(
     },
   },
   { timestamps: true }
-)
+);
 
-const Chat = mongoose.model('Chat', chatSchema)
+const Chat = mongoose.model("Chat", chatSchema);
 
-export default Chat
+module.exports = Chat;

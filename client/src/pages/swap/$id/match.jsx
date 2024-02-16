@@ -240,16 +240,14 @@ const Swaps = () => {
   useEffect(() => {
     const fetchSwaps = async () => {
       try {
-        const response = await axios.get(
-          "https://lucky-red-robe.cyclic.app/swap"
-        );
+        const response = await axios.get("http://localhost:8000/swap");
         setSwaps(response.data.data);
         console.log("Swaps:", response.data.data);
 
         // Fetch individual swap if ID is provided
         if (id) {
           const individualSwapResponse = await axios.get(
-            `https://lucky-red-robe.cyclic.app/swap/${id}`
+            `http://localhost:8000/swap/${id}`
           );
           setIndividualSwap(individualSwapResponse.data.data);
           console.log("Individual swap:", individualSwapResponse.data.data);
@@ -321,7 +319,7 @@ const Swaps = () => {
             {Array.isArray(matches) && matches.length > 0 ? (
               matches.map((match, index) => (
                 <Link
-                  to={`/swap/${match.swap._id}`}
+                  to={`/swap/${match.swap.id}`}
                   style={{ color: "inherit", textDecoration: "none" }}
                   key={index}
                   className=""
