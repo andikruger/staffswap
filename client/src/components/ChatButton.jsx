@@ -14,13 +14,10 @@ const ChatButton = ({ id, swapDetails, creatorId, partnerId }) => {
   const socket = useContext(SocketContext);
   const handleClick = () => {
     // Perform delete action or API call if needed
-    console.log("Chat button clicked");
-    console.log("creatorId", creatorId);
-    console.log("partnerId", partnerId);
-    dispatch(createPrivateChat(creatorId, partnerId, socket));
-    // Redirect to "/swap"
-    //navigateTo("/chat");
-    // use the link http://localhost:8000/swap/${id} to delete the swap with axios.delete method handle the error and success with toast
+
+    dispatch(createPrivateChat(creatorId, partnerId, swapDetails, socket));
+    // open /chat in new tab
+    navigateTo(`/chat`);
   };
 
   return (

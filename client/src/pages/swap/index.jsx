@@ -22,7 +22,6 @@ const Swaps = () => {
       try {
         const response = await axios.get("http://localhost:8000/swap");
         setSwaps(response.data.data);
-        console.log("Swaps:", response.data.data);
       } catch (error) {
         console.error("Error fetching swaps:", error);
         setError("Error fetching swaps");

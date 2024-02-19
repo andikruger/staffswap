@@ -5,25 +5,20 @@ import io from "socket.io-client";
 import { fetchChats, receiveMessage } from "../actions/chats";
 
 export const SocketContext = createContext(null);
-// const socket = io(process.env.REACT_APP_SERVER_URL,
+
 function SocketProvider({ children }) {
-  const socket = io("http://localhost:8000", {
+  const socket = io(process.env.REACT_APP_SERVER_URL, {
     transports: ["websocket"],
   });
   const dispatch = useDispatch();
 
   const subscribeChats = (userId) => {
+    let userid = sessionStorage.getItem("user");
     socket.emit("subscribe chats", userId);
-    socket.on("chat created", () => {
-      dispatch(fetchChats());
-      console.log(err);
-    });
-    socket.on("chat deleted", () => {
-      dispatch(fetchChats());
-      console.log(err);
-    });
-    socket.on("member added", () => dispatch(fetchChats()));
-    socket.on("member left", () => dispatch(fetchChats()));
+    socket.on("chat created", () => dispatch(fetchChats(userid)));
+    socket.on("chat deleted", () => dispatch(fetchChats(userid)));
+    socket.on("member added", () => dispatch(fetchChats(userid)));
+    socket.on("member left", () => dispatch(fetchChats(userid)));
     // ↑ These can be optimized ↑
   };
 
@@ -51,8 +46,8 @@ function SocketProvider({ children }) {
     socket.emit("unsubscribe chat messages", chatId);
   };
 
-  const sendMessage = (chatId, message) => {
-    socket.emit("send message", chatId, message);
+  const sendMessage = (userId, chatId, message) => {
+    socket.emit("send message", userId, chatId, message);
   };
 
   return (

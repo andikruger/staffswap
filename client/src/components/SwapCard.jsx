@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+
 const formatDate = (dateString) => {
   const options = { day: "numeric", month: "numeric", year: "numeric" };
   return new Date(dateString).toLocaleDateString(undefined, options);
@@ -17,17 +18,18 @@ const getPriorityColor = (priority) => {
       return "#e0211a"; // Default to highest priority
   }
 };
+
 const SwapCard = ({ swap, index }) => {
   return (
     <Link
-      to={`/swap/${swap._id}`}
+      to={`/swap/${swap.id}`}
       style={{ color: "inherit", textDecoration: "none" }}
       key={index}
       className=""
     >
       <div
         key={index}
-        className="bg-white p-8 rounded-lg shadow-lg m-4 max-w-md transition duration-300 ease-in-out hover:bg-gray-200"
+        className="bg-white p-8 rounded-lg shadow-lg m-4 max-w-md transition duration-300 ease-in-out hover:bg-gray-200 text-center" // Centering all text
         style={{
           flexBasis: "100%",
           borderColor: getPriorityColor(swap.priority),
@@ -47,18 +49,15 @@ const SwapCard = ({ swap, index }) => {
         <div>
           <strong>Three Letter Code:</strong> {swap.threeLetterCode}
         </div>
-
         <div>
           <strong>Wish:</strong>{" "}
           <p className="bg-[#e0211a] text-white rounded-full px-3 py-1 text-sm font-semibold m-1">
             {swap.shiftWish}
           </p>
         </div>
-
         <div>
           <strong>Note:</strong> {swap.note}
         </div>
-
         <div className="flex flex-wrap mt-4 items-center justify-center content-center">
           {/* Display qualifications as tags */}
           {Array.isArray(swap.qualifications) &&

@@ -3,12 +3,12 @@ import { useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 
 function Messages({ chat }) {
-  const user = useSelector((state) => state.auth);
+  const user = sessionStorage.getItem("user");
 
   const messageBoxes = chat.messages
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     .map((message) => {
-      const isOwnMessage = message.sender.id === user.id;
+      const isOwnMessage = message.sender.id === user;
 
       return (
         <div

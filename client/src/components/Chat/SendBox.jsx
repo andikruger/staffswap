@@ -13,8 +13,8 @@ function SendBox({ chat }) {
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!message) return;
-
-    dispatch(sendMessage(chat.id, message, socket));
+    let userid = sessionStorage.getItem("user");
+    dispatch(sendMessage(userid, chat.id, message, socket));
     setMessage("");
   };
 

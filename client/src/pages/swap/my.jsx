@@ -25,7 +25,6 @@ const Swaps = () => {
           `http://localhost:8000/swap/user/${user}`
         );
         setSwaps(response.data.data);
-        console.log("Swaps:", response.data.data);
       } catch (error) {
         console.error("Error fetching swaps:", error);
         setError("Error fetching swaps");

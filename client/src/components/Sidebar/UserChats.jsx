@@ -5,12 +5,12 @@ import { Link, useParams } from "react-router-dom";
 import { getInitials, getOtherMember } from "../../utils/functions";
 
 function UserChats() {
-  const user = useSelector((state) => state.auth);
+  const user = sessionStorage.getItem("user");
   const chats = useSelector((state) => state.chats);
   const { chatId } = useParams();
 
   const chatBoxes = chats.map((chat) => {
-    const otherUser = getOtherMember(chat.members, user.id);
+    const otherUser = getOtherMember(chat.members, user);
 
     function trunctuate(str, n) {
       return str.length > n ? str.substr(0, n - 1) + "..." : str;
@@ -18,7 +18,7 @@ function UserChats() {
 
     return (
       <Link
-        to={`/${chat.id}`}
+        to={`/chat/${chat.id}`}
         key={chat.id}
         className="text-black no-underline focus:outline-none"
       >
@@ -44,7 +44,7 @@ function UserChats() {
 
               <span className="text-xs">
                 {chat.messages.length > 0
-                  ? trunctuate(chat.messages[chat.messages.length - 1].text, 30)
+                  ? trunctuate(chat.recentMessage.text, 30)
                   : "No messages yet"}
               </span>
             </div>

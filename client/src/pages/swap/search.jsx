@@ -104,10 +104,6 @@ const SearchSwap = React.memo(() => {
       // Redirect to the search results page
       window.location.href = `/swap/result/${searchQuery}`;
 
-      // Log the form data to the console
-      console.log("Form Data:", formData);
-      console.log(JSON.stringify(formData));
-
       // Clear localStorage
       localStorage.clear();
     },
@@ -144,7 +140,7 @@ const SearchSwap = React.memo(() => {
 
             {/* Global Join */}
             <div className="mb-4">
-              <label htmlFor="join" className="block text-sm mb-2">
+              <label htmlFor="join" className="block text-sm mb-2 text-center">
                 Global Join
               </label>
               <select
@@ -165,7 +161,7 @@ const SearchSwap = React.memo(() => {
                   <div className="flex flex-wrap -mx-3 mb-2">
                     <div className="w-full  px-3 mb-6 md:mb-0">
                       <label
-                        className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                        className="block text-sm mb-2 text-center"
                         htmlFor="field"
                       >
                         Field
@@ -189,7 +185,7 @@ const SearchSwap = React.memo(() => {
 
                     <div className="w-full  px-3 mb-6 md:mb-0">
                       <label
-                        className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                        className="block text-sm mb-2 text-center "
                         htmlFor="field"
                       >
                         Search Value
@@ -201,7 +197,7 @@ const SearchSwap = React.memo(() => {
                   </div>
 
                   {/* Add/remove search criterias */}
-                  <div className="btn-box">
+                  <div className="btn-box flex justify-center items-center">
                     {searchValues.length - 1 === i && (
                       <button
                         className="bg-[#e0211a] text-white rounded-full px-3 py-1 text-sm font-semibold m-1 hover:bg-[#b41813]"
@@ -226,13 +222,14 @@ const SearchSwap = React.memo(() => {
             })}
 
             {/* END */}
-
-            <button
-              type="submit"
-              className="bg-[#e0211a] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#b41813]"
-            >
-              Search
-            </button>
+            <div className="flex justify-center items-center pt-2">
+              <button
+                type="submit"
+                className="bg-[#e0211a] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#b41813] "
+              >
+                Search
+              </button>
+            </div>
           </form>
         </div>
       </div>

@@ -192,7 +192,7 @@ const SearchInputField = ({ type, index }) => {
         </div>
       );
     default:
-      return <div>Please select a field</div>;
+      return <div></div>;
   }
 };
 

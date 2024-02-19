@@ -23,11 +23,11 @@ function Chat() {
   useEffect(() => {
     if (prevChatId.current === chatId) return;
     if (!chats.find((chat) => chat.id === chatId)) return;
-
+    let userid = sessionStorage.getItem("user");
     socket.unsubscribeChatMessages(prevChatId.current);
     prevChatId.current = chatId;
     socket.subscribeChatMessages(chatId);
-    dispatch(fetchChat(chatId));
+    dispatch(fetchChat(userid, chatId));
   }, [chatId, chats, dispatch, socket]);
 
   if (!chat) return null;

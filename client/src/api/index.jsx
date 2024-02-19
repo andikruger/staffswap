@@ -3,17 +3,8 @@ import axios from "axios";
 
 // create a function to decode jwt token without jwt-decode
 
-function parseJwt(token) {
-  if (!token) {
-    return;
-  }
-  const base64Url = token.split(".")[1];
-  const base64 = base64Url.replace("-", "+").replace("_", "/");
-  return JSON.parse(window.atob(base64));
-}
+const API = axios.create({ baseURL: process.env.REACT_APP_SERVER_URL });
 
-//const API = axios.create({ baseURL: process.env.REACT_APP_SERVER_URL });
-const API = axios.create({ baseURL: "http://localhost:8000" });
 API.interceptors.request.use((req) => {
   const userData = localStorage.getItem("userData");
 
@@ -22,12 +13,10 @@ API.interceptors.request.use((req) => {
 
     req.headers.Authorization = `Bearer ${userToken}`;
 
-    const decodedToken = parseJwt(userToken);
-
-    if (decodedToken.exp * 1000 < new Date().getTime()) {
-      window.location.reload(false);
-      alert("Your token expired, please sign in again");
-    }
+    // if (decodedToken.exp * 1000 < new Date().getTime()) {
+    //   window.location.href = "/login";
+    //   //alert("Your token expired, please sign in again");
+    // }
   }
   return req;
 });
@@ -41,10 +30,18 @@ export const validateUser = (userData) =>
 
 // CHATS
 export const getChats = () => API.get("/chats");
-export const getChat = (chatId) => API.get(`/chats/${chatId}`);
-export const createPrivateChat = (creatorId, partnerId) =>
-  API.post("/chats/private", { creatorId, partnerId });
-export const createMessage = (chatId, text) =>
-  API.post(`/chats/${chatId}`, { text });
+//export const getChat = (chatId) => API.get(`/chats/${chatId}`);
+export const createPrivateChat = (creatorId, partnerId, swapDetails) =>
+  API.post("/chats/private", { creatorId, partnerId, swapDetails });
+// export const createMessage = (chatId, text) =>
+//   API.post(`/chats/${chatId}`, { text });
 
 export const deleteChat = (chatId) => API.delete(`/chats/${chatId}`);
+
+export const getChatsByUserId = (userId) => API.get(`/chats/chat/${userId}`);
+
+export const getChat = (userId, chatId) =>
+  API.get(`/chats/chat/${userId}/${chatId}`);
+
+export const createMessage = (userId, chatId, text) =>
+  API.post(`/chats/chat/${userId}/${chatId}`, { text });

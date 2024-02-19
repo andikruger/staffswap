@@ -1,158 +1,65 @@
-import "./App.css";
-import {
-  AuthenticatedTemplate,
-  UnauthenticatedTemplate,
-  useMsal,
-  MsalProvider,
-} from "@azure/msal-react";
-import { loginRequest } from "./auth-config";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useContext, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { autoSignIn, signOut } from "./actions/auth";
+import { fetchChats } from "./actions/chats";
+import { SocketContext } from "./context/Socket";
+import { PublicClientApplication, EventType } from "@azure/msal-browser";
+import { msalConfig } from "./auth-config";
+import LoadingPage from "./pages/LoadingPage";
+import LoginPage from "./pages/LoginPage";
 
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import "./index.css";
+import UserPage from "./pages/UserPage";
 
-const pages = import.meta.glob("./pages/**/*.jsx", { eager: true });
-const publicPages = import.meta.glob("./PublicPages/**/*.jsx", { eager: true });
+function App() {
+  const dispatch = useDispatch();
+  const socket = useContext(SocketContext);
+  const chats = useSelector((state) => state.chats);
+  const user = sessionStorage.getItem("user");
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    setLoading(false);
+    const userData = JSON.parse(localStorage.getItem("userData"));
+    if (userData) {
+      dispatch(autoSignIn());
+      setTimeout(() => {
+        setLoading(false);
+      }, 300);
+    } else {
+      dispatch(signOut());
+      setTimeout(() => {
+        setLoading(false);
+      }, 300);
+    }
+  }, []);
 
-const routes = [];
-const publicRoutes = [];
-for (const path of Object.keys(pages)) {
-  const fileName = path.match(/\.\/pages\/(.*)\.jsx$/)?.[1];
-  if (!fileName) {
-    continue;
+  useEffect(() => {
+    let userid = sessionStorage.getItem("user");
+    dispatch(fetchChats(userid));
+    socket.subscribeChats(user);
+    chats.map((chat) => socket.subscribeChatMessages(chat.id));
+  }, []);
+
+  const msalInstance = new PublicClientApplication(msalConfig);
+
+  if (
+    !msalInstance.getActiveAccount() &&
+    msalInstance.getAllAccounts().length > 0
+  ) {
+    msalInstance.setActiveAccount(msalInstance.getAllAccounts()[0]);
   }
 
-  const normalizedPathName = fileName.includes("$")
-    ? fileName.replace("$", ":")
-    : fileName.replace(/\/index/, "");
-
-  routes.push({
-    path: fileName === "index" ? "/" : `/${normalizedPathName.toLowerCase()}`,
-    Element: pages[path].default,
-    loader: pages[path]?.loader,
-    action: pages[path]?.action,
-    ErrorBoundary: pages[path]?.ErrorBoundary,
+  msalInstance.addEventCallback((event) => {
+    if (event.eventType === EventType.LOGIN_SUCCESS && event.payload.account) {
+      const account = event.payload.account;
+      msalInstance.setActiveAccount(account);
+    }
   });
+
+  if (loading) return <LoadingPage />;
+  // if (!user || user?.isBlocked) return <LoginPage />;
+  else return <UserPage instance={msalInstance} />;
 }
-
-for (const path of Object.keys(publicPages)) {
-  const fileName = path.match(/\.\/PublicPages\/(.*)\.jsx$/)?.[1];
-  if (!fileName) {
-    continue;
-  }
-
-  const normalizedPathName = fileName.includes("$")
-    ? fileName.replace("$", ":")
-    : fileName.replace(/\/index/, "");
-
-  publicRoutes.push({
-    path: fileName === "index" ? "/" : `/${normalizedPathName.toLowerCase()}`,
-    Element: publicPages[path].default,
-    loader: publicPages[path]?.loader,
-    action: publicPages[path]?.action,
-    ErrorBoundary: publicPages[path]?.ErrorBoundary,
-  });
-}
-const router = createBrowserRouter(
-  routes.map(({ Element, ErrorBoundary, ...rest }) => ({
-    ...rest,
-    element: <Element />,
-    ...(ErrorBoundary && { errorElement: <ErrorBoundary /> }),
-  }))
-);
-
-const publicRouter = createBrowserRouter(
-  publicRoutes.map(({ Element, ErrorBoundary, ...rest }) => ({
-    ...rest,
-    element: <Element />,
-    ...(ErrorBoundary && { errorElement: <ErrorBoundary /> }),
-  }))
-);
-
-// const App = () => {
-//   return <RouterProvider router={router} />;
-// };
-console.log("router", router);
-const WrapperView = () => {
-  const { instance } = useMsal();
-  const activeAccount = instance.getActiveAccount();
-
-  const handleRedirect = () => {
-    instance
-      .loginRedirect({
-        ...loginRequest,
-        prompt: "create",
-      })
-      .catch((e) => {
-        console.error(e);
-      });
-  };
-
-  return (
-    <div className="App">
-      <AuthenticatedTemplate>
-        {activeAccount ? (
-          // <div>
-          //   {/* <h5>Welcome {activeAccount ? activeAccount.name : ""}!</h5>
-          //   <button onClick={() => instance.logout()} className="button">
-          //     Logout
-          //   </button> */}
-          // </div>
-          <>
-            <RouterProvider router={router} />
-          </>
-        ) : (
-          <h5>Not logged in</h5>
-        )}
-      </AuthenticatedTemplate>
-
-      <UnauthenticatedTemplate>
-        {/* <h5>Not logged in</h5> */}
-        {/* create a blue button with hover with tailwind */}
-        {/* <button
-          onClick={handleRedirect}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Login
-        </button> */}
-        <RouterProvider router={publicRouter} />;
-      </UnauthenticatedTemplate>
-    </div>
-  );
-};
-
-const App = ({ instance }) => {
-  return (
-    <MsalProvider instance={instance}>
-      <WrapperView />
-    </MsalProvider>
-  );
-};
-// function App() {
-//   const [count, setCount] = useState(0)
-
-//   return (
-//     <>
-//       <div>
-//         <a href="https://vitejs.dev" target="_blank">
-//           <img src={viteLogo} className="logo" alt="Vite logo" />
-//         </a>
-//         <a href="https://react.dev" target="_blank">
-//           <img src={reactLogo} className="logo react" alt="React logo" />
-//         </a>
-//       </div>
-//       <h1>Vite + React</h1>
-//       <div className="card">
-//         <button onClick={() => setCount((count) => count + 1)}>
-//           count is {count}
-//         </button>
-//         <p>
-//           Edit <code>src/App.jsx</code> and save to test HMR
-//         </p>
-//       </div>
-//       <p className="read-the-docs">
-//         Click on the Vite and React logos to learn more
-//       </p>
-//     </>
-//   )
-// }
 
 export default App;

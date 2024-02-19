@@ -25,16 +25,11 @@ const DeleteSwapButton = ({ id }) => {
     axios
       .delete(`http://localhost:8000/swap/${id}`)
       .then((response) => {
-        console.log(response);
-        toast.success("Swap deleted successfully", {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        toast.success("Swap deleted successfully");
       })
       .catch((error) => {
         console.log(error);
-        toast.error("Error deleting swap", {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        toast.error("Error deleting swap");
       });
 
     // Close the modal

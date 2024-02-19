@@ -5,8 +5,8 @@ import { getInitials, getOtherMember } from "../../../utils/functions";
 import PrivateMenu from "./PrivateMenu";
 
 function ChatPanel({ chat }) {
-  const user = useSelector((state) => state.auth);
-  const otherUser = getOtherMember(chat.members, user.id);
+  const user = sessionStorage.getItem("user");
+  const otherUser = getOtherMember(chat.members, user);
 
   return (
     <div className="flex justify-between p-2 border-b border-divider">
