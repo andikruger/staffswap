@@ -4,11 +4,11 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import HowItWorks from "../components/HowItWorks";
 import { toast } from "react-toastify";
-import { useMsal, MsalProvider } from "@azure/msal-react";
+import { useMsal } from "@azure/msal-react";
 import sha256 from "crypto-js/sha256";
 import axios from "axios";
 const Home = () => {
-  const { instance, accounts } = useMsal();
+  const { accounts } = useMsal();
   // log instance and accounts to console
 
   const checkIfNewUser = () => {

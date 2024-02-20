@@ -7,7 +7,6 @@ import { SocketContext } from "./context/Socket";
 import { PublicClientApplication, EventType } from "@azure/msal-browser";
 import { msalConfig } from "./auth-config";
 import LoadingPage from "./pages/LoadingPage";
-import LoginPage from "./pages/LoginPage";
 
 import "./index.css";
 import UserPage from "./pages/UserPage";

@@ -1,9 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { SocketContext } from "../context/Socket";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { createPrivateChat } from "../actions/chats";
-import { toast } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
 

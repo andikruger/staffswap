@@ -5,12 +5,11 @@ import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import axios from "axios";
 import "../../../index.css";
-import * as CryptoJS from "crypto-js";
+
 import qualificationData from "../../../data/qualifications.json";
 import shiftWishData from "../../../data/shiftWishes.json";
 import shiftTimesData from "../../../data/shifttimes.json";
 import { toast } from "react-toastify";
-import { useMsal, MsalProvider } from "@azure/msal-react";
 
 const validateUser = (user) => {
   let loggedInUser = sessionStorage.getItem("user");
@@ -169,7 +168,7 @@ const DisplayEmailComponent = ({ displayEmail, setDisplayEmail }) => {
 const EditSwap = () => {
   const [phoneNumber, setPhoneNumber] = useState(null);
   const [email, setEmail] = useState(null);
-  const { instance, accounts } = useMsal();
+
   const [submitObject, setSubmitObject] = useState({});
   const [displayEmail, setDisplayEmail] = useState(false);
   const [displayPhoneNumber, setDisplayPhoneNumber] = useState(false);
@@ -177,7 +176,7 @@ const EditSwap = () => {
 
   const handleStatusToggle = () => {
     const newStatus = status === "Pending" ? "Accepted" : "Pending";
-
+    console.log("newStatus", newStatus);
     try {
       axios.put(`http://localhost:8000/swap/status/${id}`, {
         status: newStatus,
@@ -208,6 +207,7 @@ const EditSwap = () => {
         setExchanges(response.data.data.exchanges);
         let formatedDate = response.data.data.date.split("T")[0];
         setDateFormated(formatedDate);
+        setStatus(response.data.data.status);
       } catch (error) {
         console.error("Error fetching swap details:", error);
         toast.error("Error fetching swap details");
@@ -354,11 +354,6 @@ const EditSwap = () => {
         `http://localhost:8000/swap/${id}`,
         tempObj
       );
-
-      // const response = await axios.put(
-      //   `http://localhost:8000/api/v1/swap/${id}`,
-      //   tempObj
-      // );
 
       toast.success("Swap updated successfully");
 

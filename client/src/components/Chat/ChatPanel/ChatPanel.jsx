@@ -1,5 +1,4 @@
 import React from "react";
-import { useSelector } from "react-redux";
 
 import { getInitials, getOtherMember } from "../../../utils/functions";
 import PrivateMenu from "./PrivateMenu";

@@ -1,10 +1,14 @@
 import React, { useContext, useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
 import { deleteChat } from "../../../actions/chats";
+import { useParams } from "react-router";
 import { SocketContext } from "../../../context/Socket";
 import { HiDotsVertical, HiTrash } from "react-icons/hi";
-
-function PrivateMenu({ otherUser, chat }) {
+import { toast } from "react-toastify";
+function PrivateMenu() {
+  const navigate = useNavigate();
+  const { chatId } = useParams();
   const dispatch = useDispatch();
   const socket = useContext(SocketContext);
 
@@ -12,7 +16,10 @@ function PrivateMenu({ otherUser, chat }) {
   const [openDelete, setOpenDelete] = useState(false);
 
   const handleDelete = () => {
-    dispatch(deleteChat(chat.id, socket));
+    const userId = sessionStorage.getItem("user");
+    dispatch(deleteChat(userId, chatId, socket));
+    navigate("/chat");
+    toast.success("Chat deleted successfully");
     closeDeleteDialog();
   };
 
@@ -53,26 +60,24 @@ function PrivateMenu({ otherUser, chat }) {
 
       {openDelete && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-4 rounded w-80">
-            <h2 className="text-xl font-bold mb-4">
-              Do you want to delete this chat?
-            </h2>
-            <p className="text-sm mb-4">
-              Notice: This action is irreversible and will result in permanent
-              deletion of the chat for both users.
+          <div className="z-50 bg-white p-8 rounded-lg shadow-lg max-w-md">
+            <p className="text-lg font-semibold mb-4">Confirm Deletion</p>
+            <p className="mb-4">Are you sure you want to delete this chat?</p>
+            <p className="mb-4">
+              This action <strong>cannot</strong> be undone.
             </p>
             <div className="flex justify-end">
               <button
-                className="px-4 py-2 bg-blue-500 text-white rounded mr-2 hover:bg-blue-700"
                 onClick={closeDeleteDialog}
+                className="bg-gray-300 text-gray-800 px-4 py-2 rounded-full mr-2 hover:bg-gray-400"
               >
-                No
+                Cancel
               </button>
               <button
-                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700"
                 onClick={handleDelete}
+                className="bg-[#e0211a] text-white px-4 py-2 rounded-full hover:bg-[#b41813]"
               >
-                Yes
+                Delete
               </button>
             </div>
           </div>

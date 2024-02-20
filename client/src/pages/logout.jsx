@@ -1,12 +1,8 @@
 import React, { useEffect } from "react";
 import { Helmet } from "react-helmet";
 import Header from "../components/PublicHeader";
-import { useMsal, MsalProvider } from "@azure/msal-react";
-import { loginRequest } from "../auth-config";
 
 const Logout = () => {
-  const { instance, accounts } = useMsal();
-
   const handleLogout = () => {
     // instance.logout({
     //   account: accounts[0], // You may need to adjust this based on your application's needs

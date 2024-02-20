@@ -1,13 +1,11 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import {
   AuthenticatedTemplate,
-  UnauthenticatedTemplate,
   useMsal,
   MsalProvider,
 } from "@azure/msal-react";
-import { loginRequest } from "../auth-config";
 import Sidebar from "../components/Sidebar";
-import Chat from "../components/Chat";
+
 import About from "../pages/about";
 import Contact from "../pages/contact";
 import Home from "../pages/home";
@@ -30,17 +28,6 @@ import PublicLogin from "../PublicPages/login";
 const WrapperView = () => {
   const { instance } = useMsal();
   const activeAccount = instance.getActiveAccount();
-
-  const handleRedirect = () => {
-    instance
-      .loginRedirect({
-        ...loginRequest,
-        prompt: "create",
-      })
-      .catch((e) => {
-        console.error(e);
-      });
-  };
 
   return (
     <div>

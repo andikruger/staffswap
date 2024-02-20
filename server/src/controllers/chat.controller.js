@@ -4,70 +4,11 @@ import User from '../models/user.model.js'
 import ApiError from '../error/ApiError.js'
 import 'express-async-errors'
 
-// export const getChats = async (req, res) => {
-
-//   const { user } = req
-//   const chats = await Chat.find({ 'members._id': user._id })
-//   res.status(200).json(chats)
-// }
-
 export const getChatsByUserId = async (req, res) => {
   const { userId } = req.params
   const chats = await Chat.find({ 'members._id': userId })
   res.status(200).json(chats)
 }
-
-// export const getChat = async (req, res) => {
-//   const { user } = req
-//   const { chatId } = req.params
-
-//   const chat = await Chat.findById(chatId)
-//   if (!chat) throw ApiError.notFound('Chat not found')
-
-//   const userId = mongoose.Types.ObjectId(user._id).toString()
-//   const isMember = chat.members.find((member) => member._id === userId)
-//   if (!isMember) throw ApiError.forbidden('User is not a chat member')
-
-//   res.status(200).json(chat)
-// }
-
-// export const createPrivateChat = async (req, res) => {
-//   const creator = req.user
-//   const { email } = req.body
-
-//   if (email === creator.email)
-//     throw ApiError.methodNotAllowed(
-//       'Cannot create a chat with your own account'
-//     )
-
-//   const user = await User.findOne({ email })
-//   if (!user) throw ApiError.notFound('User not found')
-//   if (user.role !== 'user')
-//     throw ApiError.methodNotAllowed('Creating such chat is not allowed')
-
-//   const doesChatExist = await Chat.findOne({
-//     type: 'private',
-//     'members._id': { $all: [creator._id, user._id] },
-//   })
-//   if (doesChatExist) throw ApiError.methodNotAllowed('Chat already exists')
-
-//   const newChat = new Chat({
-//     members: [
-//       {
-//         _id: creator._id,
-//         name: creator.name,
-//       },
-//       {
-//         _id: user._id,
-//         name: user.name,
-//       },
-//     ],
-//   })
-
-//   await newChat.save()
-
-//   res.status(200).json(newChat)
-// }
 
 export const getChat = async (req, res) => {
   const { userId, chatId } = req.params
@@ -78,6 +19,15 @@ export const getChat = async (req, res) => {
   const user = mongoose.Types.ObjectId(userId).toString()
   const isMember = chat.members.find((member) => member._id === user)
   if (!isMember) throw ApiError.forbidden('User is not a chat member')
+
+  res.status(200).json(chat)
+}
+
+export const getChatById = async (req, res) => {
+  const { chatId } = req.params
+
+  const chat = await Chat.findById(chatId)
+  if (!chat) throw ApiError.notFound('Chat not found')
 
   res.status(200).json(chat)
 }
@@ -100,7 +50,39 @@ export const createPrivateChat = async (req, res) => {
     'members._id': { $all: [creatorId, partnerId] },
   })
   //console.log('Does chat exist:', doesChatExist)
-  if (doesChatExist) throw ApiError.methodNotAllowed('Chat already exists')
+  if (doesChatExist) {
+    if (swapDetails) {
+      let formattedDate = new Date(swapDetails.date).toLocaleDateString(
+        'en-GB',
+        {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric',
+        }
+      )
+      welcomeMessage = `Hello, I am interested in your Swap: on ${formattedDate} at ${swapDetails.startTime} - ${swapDetails.endTime}.`
+
+      const message = {
+        sender: {
+          _id: 1,
+          name: 'SwapBot',
+        },
+        text: welcomeMessage,
+      }
+
+      const updatedChat = await Chat.findByIdAndUpdate(
+        doesChatExist._id,
+        {
+          $push: { messages: message },
+          recentMessage: message,
+        },
+        { new: true }
+      )
+      throw ApiError.methodNotAllowed('Chat already exists')
+    }
+
+    throw ApiError.methodNotAllowed('Chat already exists')
+  }
 
   const newChat = new Chat({
     members: [
@@ -118,13 +100,17 @@ export const createPrivateChat = async (req, res) => {
   await newChat.save()
 
   if (swapDetails) {
-    let formattedDate = new Date(swapDetails.date).toLocaleDateString()
+    let formattedDate = new Date(swapDetails.date).toLocaleDateString('en-GB', {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    })
     welcomeMessage = `Hello, I am interested in your Swap: on ${formattedDate} at ${swapDetails.startTime} - ${swapDetails.endTime}.`
 
     const message = {
       sender: {
-        _id: creatorId,
-        name: creator.name,
+        _id: 1,
+        name: 'SwapBot',
       },
       text: welcomeMessage,
     }
@@ -171,15 +157,16 @@ export const addMember = async (req, res) => {
 }
 
 export const deleteChat = async (req, res) => {
-  const { user } = req
-  const { chatId } = req.params
+  const { userId, chatId } = req.params
 
   const chat = await Chat.findById(chatId)
+
   if (!chat) throw ApiError.notFound('Chat not found')
 
   const isMember = chat.members.find(
-    (member) => member._id === mongoose.Types.ObjectId(user._id).toString()
+    (member) => member._id === mongoose.Types.ObjectId(userId).toString()
   )
+
   if (!isMember)
     throw ApiError.forbidden('Only chat member can perform this operation')
 

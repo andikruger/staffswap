@@ -33,6 +33,7 @@ code {
   margin-left: 16px;
   border-radius: 10px;
   background-color: #eee;
+  z-index: -5;
 }
 
 .own-message {
@@ -42,9 +43,25 @@ code {
   margin-left: auto;
   background-color: #e0211a;
   color: #fff;
+  z-index: -5;
 }
 
 .own-message .message-author {
+  right: 5px;
+  left: auto;
+}
+
+.swapbot-message {
+  text-align: right;
+  align-items: flex-end;
+  margin-right: 16px;
+  margin-left: auto;
+  background-color: #56a6de;
+  color: #fff;
+  z-index: -5;
+}
+
+.swapbot-message .message-author {
   right: 5px;
   left: auto;
 }

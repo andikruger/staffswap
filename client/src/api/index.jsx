@@ -33,12 +33,13 @@ export const getChats = () => API.get("/chats");
 //export const getChat = (chatId) => API.get(`/chats/${chatId}`);
 export const createPrivateChat = (creatorId, partnerId, swapDetails) =>
   API.post("/chats/private", { creatorId, partnerId, swapDetails });
-// export const createMessage = (chatId, text) =>
-//   API.post(`/chats/${chatId}`, { text });
 
-export const deleteChat = (chatId) => API.delete(`/chats/${chatId}`);
-
+export const deleteChat = (userId, chatId) => {
+  API.delete(`/chats/${userId}/${chatId}`);
+};
 export const getChatsByUserId = (userId) => API.get(`/chats/chat/${userId}`);
+
+export const getChatById = (chatId) => API.get(`/chats/${chatId}`);
 
 export const getChat = (userId, chatId) =>
   API.get(`/chats/chat/${userId}/${chatId}`);

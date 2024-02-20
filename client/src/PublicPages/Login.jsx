@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Helmet } from "react-helmet";
 import Header from "../components/PublicHeader";
-import { useMsal, MsalProvider } from "@azure/msal-react";
+import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "../auth-config";
 
 const HelloWorld = () => {

@@ -1,21 +1,13 @@
-import React, { useContext, useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { signOut } from "../../actions/auth";
-import { createPrivateChat } from "../../actions/chats";
-import { SocketContext } from "../../context/Socket";
+
 import { getInitials } from "../../utils/functions";
 import { FaHome } from "react-icons/fa";
 import { useMsal } from "@azure/msal-react";
 function UserPanel() {
   const { accounts } = useMsal();
-  const dispatch = useDispatch();
 
-  const socket = useContext(SocketContext);
   let user = accounts[0];
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [openAddPrivate, setOpenAddPrivate] = useState(false);
-  const [newPrivateEmail, setNewPrivateEmail] = useState("");
 
   const navigate = useNavigate();
 

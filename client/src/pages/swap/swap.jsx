@@ -116,7 +116,7 @@ const SwapDetails = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [email, setEmail] = useState(null);
   const [phone, setPhone] = useState(null);
-  const [user, setUser] = useState(null);
+
   useEffect(() => {
     const fetchSwapDetails = async () => {
       try {
@@ -152,7 +152,6 @@ const SwapDetails = () => {
     };
 
     fetchSwapDetails(); // Fetch swap details when the component mounts
-    setUser(sessionStorage.getItem("user"));
 
     localStorage.clear();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -161,11 +160,6 @@ const SwapDetails = () => {
   const qualifications = qualificationData.qualifications;
 
   const shiftWish = shiftWishData.shiftWishes;
-
-  const [exchanges, setExchanges] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [startTime, setStartTime] = useState("12:00");
-  const [endTime, setEndTime] = useState("13:00");
 
   return (
     <>

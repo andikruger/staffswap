@@ -93,7 +93,7 @@ export const getAllController = async (req, res) => {
   })
 
   // remove all swaps that have status of 'accepted'
-  const filteredSwap = sortedSwap.filter((swap) => swap.status !== 'accepted')
+  const filteredSwap = sortedSwap.filter((swap) => swap.status !== 'Accepted')
 
   res.status(200).json({
     message: 'Swaps fetched successfully',
@@ -343,17 +343,11 @@ export const updateStatusController = async (req, res) => {
     const { status } = req.body
 
     // update the status of the swap
-    const updatedSwap = await Swap.findByIdAndUpdate(
-      id,
-      { status },
-      { new: true }
-    )
+    const updatedSwap = await Swap.findByIdAndUpdate(id, { status })
 
     if (!updatedSwap) {
       return res.status(404).json({ message: 'Swap not found' })
     }
-
-    console.log('Updated swap:', updatedSwap)
 
     res.status(200).json({
       message: 'Swap status updated successfully',

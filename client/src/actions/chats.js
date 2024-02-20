@@ -44,10 +44,12 @@ export const createPrivateChat =
     }
   };
 
-export const deleteChat = (chatId, socket) => async (dispatch) => {
+export const deleteChat = (userId, chatId, socket) => async (dispatch) => {
   try {
-    const { data: chat } = await api.getChat(chatId);
-    await api.deleteChat(chatId);
+    const { data: chat } = await api.getChatById(chatId);
+    console.log(chat.members);
+
+    await api.deleteChat(userId, chatId);
     chat.members.map((member) => socket.deleteChat(member.id));
     dispatch({ type: DELETE_CHAT, payload: chatId });
   } catch (error) {

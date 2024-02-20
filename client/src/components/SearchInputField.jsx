@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from "react";
-import searchCriteria from "../data/searchCriteria.json";
 import qualificationData from "../data/qualifications.json";
 import shiftWishData from "../data/shiftWishes.json";
 

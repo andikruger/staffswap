@@ -49,12 +49,12 @@ const RadioButtonList = ({ options, selectedOption, onChange }) => {
 };
 const Profile = () => {
   const navigate = useNavigate();
-  const [name, setName] = useState("");
+
   const [threeLetterCode, setThreeLetterCode] = useState("");
   const [user, setUser] = useState(null);
   const [userExists, setUserExists] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
-  const { instance, accounts } = useMsal();
+  const { accounts } = useMsal();
 
   // get the user data from the database
 
@@ -63,7 +63,6 @@ const Profile = () => {
     axios.get(`http://localhost:8000/user/username/${uuid}`).then((res) => {
       let data = res.data.data;
 
-      setName(data.name);
       setThreeLetterCode(data.threeLetterCode);
       setSelectedOption(data.role);
       setUser(data);
@@ -79,7 +78,7 @@ const Profile = () => {
   // if newUser is false, then we are updating the user
   // create a function to handle the input change and save it to submitObject
   const handleInputChange = (event) => {
-    const { name, value } = event.target;
+    const { value } = event.target;
     setThreeLetterCode(value);
   };
 

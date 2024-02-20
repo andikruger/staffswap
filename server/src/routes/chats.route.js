@@ -4,6 +4,7 @@ import {
   //getChats,
   getChatsByUserId,
   getChat,
+  getChatById,
   createPrivateChat,
   createMessage,
   deleteChat,
@@ -14,7 +15,7 @@ import idValidator from '../middleware/idValidator.js'
 const router = express.Router()
 
 //router.get('/', getChats)
-//router.get('/:chatId', idValidator, getChat)
+router.get('/:chatId', idValidator, getChatById)
 
 router.get('/chat/:userId', getChatsByUserId)
 
@@ -28,6 +29,6 @@ router.post('/chat/:userId/:chatId', idValidator, createMessage)
 
 router.put('/:chatId/add-member', idValidator, addMember)
 
-router.delete('/:chatId', idValidator, deleteChat)
+router.delete('/:userId/:chatId', idValidator, deleteChat)
 
 export default router
