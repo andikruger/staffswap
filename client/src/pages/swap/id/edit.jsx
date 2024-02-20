@@ -176,7 +176,7 @@ const EditSwap = () => {
 
   const handleStatusToggle = () => {
     const newStatus = status === "Pending" ? "Accepted" : "Pending";
-    console.log("newStatus", newStatus);
+
     try {
       axios.put(`http://localhost:8000/swap/status/${id}`, {
         status: newStatus,
@@ -201,7 +201,7 @@ const EditSwap = () => {
         setSubmitObject(response.data.data);
         setDisplayEmail(response.data.data.displayEmail);
         setDisplayPhoneNumber(response.data.data.displayPhoneNumber);
-
+        setEmail(response.data.data.email);
         setSelectedOption(response.data.data.shiftWish);
         setSelectedOptions(response.data.data.qualifications);
         setExchanges(response.data.data.exchanges);
@@ -348,12 +348,7 @@ const EditSwap = () => {
 
       setSubmitObject(tempObj);
 
-      console.log("tempObj", tempObj);
-
-      const response = await axios.put(
-        `http://localhost:8000/swap/${id}`,
-        tempObj
-      );
+      await axios.put(`http://localhost:8000/swap/${id}`, tempObj);
 
       toast.success("Swap updated successfully");
 
