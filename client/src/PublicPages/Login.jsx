@@ -4,7 +4,7 @@ import Header from "../components/PublicHeader";
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "../auth-config";
 
-const HelloWorld = () => {
+const Login = () => {
   const { instance } = useMsal();
   const handleRedirect = () => {
     instance
@@ -38,4 +38,4 @@ const HelloWorld = () => {
   );
 };
 
-export default HelloWorld;
+export default Login;
