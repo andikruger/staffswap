@@ -1,0 +1,32 @@
+# The version of the docker-compose.
+version: "3.8"
+# Telling docker-compose to build the client and server images and run them in containers.
+services:
+  client:
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+    # Telling docker-compose to build the client image using the Dockerfile in the client directory.
+    build: ./client
+    # Giving the container a name.
+    container_name: clientapp_c
+    # Mapping the port 3000 on the host machine to the port 3000 on the container.
+    ports:
+      - "3000:3000"
+    # Mapping the client directory on the host machine to the /app directory on the container.
+    volumes:
+      - ./client:/app
+    # Allows you to run container in detached mode.
+    stdin_open: true
+    tty: true
+  server:
+    environment:
+      - PORT=8000
+      - NODE_ENV=development
+      - MONGO_URI=mongodb+srv://vitomzev:Assetmanager1@vitomzev-cluster.wv1np.mongodb.net/staffSwap?retryWrites=true&w=majority
+    # Telling docker-compose to build the client image using the Dockerfile in the server directory.
+    build: ./server
+    container_name: serverapp_c
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./server:/app
