@@ -8,6 +8,7 @@ import {
   getAllController,
   getByIDController,
   getByUserController,
+  getByRoleController,
   getCountController,
   getCountUserController,
   getNextMonthController,
@@ -21,6 +22,7 @@ router.post('/new', createController)
 router.get('/', getAllController)
 router.get('/:id', getByIDController)
 router.get('/user/:id', getByUserController)
+router.get('/role/:role', getByRoleController)
 router.get('/get/count', getCountController)
 router.get('user/count/:id', getCountUserController)
 router.get('/month/user/:id', getNextMonthController)

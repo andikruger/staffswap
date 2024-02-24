@@ -32,6 +32,7 @@ const Home = () => {
           window.location.href = "/profile";
         } else {
           sessionStorage.setItem("user", res.data.data._id);
+          sessionStorage.setItem("role", res.data.data.role);
         }
       })
       .catch((err) => {

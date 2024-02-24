@@ -96,20 +96,27 @@ const Profile = () => {
       };
 
       if (!userExists) {
+        console.log("new user");
         axios
           .post("http://localhost:8000/user/register", submitObject)
           .then((res) => {
             toast.success("Profile updated successfully");
+            sessionStorage.role = selectedOption;
           })
           .catch((err) => {
             console.log("err", err);
             toast.error("Profile update failed");
           });
       } else {
+        // remove the threeLetterCode from the submitObject if it is the same as the user's threeLetterCode;
+        if (submitObject.threeLetterCode === user.threeLetterCode) {
+          delete submitObject.threeLetterCode;
+        }
         axios
           .put(`http://localhost:8000/user/update/${user._id}`, submitObject)
           .then((res) => {
             toast.success("Profile updated successfully");
+            sessionStorage.role = selectedOption;
           })
           .catch((err) => {
             console.log("err", err);

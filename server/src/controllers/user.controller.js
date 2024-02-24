@@ -48,44 +48,6 @@ export const signIn = async (req, res) => {
   res.status(200).json({ ...userData, id, token })
 }
 
-export const warnUser = async (req, res) => {
-  const { userId } = req.params
-
-  const user = await User.findById(userId)
-  if (!user) throw ApiError.notFound('User not found')
-
-  const updatedUser = await User.findByIdAndUpdate(
-    userId,
-    {
-      warnings: user.warnings + 1,
-    },
-    { new: true }
-  )
-
-  res
-    .status(200)
-    .json({ name: updatedUser.name, warnings: updatedUser.warnings })
-}
-
-export const blockUser = async (req, res) => {
-  const { userId } = req.params
-
-  const user = await User.findById(userId)
-  if (!user) throw ApiError.notFound('User not found')
-
-  const updatedUser = await User.findByIdAndUpdate(
-    userId,
-    {
-      isBlocked: true,
-    },
-    { new: true }
-  )
-
-  res
-    .status(200)
-    .json({ name: updatedUser.name, isBlocked: updatedUser.isBlocked })
-}
-
 export const unblockUser = async (req, res) => {
   const { userId } = req.params
 
@@ -167,9 +129,8 @@ export const updateUser = async (req, res, next) => {
 
       user.save((err, updatedUser) => {
         if (err) {
-          console.log('User UPDATE ERROR', err)
           return res.status(400).json({
-            error: 'User update failed',
+            error: 'User not updated',
           })
         }
         res.json(updatedUser)

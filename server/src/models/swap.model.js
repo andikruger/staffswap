@@ -96,6 +96,11 @@ const SwapSchema = new mongoose.Schema(
       required: [false, 'A displayPhoneNumber is required'],
       default: false,
     },
+
+    role: {
+      type: String,
+      required: [false, 'A role is required'],
+    },
   },
   {
     timestamps: true,

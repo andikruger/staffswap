@@ -32,6 +32,7 @@ export const createController = async (req, res) => {
     displayEmail,
     phoneNumber,
     displayPhoneNumber,
+    role,
   } = req.body
   let encryptedEmail = ''
   let encryptedPhoneNumber = ''
@@ -69,6 +70,7 @@ export const createController = async (req, res) => {
     displayEmail,
     phoneNumber: encryptedPhoneNumber,
     displayPhoneNumber,
+    role,
   })
   await newSwap.save()
   res.status(201).json({
@@ -113,6 +115,15 @@ export const getByIDController = async (req, res) => {
 export const getByUserController = async (req, res) => {
   const { id } = req.params
   const swaps = await Swap.find({ userID: id })
+  res.status(200).json({
+    message: 'Swaps fetched successfully',
+    data: swaps,
+  })
+}
+
+export const getByRoleController = async (req, res) => {
+  const { role } = req.params
+  const swaps = await Swap.find({ role: role })
   res.status(200).json({
     message: 'Swaps fetched successfully',
     data: swaps,
