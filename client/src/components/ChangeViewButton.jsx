@@ -11,7 +11,9 @@ const ChangeViewButton = ({ toggleView, icon }) => {
     }
   }
   return (
-    <div className="change-view-button-container">{displayIcon(icon)}</div>
+    <div className="change-view-button-container hidden md:block">
+      {displayIcon(icon)}
+    </div>
   );
 };
 
