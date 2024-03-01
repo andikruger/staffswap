@@ -7,10 +7,11 @@ import ChangeViewButton from "../../components/ChangeViewButton";
 import SearchButton from "../../components/SearchButton";
 import SwapList from "../../components/SwapList";
 import SwapCard from "../../components/SwapCard";
+import Loading from "../../components/Loading";
 import axios from "axios";
 import "../../index.css";
 import { toast } from "react-toastify";
-
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 const Swaps = () => {
   const [swaps, setSwaps] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -105,14 +106,13 @@ const Swaps = () => {
       <div
         className="min-h-screen bg-cover bg-center flex items-center justify-center"
         style={{
-          backgroundImage:
-            'url("https://source.unsplash.com/1600x900/?aviation")',
+          backgroundImage: `url(/assets/hero_${
+            Math.floor(Math.random() * 6) + 1
+          }.jpg)`,
         }}
       >
         {loading ? (
-          <p className="bg-white p-8 rounded-lg shadow-lg m-4 max-w-md">
-            Loading swaps...
-          </p>
+          <Loading />
         ) : error ? (
           <p className="bg-white p-8 rounded-lg shadow-lg m-4 max-w-md">
             {error}

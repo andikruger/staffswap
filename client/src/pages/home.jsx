@@ -3,10 +3,12 @@ import { Helmet } from "react-helmet";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import HowItWorks from "../components/HowItWorks";
+import Hero from "../components/Hero";
 import { toast } from "react-toastify";
 import { useMsal } from "@azure/msal-react";
 import sha256 from "crypto-js/sha256";
 import axios from "axios";
+
 const Home = () => {
   const { accounts } = useMsal();
   // log instance and accounts to console
@@ -63,24 +65,7 @@ const Home = () => {
       </Helmet>
       <Header />
 
-      <section className="hero">
-        <div className="bg-white p-4 rounded-lg shadow-lg w-full md:w-3/4 lg:w-2/4 max-w-screen-md overflow-y-auto">
-          <div className="opacity-100">
-            <h1 className="text-2xl md:text-4xl font-bold mb-2 md:mb-4">
-              StaffSwap
-            </h1>
-            <p className="text-sm md:text-lg mb-4 px-2">
-              Your Marketplace for Seamless Shift Exchanges
-            </p>
-            <a
-              href="#how-it-works"
-              className="bg-[#e0211a] text-white py-2 px-4 rounded-full hover:bg-[#b41813] no-underline text-sm"
-            >
-              How It Works
-            </a>
-          </div>
-        </div>
-      </section>
+      <Hero />
 
       <HowItWorks />
 

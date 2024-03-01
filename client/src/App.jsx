@@ -12,6 +12,11 @@ import "./index.css";
 import UserPage from "./pages/UserPage";
 
 function App() {
+  const randomImage = () => {
+    const random = Math.floor(Math.random() * 6) + 1;
+    console.log(random);
+    sessionStorage.setItem("randomImage", random);
+  };
   const dispatch = useDispatch();
   const socket = useContext(SocketContext);
   const chats = useSelector((state) => state.chats);
@@ -19,6 +24,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     setLoading(false);
+    randomImage();
     const userData = JSON.parse(localStorage.getItem("userData"));
     if (userData) {
       dispatch(autoSignIn());

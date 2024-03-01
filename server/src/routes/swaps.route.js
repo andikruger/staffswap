@@ -16,6 +16,7 @@ import {
   updateController,
   updateStatusController,
   deleteController,
+  deleteOldSwapsController,
 } from '../controllers/swap.controller.js'
 
 router.post('/new', createController)
@@ -30,5 +31,6 @@ router.get('/search/:search', getSearchController)
 router.put('/:id', updateController)
 router.put('/status/:id', updateStatusController)
 router.delete('/:id', deleteController)
+router.delete('/old', deleteOldSwapsController)
 
 export default router

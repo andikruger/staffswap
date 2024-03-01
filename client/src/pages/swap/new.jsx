@@ -331,8 +331,9 @@ const NewSwap = () => {
       <div
         className="min-h-screen bg-cover bg-center flex items-center justify-center"
         style={{
-          backgroundImage:
-            'url("https://source.unsplash.com/1600x900/?aviation")',
+          backgroundImage: `url(/assets/hero_${
+            Math.floor(Math.random() * 6) + 1
+          }.jpg)`,
         }}
       >
         {/* White rounded box */}

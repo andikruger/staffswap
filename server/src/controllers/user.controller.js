@@ -155,3 +155,43 @@ export const deleteUser = async (req, res) => {
     })
   }
 }
+
+// create a delete user function that will delete a user from the database by their id and delete all their swaps where their id in the userID field of the swap
+// also delete all chats where their id is in the _id field of the chat members array
+export const deleteAllUser = async (req, res) => {
+  const { id } = req.params
+  const user = await User.findById(id)
+  if (!user) {
+    res.status(404).json({
+      message: 'User not found',
+    })
+  } else {
+    await user.remove()
+    res.status(200).json({
+      message: 'User deleted successfully',
+    })
+
+    await Swap.deleteMany({ userID: id }, (err, swap) => {
+      if (err) {
+        return res.status(400).json({
+          error: 'Swaps not deleted',
+        })
+      }
+      res.json(swap)
+    })
+
+    // chat delete where id = _id in chat members array
+    await Chat.deleteMany({ 'members._id': id }, (err, chat) => {
+      if (err) {
+        return res.status(400).json({
+          error: 'Chats not deleted',
+        })
+      }
+      res.json(chat)
+    })
+  }
+
+  return res.status(200).json({
+    message: 'User deleted successfully',
+  })
+}

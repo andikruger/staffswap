@@ -11,7 +11,7 @@ import SwapList from "../../../components/SwapList";
 import axios from "axios";
 import "../../../index.css";
 import { toast } from "react-toastify";
-
+import Loading from "../../../components/Loading";
 const Swaps = () => {
   const { query } = useParams();
   const [swaps, setSwaps] = useState([]);
@@ -111,14 +111,13 @@ const Swaps = () => {
       <div
         className="min-h-screen bg-cover bg-center flex items-center justify-center"
         style={{
-          backgroundImage:
-            'url("https://source.unsplash.com/1600x900/?aviation")',
+          backgroundImage: `url(/assets/hero_${
+            Math.floor(Math.random() * 6) + 1
+          }.jpg)`,
         }}
       >
         {loading ? (
-          <p className="bg-white p-8 rounded-lg shadow-lg m-4 max-w-md">
-            Loading swaps...
-          </p>
+          <Loading />
         ) : error ? (
           <p className="bg-white p-8 rounded-lg shadow-lg m-4 max-w-md">
             {error}

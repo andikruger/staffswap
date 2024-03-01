@@ -124,14 +124,15 @@ const SearchSwap = React.memo(() => {
       <div
         className="min-h-screen bg-cover bg-center flex items-center justify-center"
         style={{
-          backgroundImage:
-            'url("https://source.unsplash.com/1600x900/?aviation")',
+          backgroundImage: `url(/assets/hero_${
+            Math.floor(Math.random() * 6) + 1
+          }.jpg)`,
         }}
       >
         {/* White rounded box */}
         <div className="bg-white p-8 rounded-lg shadow-lg w-11/12 max-w-screen-md overflow-y-auto">
           {/* Your content goes here */}
-          <h2 className="text-2xl font-bold mb-4 text-gray-800">
+          <h2 className="text-2xl font-bold mb-4 text-gray-800 text-center">
             Search Swaps
           </h2>
 
@@ -141,7 +142,7 @@ const SearchSwap = React.memo(() => {
             {/* Global Join */}
             <div className="mb-4">
               <label htmlFor="join" className="block text-sm mb-2 text-center">
-                Global Join
+                Search Mode
               </label>
               <select
                 id="join"
@@ -149,8 +150,8 @@ const SearchSwap = React.memo(() => {
                 //onChange={handleSearchInputChange}
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
               >
-                <option value="and">AND</option>
-                <option value="or">OR</option>
+                <option value="and">Must Satisfy All Conditions (AND)</option>
+                <option value="or">Satisfy At Least One Condition (OR)</option>
               </select>
             </div>
 

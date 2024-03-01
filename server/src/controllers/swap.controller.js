@@ -369,3 +369,20 @@ export const updateStatusController = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' })
   }
 }
+
+// create deleteOldSwapsController function which will delete all swaps that are older than a certain date of creation (e.g. 7 days)
+
+export const deleteOldSwapsController = async (req, res) => {
+  try {
+    const date = new Date()
+    date.setDate(date.getDate() - 7)
+    const deletedSwaps = await Swap.deleteMany({ createdAt: { $lt: date } })
+    res.status(200).json({
+      message: 'Old swaps deleted successfully',
+      data: deletedSwaps,
+    })
+  } catch (error) {
+    console.error('Error deleting old swaps:', error)
+    res.status(500).json({ message: 'Internal server error' })
+  }
+}

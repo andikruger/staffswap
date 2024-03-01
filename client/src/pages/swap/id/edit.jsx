@@ -375,8 +375,9 @@ const EditSwap = () => {
       <div
         className="min-h-screen bg-cover bg-center flex items-center justify-center"
         style={{
-          backgroundImage:
-            'url("https://source.unsplash.com/1600x900/?aviation")',
+          backgroundImage: `url(/assets/hero_${
+            Math.floor(Math.random() * 6) + 1
+          }.jpg)`,
         }}
       >
         {/* White rounded box */}
@@ -552,7 +553,7 @@ const EditSwap = () => {
                   onChange={(e) => handleEndTimeChange(e.target.value)}
                 />
               </div>
-              <div className="justify-center items-center">
+              <div className="btn-box flex justify-center items-center">
                 <button
                   type="button"
                   onClick={handleAddExchange}
@@ -652,13 +653,14 @@ const EditSwap = () => {
                 setDisplayPhoneNumber={setDisplayPhoneNumber}
               />
             </div>
-
-            <button
-              type="submit"
-              className="bg-[#e0211a] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#b41813]"
-            >
-              Update Swap Details
-            </button>
+            <div className="flex flex-col sm:flex-row justify-between">
+              <button
+                type="submit"
+                className="bg-[#e0211a] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#b41813]"
+              >
+                Update Swap Details
+              </button>
+            </div>
           </form>
           <button
             type="button"

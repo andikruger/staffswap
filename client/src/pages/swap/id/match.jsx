@@ -10,6 +10,7 @@ import axios from "axios";
 import "../../../index.css";
 import { toast } from "react-toastify";
 
+import Loading from "../../../components/Loading";
 function removeElementsWithMatchingThreeLetterCode(arr, targetThreeLetterCode) {
   return arr.filter(
     (element) => element.threeLetterCode !== targetThreeLetterCode
@@ -297,14 +298,13 @@ const Swaps = () => {
       <div
         className="min-h-screen bg-cover bg-center flex items-center justify-center"
         style={{
-          backgroundImage:
-            'url("https://source.unsplash.com/1600x900/?aviation")',
+          backgroundImage: `url(/assets/hero_${
+            Math.floor(Math.random() * 6) + 1
+          }.jpg)`,
         }}
       >
         {loading ? (
-          <p className="bg-white p-8 rounded-lg shadow-lg m-4 max-w-md">
-            Loading swaps...
-          </p>
+          <Loading />
         ) : error ? (
           <p className="bg-white p-8 rounded-lg shadow-lg m-4 max-w-md">
             {error}
@@ -328,21 +328,21 @@ const Swaps = () => {
                       borderWidth: "0 0 4px 0",
                     }}
                   >
-                    <h2 className="text-2xl font-bold mb-2 text-gray-800">
+                    <h2 className="text-2xl font-bold mb-2 text-gray-800 text-center">
                       {formatDate(match.swap.date)}
                     </h2>
                     {/* Render swap details here */}
-                    <div>
+                    <div className="text-center">
                       <strong>{`${match.swap.startTime} - ${match.swap.endTime}`}</strong>
                     </div>
-                    <div>
+                    <div className="text-center">
                       <strong>Name:</strong> {match.swap.name}
                     </div>
-                    <div>
+                    <div className="text-center">
                       <strong>Three Letter Code:</strong>{" "}
                       {match.swap.threeLetterCode}
                     </div>
-                    <div>
+                    <div className="text-center">
                       <strong>Note:</strong> {match.swap.note}
                     </div>
 
