@@ -23,7 +23,9 @@ const Home = () => {
 
     // check if the hash exists in the database api endpoint https://lucky-red-robe.cyclic.app/user/username/:hash
     axios
-      .get(`https://lucky-red-robe.cyclic.app/user/username/${hash}`)
+
+      .get(`${process.env.REACT_APP_SERVER_URL}/user/username/${hash}`)
+
       .then((res) => {
         // if it doesn't, then create a new user redirect to the profile page
         if (!res.data.data) {
