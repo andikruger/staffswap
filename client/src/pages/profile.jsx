@@ -60,14 +60,16 @@ const Profile = () => {
 
   useEffect(() => {
     let uuid = sha256(accounts[0].username).toString();
-    axios.get(`http://localhost:8000/user/username/${uuid}`).then((res) => {
-      let data = res.data.data;
+    axios
+      .get(`${process.env.REACT_APP_SERVER_URL}/user/username/${uuid}`)
+      .then((res) => {
+        let data = res.data.data;
 
-      setThreeLetterCode(data.threeLetterCode);
-      setSelectedOption(data.role);
-      setUser(data);
-      setUserExists(true);
-    });
+        setThreeLetterCode(data.threeLetterCode);
+        setSelectedOption(data.role);
+        setUser(data);
+        setUserExists(true);
+      });
     localStorage.clear();
   }, []);
 
@@ -98,7 +100,10 @@ const Profile = () => {
       if (!userExists) {
         console.log("new user");
         axios
-          .post("http://localhost:8000/user/register", submitObject)
+          .post(
+            `${process.env.REACT_APP_SERVER_URL}/user/register`,
+            submitObject
+          )
           .then((res) => {
             toast.success("Profile updated successfully");
             sessionStorage.role = selectedOption;
@@ -113,7 +118,10 @@ const Profile = () => {
           delete submitObject.threeLetterCode;
         }
         axios
-          .put(`http://localhost:8000/user/update/${user._id}`, submitObject)
+          .put(
+            `${process.env.REACT_APP_SERVER_URL}/user/update/${user._id}`,
+            submitObject
+          )
           .then((res) => {
             toast.success("Profile updated successfully");
             sessionStorage.role = selectedOption;

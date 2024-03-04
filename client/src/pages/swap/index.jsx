@@ -22,7 +22,9 @@ const Swaps = () => {
   useEffect(() => {
     const fetchSwaps = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/swap");
+        const response = await axios.get(
+          `${process.env.REACT_APP_SERVER_URL}/swap`
+        );
         setSwaps(response.data.data);
       } catch (error) {
         console.error("Error fetching swaps:", error);

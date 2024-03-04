@@ -121,7 +121,9 @@ const SwapDetails = () => {
     const fetchSwapDetails = async () => {
       try {
         // Fetch swap details from the API
-        const response = await axios.get(`http://localhost:8000/swap/${id}`);
+        const response = await axios.get(
+          `${process.env.REACT_APP_SERVER_URL}/swap/${id}`
+        );
         setSwapDetails(response.data.data);
         setSelectedOption(response.data.data.shiftWish);
         setSelectedOptions(response.data.data.qualifications);

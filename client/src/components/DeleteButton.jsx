@@ -23,7 +23,7 @@ const DeleteSwapButton = ({ id }) => {
     navigateTo("/swap");
     // use the link http://localhost:8000/swap/${id} to delete the swap with axios.delete method handle the error and success with toast
     axios
-      .delete(`http://localhost:8000/swap/${id}`)
+      .delete(`${process.env.REACT_APP_SERVER_URL}/swap/${id}`)
       .then((response) => {
         toast.success("Swap deleted successfully");
       })

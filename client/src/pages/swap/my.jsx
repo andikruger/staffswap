@@ -23,7 +23,7 @@ const Swaps = () => {
     const fetchSwaps = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/swap/user/${user}`
+          `${process.env.REACT_APP_SERVER_URL}/swap/user/${user}`
         );
         setSwaps(response.data.data);
       } catch (error) {

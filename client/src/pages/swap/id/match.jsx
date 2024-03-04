@@ -240,13 +240,15 @@ const Swaps = () => {
   useEffect(() => {
     const fetchSwaps = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/swap");
+        const response = await axios.get(
+          `${process.env.REACT_APP_SERVER_URL}/swap`
+        );
         setSwaps(response.data.data);
 
         // Fetch individual swap if ID is provided
         if (id) {
           const individualSwapResponse = await axios.get(
-            `http://localhost:8000/swap/${id}`
+            `${process.env.REACT_APP_SERVER_URL}/swap/${id}`
           );
           setIndividualSwap(individualSwapResponse.data.data);
 

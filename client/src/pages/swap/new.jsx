@@ -171,7 +171,7 @@ const NewSwap = () => {
 
     // get data from the database using axios with catch
     axios
-      .get(`https://lucky-red-robe.cyclic.app/user/username/${newUserID}`)
+      .get(`${process.env.REACT_APP_SERVER_URL}/user/username/${newUserID}`)
       .then((res) => {
         let data = res.data.data;
 
@@ -291,7 +291,7 @@ const NewSwap = () => {
       submitObject.displayPhoneNumber = displayPhoneNumber;
 
       const response = await axios.post(
-        "https://lucky-red-robe.cyclic.app/swap/new",
+        `${process.env.REACT_APP_SERVER_URL}/swap/new`,
         submitObject
       );
 
