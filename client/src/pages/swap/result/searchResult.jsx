@@ -23,7 +23,9 @@ const Swaps = () => {
     const fetchSwaps = async () => {
       try {
         const response = await axios.get(
+
           `${process.env.REACT_APP_SERVER_URL}/swap/search/${query}`
+
         );
 
         setSwaps(response.data);

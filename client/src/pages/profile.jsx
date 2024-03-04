@@ -60,6 +60,7 @@ const Profile = () => {
 
   useEffect(() => {
     let uuid = sha256(accounts[0].username).toString();
+
     axios
       .get(`${process.env.REACT_APP_SERVER_URL}/user/username/${uuid}`)
       .then((res) => {
@@ -70,6 +71,7 @@ const Profile = () => {
         setUser(data);
         setUserExists(true);
       });
+
     localStorage.clear();
   }, []);
 
@@ -100,10 +102,12 @@ const Profile = () => {
       if (!userExists) {
         console.log("new user");
         axios
+
           .post(
             `${process.env.REACT_APP_SERVER_URL}/user/register`,
             submitObject
           )
+
           .then((res) => {
             toast.success("Profile updated successfully");
             sessionStorage.role = selectedOption;
@@ -118,10 +122,12 @@ const Profile = () => {
           delete submitObject.threeLetterCode;
         }
         axios
+
           .put(
             `${process.env.REACT_APP_SERVER_URL}/user/update/${user._id}`,
             submitObject
           )
+
           .then((res) => {
             toast.success("Profile updated successfully");
             sessionStorage.role = selectedOption;

@@ -178,7 +178,9 @@ const EditSwap = () => {
     const newStatus = status === "Pending" ? "Accepted" : "Pending";
 
     try {
+
       axios.put(`${process.env.REACT_APP_SERVER_URL}/swap/status/${id}`, {
+
         status: newStatus,
       });
       toast.success(`Swap status updated to ${newStatus}`);
@@ -194,9 +196,11 @@ const EditSwap = () => {
     const fetchSwapDetails = async () => {
       try {
         // Fetch swap details from the API
+
         const response = await axios.get(
           `${process.env.REACT_APP_SERVER_URL}/swap/${id}`
         );
+
         if (!validateUser(response.data.data.userID)) {
           navigate("/swap");
         }
@@ -350,10 +354,12 @@ const EditSwap = () => {
 
       setSubmitObject(tempObj);
 
+
       await axios.put(
         `${process.env.REACT_APP_SERVER_URL}/swap/${id}`,
         tempObj
       );
+
 
       toast.success("Swap updated successfully");
 
