@@ -4,7 +4,6 @@ import { BsGridFill } from "react-icons/bs";
 
 const ChangeViewButton = ({ toggleView, icon }) => {
   function displayIcon(icon) {
-    console.log(icon);
     if (icon === "grid") {
       return <BsGridFill className="add-icon" onClick={toggleView} />;
     } else {
@@ -12,7 +11,9 @@ const ChangeViewButton = ({ toggleView, icon }) => {
     }
   }
   return (
-    <div className="change-view-button-container">{displayIcon(icon)}</div>
+    <div className="change-view-button-container hidden md:block">
+      {displayIcon(icon)}
+    </div>
   );
 };
 

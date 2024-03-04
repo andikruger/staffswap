@@ -1,14 +1,17 @@
-# Pull Docker Hub base image
-FROM node:14.16.0-alpine3.10
-# Set working directory
-WORKDIR /usr/app
-# Install app dependencies
-COPY package*.json ./
-RUN npm install -qyg nodemon@2.0.7
-RUN npm install -qy
-# Copy app to container
+FROM node:17-alpine
+
+# We use nodemon to restart the server every time there's a change
+RUN npm install -g nodemon
+
+WORKDIR /app
+
+COPY package.json .
+
+RUN npm install
+
 COPY . .
-# Expose port 8000
-EXPOSE 8000:8000
-# Run the "dev" script in package.json
-CMD ["npm", "run", "start"]
+
+EXPOSE 8000
+
+# Use script specified in package,json
+CMD ["npm", "run", "dev"]

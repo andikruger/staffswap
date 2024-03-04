@@ -99,7 +99,6 @@ const DisplayPhoneNumber = ({ label, isChecked, onChange }) => {
 
   const handleClick = () => {
     onChange(!isChecked);
-    console.log("PhoneNumber", isChecked);
   };
 
   return (
@@ -290,7 +289,6 @@ const NewSwap = () => {
       submitObject.exchange = exchanges;
       submitObject.displayEmail = displayEmail;
       submitObject.displayPhoneNumber = displayPhoneNumber;
-      console.log(submitObject);
 
       const response = await axios.post(
         "https://lucky-red-robe.cyclic.app/swap/new",
@@ -302,9 +300,7 @@ const NewSwap = () => {
       //   submitObject
       // );
 
-      toast.success("Swap Submitted Successfully", {
-        position: toast.POSITION.TOP_RIGHT,
-      });
+      toast.success("Swap Submitted Successfully");
 
       // Reset form values
       setSelectedOptions([]);
@@ -317,9 +313,7 @@ const NewSwap = () => {
       event.target.reset();
     } catch (error) {
       console.log(error);
-      toast.error("Swap Submission Failed", {
-        position: toast.POSITION.TOP_RIGHT,
-      });
+      toast.error("Swap Submission Failed");
     }
   };
 
@@ -337,8 +331,9 @@ const NewSwap = () => {
       <div
         className="min-h-screen bg-cover bg-center flex items-center justify-center"
         style={{
-          backgroundImage:
-            'url("https://source.unsplash.com/1600x900/?aviation")',
+          backgroundImage: `url(/assets/hero_${
+            Math.floor(Math.random() * 6) + 1
+          }.jpg)`,
         }}
       >
         {/* White rounded box */}
@@ -351,7 +346,10 @@ const NewSwap = () => {
             <div className="flex flex-col mb-4 sm:flex-row">
               {/* Name */}
               <div className="w-full sm:w-1/2 mb-2 sm:mb-0 sm:mr-2">
-                <label htmlFor="name" className="block text-sm mb-2">
+                <label
+                  htmlFor="name"
+                  className="block text-sm mb-2 text-center"
+                >
                   Name
                 </label>
                 <input
@@ -360,13 +358,16 @@ const NewSwap = () => {
                   name="name"
                   value={accounts[0].name}
                   readOnly
-                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500 text-center"
                 />
               </div>
 
               {/* Three Letter Code */}
               <div className="w-full sm:w-1/2 sm:ml-2">
-                <label htmlFor="threeLetterCode" className="block text-sm mb-2">
+                <label
+                  htmlFor="threeLetterCode"
+                  className="block text-sm mb-2 text-center"
+                >
                   Three Letter Code
                 </label>
                 <input
@@ -375,7 +376,7 @@ const NewSwap = () => {
                   name="threeLetterCode"
                   value={userData.threeLetterCode}
                   readOnly
-                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500 text-center"
                 />
               </div>
             </div>
@@ -383,7 +384,10 @@ const NewSwap = () => {
             <div className="flex flex-col sm:flex-row mb-4">
               {/* Date */}
               <div className="w-full sm:w-1/2 mb-2 sm:mb-0 sm:mr-2">
-                <label htmlFor="date" className="block text-sm mb-2">
+                <label
+                  htmlFor="date"
+                  className="block text-sm mb-2 text-center"
+                >
                   Date
                 </label>
                 <input
@@ -397,20 +401,23 @@ const NewSwap = () => {
                       .split("T")[0]
                   }
                   onChange={handleInputChange}
-                  className="appearance-none w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+                  className="appearance-none w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500 text-center"
                 />
               </div>
 
               {/* Shift time */}
               <div className="w-full sm:w-1/2 ml-0 sm:ml-2">
-                <label htmlFor="shiftTime" className="block text-sm mb-2">
+                <label
+                  htmlFor="shiftTime"
+                  className="block text-sm mb-2 text-center"
+                >
                   Shift Time
                 </label>
                 <select
                   id="shiftTime"
                   name="shiftTime"
                   onChange={handleInputChange}
-                  className="appearance-none w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+                  className="appearance-none w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500 text-center"
                 >
                   <option value="">Select Shift Time</option>
                   {shiftTimes.map((shiftTime) => (
@@ -424,14 +431,17 @@ const NewSwap = () => {
 
             {/* Priority */}
             <div className="mb-4">
-              <label htmlFor="priority" className="block text-sm mb-2">
+              <label
+                htmlFor="priority"
+                className="block text-sm mb-2 text-center"
+              >
                 Priority
               </label>
               <select
                 id="priority"
                 name="priority"
                 onChange={handleInputChange}
-                className="appearance-none w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+                className="appearance-none w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500 text-center"
               >
                 <option value="1">1 - Low</option>
                 <option value="2">2 - Medium</option>
@@ -440,7 +450,9 @@ const NewSwap = () => {
             </div>
             {/* Type */}
             <div className="mb-4">
-              <label className="block text-sm mb-2">Shift Wish</label>
+              <label className="block text-sm mb-2 text-center">
+                Shift Wish
+              </label>
               <div>
                 {/* ... Radio buttons ... */}
                 <RadioButtonList
@@ -453,13 +465,18 @@ const NewSwap = () => {
 
             {/* Exchange */}
             <div className="mb-4">
-              <label htmlFor="exchange" className="block text-sm mb-2">
+              <label
+                htmlFor="exchange"
+                className="block text-sm mb-2 text-center"
+              >
                 Exchange
               </label>
               <div className="mb-4">
-                <label className="block text-sm mb-2">Select Date</label>
+                <label className="block text-sm mb-2 text-center">
+                  Select Date
+                </label>
                 <input
-                  className="appearance-none w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+                  className="appearance-none w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500 text-center"
                   type="date"
                   min={new Date().toISOString().split("T")[0]}
                   value={selectedDate.toISOString().split("T")[0]}
@@ -473,9 +490,11 @@ const NewSwap = () => {
               </div>
 
               <div className="mb-4">
-                <label className="block text-sm mb-2 ">Select Start Time</label>
+                <label className="block text-sm mb-2 text-center ">
+                  Select Start Time
+                </label>
                 <input
-                  className="appearance-none w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+                  className="appearance-none w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500 text-center"
                   type="time"
                   value={startTime}
                   onChange={(e) => handleStartTimeChange(e.target.value)}
@@ -483,9 +502,11 @@ const NewSwap = () => {
               </div>
 
               <div className="mb-4">
-                <label className="block text-sm mb-2">Select End Time</label>
+                <label className="block text-sm mb-2 text-center">
+                  Select End Time
+                </label>
                 <input
-                  className="appearance-none w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+                  className="appearance-none w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500 text-center"
                   type="time"
                   value={endTime}
                   onChange={(e) => handleEndTimeChange(e.target.value)}
@@ -500,7 +521,7 @@ const NewSwap = () => {
                 Add Exchange
               </button>
 
-              <ul>
+              <ul className="text-center">
                 {exchanges.map((exchange, index) => (
                   <li key={index}>
                     {`Date: ${exchange.date}, Start Time: ${exchange.startTime}, End Time: ${exchange.endTime}`}
@@ -517,20 +538,20 @@ const NewSwap = () => {
             </div>
             {/* Notes */}
             <div className="mb-4">
-              <label htmlFor="note" className="block text-sm mb-2">
+              <label htmlFor="note" className="block text-sm mb-2 text-center">
                 Note
               </label>
               <textarea
                 id="note"
                 name="note"
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500 overflow-y-auto"
+                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500 text-center overflow-y-auto"
                 rows="4"
               ></textarea>
             </div>
             {/* Qualifications Required */}
             <div className="mb-4">
-              <label className="block text-sm mb-2">
+              <label className="block text-sm mb-2 text-center">
                 Qualifications Required
               </label>
               <CheckboxList
@@ -542,7 +563,7 @@ const NewSwap = () => {
 
             {/* Email */}
             <div className="mb-4">
-              <label htmlFor="email" className="block text-sm mb-2">
+              <label htmlFor="email" className="block text-sm mb-2 text-center">
                 Email
               </label>
               <input
@@ -552,7 +573,7 @@ const NewSwap = () => {
                 value={accounts[0].username}
                 readOnly
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500 text-center"
               />
             </div>
 
@@ -566,7 +587,10 @@ const NewSwap = () => {
 
             {/* Phone Number */}
             <div className="mb-4">
-              <label htmlFor="phoneNumber" className="block text-sm mb-2">
+              <label
+                htmlFor="phoneNumber"
+                className="block text-sm mb-2 text-center"
+              >
                 Phone Number
               </label>
               <input
@@ -574,7 +598,7 @@ const NewSwap = () => {
                 id="phoneNumber"
                 name="phoneNumber"
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500 text-center"
               />
             </div>
 

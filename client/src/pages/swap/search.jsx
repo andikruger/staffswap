@@ -104,10 +104,6 @@ const SearchSwap = React.memo(() => {
       // Redirect to the search results page
       window.location.href = `/swap/result/${searchQuery}`;
 
-      // Log the form data to the console
-      console.log("Form Data:", formData);
-      console.log(JSON.stringify(formData));
-
       // Clear localStorage
       localStorage.clear();
     },
@@ -128,14 +124,15 @@ const SearchSwap = React.memo(() => {
       <div
         className="min-h-screen bg-cover bg-center flex items-center justify-center"
         style={{
-          backgroundImage:
-            'url("https://source.unsplash.com/1600x900/?aviation")',
+          backgroundImage: `url(/assets/hero_${
+            Math.floor(Math.random() * 6) + 1
+          }.jpg)`,
         }}
       >
         {/* White rounded box */}
         <div className="bg-white p-8 rounded-lg shadow-lg w-11/12 max-w-screen-md overflow-y-auto">
           {/* Your content goes here */}
-          <h2 className="text-2xl font-bold mb-4 text-gray-800">
+          <h2 className="text-2xl font-bold mb-4 text-gray-800 text-center">
             Search Swaps
           </h2>
 
@@ -144,8 +141,8 @@ const SearchSwap = React.memo(() => {
 
             {/* Global Join */}
             <div className="mb-4">
-              <label htmlFor="join" className="block text-sm mb-2">
-                Global Join
+              <label htmlFor="join" className="block text-sm mb-2 text-center">
+                Search Mode
               </label>
               <select
                 id="join"
@@ -153,8 +150,8 @@ const SearchSwap = React.memo(() => {
                 //onChange={handleSearchInputChange}
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
               >
-                <option value="and">AND</option>
-                <option value="or">OR</option>
+                <option value="and">Must Satisfy All Conditions (AND)</option>
+                <option value="or">Satisfy At Least One Condition (OR)</option>
               </select>
             </div>
 
@@ -165,7 +162,7 @@ const SearchSwap = React.memo(() => {
                   <div className="flex flex-wrap -mx-3 mb-2">
                     <div className="w-full  px-3 mb-6 md:mb-0">
                       <label
-                        className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                        className="block text-sm mb-2 text-center"
                         htmlFor="field"
                       >
                         Field
@@ -189,7 +186,7 @@ const SearchSwap = React.memo(() => {
 
                     <div className="w-full  px-3 mb-6 md:mb-0">
                       <label
-                        className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                        className="block text-sm mb-2 text-center "
                         htmlFor="field"
                       >
                         Search Value
@@ -201,7 +198,7 @@ const SearchSwap = React.memo(() => {
                   </div>
 
                   {/* Add/remove search criterias */}
-                  <div className="btn-box">
+                  <div className="btn-box flex justify-center items-center">
                     {searchValues.length - 1 === i && (
                       <button
                         className="bg-[#e0211a] text-white rounded-full px-3 py-1 text-sm font-semibold m-1 hover:bg-[#b41813]"
@@ -226,13 +223,14 @@ const SearchSwap = React.memo(() => {
             })}
 
             {/* END */}
-
-            <button
-              type="submit"
-              className="bg-[#e0211a] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#b41813]"
-            >
-              Search
-            </button>
+            <div className="flex justify-center items-center pt-2">
+              <button
+                type="submit"
+                className="bg-[#e0211a] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#b41813] "
+              >
+                Search
+              </button>
+            </div>
           </form>
         </div>
       </div>

@@ -10,7 +10,7 @@ import roleData from "../data/roles.json";
 import { useMsal } from "@azure/msal-react";
 
 import { toast } from "react-toastify";
-
+import "react-toastify/dist/ReactToastify.css";
 const roles = roleData.roles;
 
 const RadioButton = ({ label, isSelected, onChange }) => {
@@ -49,31 +49,28 @@ const RadioButtonList = ({ options, selectedOption, onChange }) => {
 };
 const Profile = () => {
   const navigate = useNavigate();
+
   const [threeLetterCode, setThreeLetterCode] = useState("");
   const [user, setUser] = useState(null);
   const [userExists, setUserExists] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
-  const { instance, accounts } = useMsal();
+  const { accounts } = useMsal();
 
   // get the user data from the database
 
   useEffect(() => {
     let uuid = sha256(accounts[0].username).toString();
-    axios
-      .get(`https://lucky-red-robe.cyclic.app/user/username/${uuid}`)
-      .then((res) => {
-        let data = res.data.data;
+    axios.get(`http://localhost:8000/user/username/${uuid}`).then((res) => {
+      let data = res.data.data;
 
-        setThreeLetterCode(data.threeLetterCode);
-        setSelectedOption(data.role);
-        setUser(data);
-        setUserExists(true);
-      });
+      setThreeLetterCode(data.threeLetterCode);
+      setSelectedOption(data.role);
+      setUser(data);
+      setUserExists(true);
+    });
     localStorage.clear();
   }, []);
 
-  console.log("user", user);
-  console.log("userExists", userExists);
   const handleRadioChange = (label) => {
     setSelectedOption(label);
   };
@@ -81,7 +78,7 @@ const Profile = () => {
   // if newUser is false, then we are updating the user
   // create a function to handle the input change and save it to submitObject
   const handleInputChange = (event) => {
-    const { name, value } = event.target;
+    const { value } = event.target;
     setThreeLetterCode(value);
   };
 
@@ -89,52 +86,46 @@ const Profile = () => {
     event.preventDefault();
     try {
       let userID = sha256(accounts[0].username).toString();
+      let name = accounts[0].name;
 
       let submitObject = {
+        name: name,
         threeLetterCode: threeLetterCode,
         role: selectedOption,
         userID: userID,
       };
 
-      console.log("submitObject", submitObject);
-
       if (!userExists) {
+        console.log("new user");
         axios
-          .post("https://lucky-red-robe.cyclic.app/user/register", submitObject)
+          .post("http://localhost:8000/user/register", submitObject)
           .then((res) => {
-            toast.success("Profile updated successfully", {
-              position: toast.POSITION.TOP_RIGHT,
-            });
+            toast.success("Profile updated successfully");
+            sessionStorage.role = selectedOption;
           })
           .catch((err) => {
             console.log("err", err);
-            toast.error("Profile update failed", {
-              position: toast.POSITION.TOP_RIGHT,
-            });
+            toast.error("Profile update failed");
           });
       } else {
+        // remove the threeLetterCode from the submitObject if it is the same as the user's threeLetterCode;
+        if (submitObject.threeLetterCode === user.threeLetterCode) {
+          delete submitObject.threeLetterCode;
+        }
         axios
-          .put(
-            `https://lucky-red-robe.cyclic.app/user/update/${user._id}`,
-            submitObject
-          )
+          .put(`http://localhost:8000/user/update/${user._id}`, submitObject)
           .then((res) => {
-            toast.success("Profile updated successfully", {
-              position: toast.POSITION.TOP_RIGHT,
-            });
+            toast.success("Profile updated successfully");
+            sessionStorage.role = selectedOption;
           })
           .catch((err) => {
             console.log("err", err);
-            toast.error("Profile update failed", {
-              position: toast.POSITION.TOP_RIGHT,
-            });
+            toast.error("Profile update failed");
           });
       }
     } catch (error) {
       console.log(error);
-      toast.error("Profile update did not work", {
-        position: toast.POSITION.TOP_RIGHT,
-      });
+      toast.error("Profile update did not work");
     }
   };
 
@@ -152,18 +143,21 @@ const Profile = () => {
       <div
         className="min-h-screen bg-cover bg-center flex items-center justify-center"
         style={{
-          backgroundImage:
-            'url("https://source.unsplash.com/1600x900/?aviation")',
+          backgroundImage: `url(/assets/hero_${
+            Math.floor(Math.random() * 6) + 1
+          }.jpg)`,
         }}
       >
         {/* White rounded box */}
         <div className="bg-white p-8 rounded-lg shadow-lg w-11/12 max-w-screen-md overflow-y-auto">
           {/* Your content goes here */}
-          <h2 className="text-2xl font-bold mb-4 text-gray-800">Profile</h2>
+          <h2 className="text-2xl font-bold mb-4 text-gray-800 text-center">
+            Profile
+          </h2>
           <form onSubmit={handleSubmit}>
             {/* Name */}
             <div className="mb-4">
-              <label htmlFor="name" className="block text-sm mb-2">
+              <label htmlFor="name" className="block text-sm mb-2 text-center">
                 Name
               </label>
               <input
@@ -171,14 +165,16 @@ const Profile = () => {
                 id="text"
                 name="name"
                 value={accounts[0].name}
-                readOnly
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500 text-center"
               />
             </div>
 
             {/* ThreeLetterCode */}
             <div className="mb-4">
-              <label htmlFor="threeLetterCode" className="block text-sm mb-2">
+              <label
+                htmlFor="threeLetterCode"
+                className="block text-sm mb-2 text-center"
+              >
                 Three Letter code
               </label>
               <input
@@ -188,37 +184,42 @@ const Profile = () => {
                 onChange={handleInputChange}
                 maxLength={4} // Set maximum length to 4
                 value={threeLetterCode.toUpperCase()}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500 text-center"
               />
             </div>
 
             {/* Role */}
             <div className="mb-4">
-              <label className="block text-sm mb-2">Role</label>
-              <div>
+              <label className="block text-sm mb-2 text-center">Role</label>
+              <div className="flex justify-center items-center">
                 {/* ... Radio buttons ... */}
-                <RadioButtonList
-                  options={roles}
-                  selectedOption={selectedOption}
-                  onChange={handleRadioChange}
-                />
+                <div className="flex justify-center">
+                  <RadioButtonList
+                    options={roles}
+                    selectedOption={selectedOption}
+                    onChange={handleRadioChange}
+                  />
+                </div>
               </div>
             </div>
-
-            <button
-              type="submit"
-              className="bg-[#e0211a] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#b41813]"
-            >
-              Update Profile
-            </button>
+            <div className="flex justify-center items-center">
+              <button
+                type="submit"
+                className="bg-[#e0211a] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#b41813] justify-center mt-4"
+              >
+                Update Profile
+              </button>
+            </div>
           </form>
-          <button
-            onClick={() => navigate("/swap/my")} // Use navigate to redirect to "/my"
-            className="bg-[#e0211a] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#b41813] mt-4"
-          >
-            Go to My Swaps
-          </button>
-          <div className="mt-4">
+          <div className="mt-4 flex justify-center items-center">
+            <button
+              onClick={() => navigate("/swap/my")} // Use navigate to redirect to "/my"
+              className="bg-[#e0211a] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#b41813] mt-4"
+            >
+              Go to My Swaps
+            </button>
+          </div>
+          <div className="mt-4 flex justify-center items-center">
             <p className="text-sm text-gray-500">
               <strong>Note:</strong> You can only swap with other users with the
               same role as you.
@@ -226,13 +227,14 @@ const Profile = () => {
           </div>
 
           {/* Add a chat button navigate to /chat */}
-
-          <button
-            onClick={() => navigate("/chat")} // Use navigate to redirect to "/chat"
-            className="bg-[#e0211a] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#b41813] mt-4"
-          >
-            Go to Chat
-          </button>
+          <div className="mt-4 flex justify-center items-center">
+            <button
+              onClick={() => navigate("/chat")} // Use navigate to redirect to "/chat"
+              className="bg-[#e0211a] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#b41813] mt-4"
+            >
+              Go to Chat
+            </button>
+          </div>
         </div>
       </div>
 

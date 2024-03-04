@@ -1,20 +1,22 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { SocketContext } from "../context/Socket";
+import { useDispatch } from "react-redux";
+import { createPrivateChat } from "../actions/chats";
 
 import "react-toastify/dist/ReactToastify.css";
 
-const ChatButton = ({ id, swapDetails }) => {
+const ChatButton = ({ id, swapDetails, creatorId, partnerId }) => {
   const navigateTo = useNavigate();
+  const dispatch = useDispatch();
 
+  const socket = useContext(SocketContext);
   const handleClick = () => {
     // Perform delete action or API call if needed
-    console.log("Chat button clicked");
-    console.log("id", id);
-    console.log("swapDetails", swapDetails);
-    // Redirect to "/swap"
-    navigateTo("/chat");
-    // use the link https://lucky-red-robe.cyclic.app/swap/${id} to delete the swap with axios.delete method handle the error and success with toast
+
+    dispatch(createPrivateChat(creatorId, partnerId, swapDetails, socket));
+    // open /chat in new tab
+    navigateTo(`/chat`);
   };
 
   return (

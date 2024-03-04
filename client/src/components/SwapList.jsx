@@ -22,7 +22,7 @@ const getPriorityColor = (priority) => {
 const SwapList = ({ swap }) => {
   return (
     <Link
-      to={`/swap/${swap._id}`}
+      to={`/swap/${swap.id}`}
       style={{ color: "inherit", textDecoration: "none" }}
       className=""
     >

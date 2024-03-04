@@ -8,7 +8,7 @@ const Header = () => {
     <header className=" sticky top-0 flex-wrap z-20  mx-auto flex w-full items-center justify-between ease-in duration-300 glass-nav">
       <Logo />
       <Nav />
-      <ToastContainer />
+      <ToastContainer draggable closeOnClick />
     </header>
   );
 };
