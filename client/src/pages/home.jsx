@@ -35,8 +35,13 @@ const Home = () => {
           // redirect to the profile page
           window.location.href = "/profile";
         } else {
-          sessionStorage.setItem("user", res.data.data.id);
-          sessionStorage.setItem("role", res.data.data.role);
+          if (res.data.data.id) {
+            sessionStorage.setItem("user", res.data.data.id);
+            sessionStorage.setItem("role", res.data.data.role);
+          } else if (res.data.data._id) {
+            sessionStorage.setItem("user", res.data.data._id);
+            sessionStorage.setItem("role", res.data.data.role);
+          }
         }
       })
       .catch((err) => {
