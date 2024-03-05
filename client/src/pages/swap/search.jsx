@@ -148,7 +148,7 @@ const SearchSwap = React.memo(() => {
                 id="join"
                 name="join"
                 //onChange={handleSearchInputChange}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+                className="appearance-none w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
               >
                 <option value="and">Must Satisfy All Conditions (AND)</option>
                 <option value="or">Satisfy At Least One Condition (OR)</option>
@@ -171,7 +171,7 @@ const SearchSwap = React.memo(() => {
                         name="field"
                         id="field"
                         onChange={(e) => handleInputChange(e, i)}
-                        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+                        className="appearance-none w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
                       >
                         <option>Enter the field you want to search in</option>
                         {searchCriteria.map((item, index) => {
