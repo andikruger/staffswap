@@ -150,8 +150,13 @@ const SwapDetails = () => {
         } else {
         }
       } catch (error) {
-        console.error("Error fetching swap details:", error);
-        toast.error("Error fetching swap details");
+        console.log(error.response);
+        if (error.response && error.response.status === 404) {
+          toast.error("Swap not found");
+        } else {
+          console.error("Error fetching swap details:", error);
+          toast.error("Error fetching swap details");
+        }
       }
     };
 
@@ -187,16 +192,17 @@ const SwapDetails = () => {
         className="min-h-screen bg-cover bg-center flex items-center justify-center"
         style={{
           backgroundImage: `url(/assets/hero_${
-            Math.floor(Math.random() * 6) + 1
+            sessionStorage.getItem("randomImage") || 1
           }.jpg)`,
         }}
       >
         {/* White rounded box */}
         <div className="bg-white p-8 my-4 rounded-lg shadow-lg w-11/12 max-w-screen-md overflow-y-auto">
           {/* Your content goes here */}
-          <h2 className="text-2xl font-bold mb-4 text-gray-800 text-center">
+          <h2 className="text-2xl font-bold mb-4 text-gray-800 text-center text-center">
             Swap Details
           </h2>
+          <p className="text-center text-gray-600 mb-4">{swapDetails.userID}</p>
 
           {/* Name and Three Letter Code in a column for smaller screens */}
           <div className="pt-4 flex flex-col sm:flex-row mb-4">

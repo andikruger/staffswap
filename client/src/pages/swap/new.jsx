@@ -157,6 +157,7 @@ const DisplayEmailComponent = ({ displayEmail, setDisplayEmail }) => {
 };
 
 const NewSwap = () => {
+  const activeUserID = sessionStorage.getItem("user");
   const { instance, accounts } = useMsal();
   const [threeLetterCode, setThreeLetterCode] = useState("");
   const [userData, setUserData] = useState({});
@@ -185,7 +186,7 @@ const NewSwap = () => {
   }, [accounts]);
 
   let submitObject = {
-    userID: userData._id,
+    userID: activeUserID,
     name: accounts[0].name,
     threeLetterCode: userData.threeLetterCode,
     date: "",
@@ -283,7 +284,7 @@ const NewSwap = () => {
       const data = new FormData(event.target);
       const value = Object.fromEntries(data.entries());
       submitObject = { ...submitObject, ...value };
-
+      submitObject.userID = activeUserID;
       submitObject.qualifications = selectedOptions;
       submitObject.shiftWish = selectedOption;
       submitObject.exchange = exchanges;
@@ -332,14 +333,17 @@ const NewSwap = () => {
         className="min-h-screen bg-cover bg-center flex items-center justify-center"
         style={{
           backgroundImage: `url(/assets/hero_${
-            Math.floor(Math.random() * 6) + 1
+            sessionStorage.getItem("randomImage") || 1
           }.jpg)`,
         }}
       >
         {/* White rounded box */}
         <div className="bg-white my-4 p-8 rounded-lg shadow-lg w-11/12 max-w-screen-md overflow-y-auto">
           {/* Your content goes here */}
-          <h2 className="text-2xl font-bold mb-4 text-gray-800">New Swap</h2>
+          <h2 className="text-2xl font-bold mb-4 text-gray-800 text-center">
+            New Swap
+          </h2>
+          <p>{activeUserID}</p>
           <form onSubmit={handleSubmit}>
             {/* Add your form fields here */}
             {/* Name and Three Letter Code in the same line for larger screens */}

@@ -240,7 +240,6 @@ const Swaps = () => {
   useEffect(() => {
     const fetchSwaps = async () => {
       try {
-
         const response = await axios.get(
           `${process.env.REACT_APP_SERVER_URL}/swap`
         );
@@ -250,9 +249,7 @@ const Swaps = () => {
         // Fetch individual swap if ID is provided
         if (id) {
           const individualSwapResponse = await axios.get(
-
             `${process.env.REACT_APP_SERVER_URL}/swap/${id}`
-
           );
           setIndividualSwap(individualSwapResponse.data.data);
 
@@ -305,7 +302,7 @@ const Swaps = () => {
         className="min-h-screen bg-cover bg-center flex items-center justify-center"
         style={{
           backgroundImage: `url(/assets/hero_${
-            Math.floor(Math.random() * 6) + 1
+            sessionStorage.getItem("randomImage") || 1
           }.jpg)`,
         }}
       >

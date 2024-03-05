@@ -8,7 +8,7 @@ const Hero = () => {
       className="hero"
       style={{
         backgroundImage: `url(/assets/hero_${
-          Math.floor(Math.random() * 6) + 1
+          sessionStorage.getItem("randomImage") || 1
         }.jpg)`,
       }}
     >

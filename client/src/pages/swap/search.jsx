@@ -125,14 +125,14 @@ const SearchSwap = React.memo(() => {
         className="min-h-screen bg-cover bg-center flex items-center justify-center"
         style={{
           backgroundImage: `url(/assets/hero_${
-            Math.floor(Math.random() * 6) + 1
+            sessionStorage.getItem("randomImage") || 1
           }.jpg)`,
         }}
       >
         {/* White rounded box */}
         <div className="bg-white p-8 rounded-lg shadow-lg w-11/12 max-w-screen-md overflow-y-auto">
           {/* Your content goes here */}
-          <h2 className="text-2xl font-bold mb-4 text-gray-800 text-center">
+          <h2 className="text-2xl font-bold mb-4 text-gray-800 text-center text-center">
             Search Swaps
           </h2>
 
