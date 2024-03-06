@@ -1,6 +1,7 @@
 import Swap from '../models/swap.model.js'
 import CryptoJS from 'crypto-js'
-
+import ApiError from '../error/ApiError.js'
+import 'express-async-errors'
 function convertTimeToNumber(timeString) {
   const [hours, minutes] = timeString.split(':').map(Number)
 
@@ -37,18 +38,6 @@ export const createController = async (req, res) => {
   let encryptedEmail = ''
   let encryptedPhoneNumber = ''
 
-  // if (email) {
-  //   encryptedEmail = CryptoJS.AES.encrypt(email, process.env.EMAIL_SECRET);
-  // }
-
-  // if (phoneNumber) {
-  //   // encrypt phone number
-  //   encryptedPhoneNumber = CryptoJS.AES.encrypt(
-  //     phoneNumber,
-  //     process.env.EMAIL_SECRET
-  //   );
-  // }
-
   const newSwap = new Swap({
     userID,
     name,
@@ -72,11 +61,21 @@ export const createController = async (req, res) => {
     displayPhoneNumber,
     role,
   })
-  await newSwap.save()
-  res.status(201).json({
-    message: 'Swap created successfully',
-    data: newSwap,
-  })
+
+  try {
+    const savedSwap = await newSwap.save()
+    res.status(201).json({
+      message: 'Swap created successfully',
+      data: savedSwap,
+    })
+  } catch (error) {
+    if (error.name === 'ValidationError') {
+      throw ApiError.badRequest('Validation error', error.message)
+    } else {
+      console.error('Error creating swap:', error)
+      throw ApiError.internal('Internal server error')
+    }
+  }
 }
 
 export const getAllController = async (req, res) => {
@@ -84,50 +83,78 @@ export const getAllController = async (req, res) => {
   const swaps = await Swap.find()
 
   // sort shifts by date
-  const sortedSwap = swaps.sort((a, b) => {
-    if (a.date < b.date) {
-      return -1
-    }
-    if (a.date > b.date) {
-      return 1
-    }
-    return 0
-  })
+  try {
+    const sortedSwap = swaps.sort((a, b) => {
+      if (a.date < b.date) {
+        return -1
+      }
+      if (a.date > b.date) {
+        return 1
+      }
+      return 0
+    })
 
-  // remove all swaps that have status of 'accepted'
-  const filteredSwap = sortedSwap.filter((swap) => swap.status !== 'Accepted')
+    // remove all swaps that have status of 'accepted'
+    const filteredSwap = sortedSwap.filter((swap) => swap.status !== 'Accepted')
 
-  res.status(200).json({
-    message: 'Swaps fetched successfully',
-    data: filteredSwap,
-  })
+    res.status(200).json({
+      message: 'Swaps fetched successfully',
+      data: filteredSwap,
+    })
+  } catch (error) {
+    console.error('Error fetching swaps:', error)
+    throw ApiError.internal('Internal server error')
+  }
 }
 
 export const getByIDController = async (req, res) => {
   const { id } = req.params
-  const swap = await Swap.findById(id)
-  res.status(200).json({
-    message: 'Swap fetched successfully',
-    data: swap,
-  })
+  try {
+    const swap = await Swap.findById(id)
+    res.status(200).json({
+      message: 'Swap fetched successfully',
+      data: swap,
+    })
+  } catch (error) {
+    // check if the error is that the id is not found
+    if (error.kind === 'ObjectId') {
+      throw ApiError.notFound('Swap not found')
+    }
+    console.error('Error fetching swaps:', error)
+    throw ApiError.internal('Internal server error')
+  }
 }
 
 export const getByUserController = async (req, res) => {
   const { id } = req.params
-  const swaps = await Swap.find({ userID: id })
-  res.status(200).json({
-    message: 'Swaps fetched successfully',
-    data: swaps,
-  })
+  try {
+    const swaps = await Swap.find({ userID: id })
+    res.status(200).json({
+      message: 'Swaps fetched successfully',
+      data: swaps,
+    })
+  } catch (error) {
+    // check if the error is that the id is not found
+    if (error.kind === 'ObjectId') {
+      throw ApiError.notFound('Swap not found')
+    }
+    console.error('Error fetching swaps:', error)
+    throw ApiError.internal('Internal server error')
+  }
 }
 
 export const getByRoleController = async (req, res) => {
   const { role } = req.params
   const swaps = await Swap.find({ role: role })
-  res.status(200).json({
-    message: 'Swaps fetched successfully',
-    data: swaps,
-  })
+  try {
+    res.status(200).json({
+      message: 'Swaps fetched successfully',
+      data: swaps,
+    })
+  } catch (error) {
+    console.error('Error fetching swaps:', error)
+    throw ApiError.internal('Internal server error')
+  }
 }
 
 export const getCountController = async (req, res) => {
@@ -217,18 +244,34 @@ export const updateController = async (req, res) => {
       data: updatedSwap,
     })
   } catch (error) {
+    if (error.name === 'ValidationError') {
+      throw ApiError.badRequest('Validation error', error.message)
+    }
+
+    if (error.kind === 'ObjectId') {
+      throw ApiError.notFound('Swap not found')
+    }
+
     console.error('Error updating swap:', error)
-    res.status(500).json({ message: 'Internal server error' })
+    throw ApiError.internal('Internal server error')
   }
 }
 
 export const deleteController = async (req, res) => {
   const { id } = req.params
   const deletedSwap = await Swap.findByIdAndDelete(id)
-  res.status(200).json({
-    message: 'Swap deleted successfully',
-    data: deletedSwap,
-  })
+  try {
+    if (!deletedSwap) {
+      throw ApiError.notFound('Swap not found')
+    }
+    res.status(200).json({
+      message: 'Swap deleted successfully',
+      data: deletedSwap,
+    })
+  } catch (error) {
+    console.error('Error deleting swap:', error)
+    throw ApiError.internal('Internal server error')
+  }
 }
 
 function createSearchQuery(obj) {
@@ -345,7 +388,7 @@ export const getSearchController = async (req, res, next) => {
     }
   } catch (err) {
     console.error('No Swaps found')
-    next(err)
+    throw ApiError.internal('Internal server error')
   }
 }
 export const updateStatusController = async (req, res) => {
@@ -366,7 +409,7 @@ export const updateStatusController = async (req, res) => {
     })
   } catch (error) {
     console.error('Error updating swap status:', error)
-    res.status(500).json({ message: 'Internal server error' })
+    throw ApiError.internal('Internal server error')
   }
 }
 
@@ -383,6 +426,6 @@ export const deleteOldSwapsController = async (req, res) => {
     })
   } catch (error) {
     console.error('Error deleting old swaps:', error)
-    res.status(500).json({ message: 'Internal server error' })
+    throw ApiError.internal('Internal server error')
   }
 }

@@ -105,7 +105,12 @@ const Profile = () => {
 
           .post(
             `${process.env.REACT_APP_SERVER_URL}/user/register`,
-            submitObject
+            submitObject,
+            {
+              headers: {
+                Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+              },
+            }
           )
 
           .then((res) => {
@@ -125,7 +130,12 @@ const Profile = () => {
 
           .put(
             `${process.env.REACT_APP_SERVER_URL}/user/update/${user._id}`,
-            submitObject
+            submitObject,
+            {
+              headers: {
+                Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+              },
+            }
           )
 
           .then((res) => {

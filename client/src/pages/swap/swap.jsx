@@ -123,7 +123,12 @@ const SwapDetails = () => {
         // Fetch swap details from the API
 
         const response = await axios.get(
-          `${process.env.REACT_APP_SERVER_URL}/swap/${id}`
+          `${process.env.REACT_APP_SERVER_URL}/swap/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            },
+          }
         );
 
         setSwapDetails(response.data.data);

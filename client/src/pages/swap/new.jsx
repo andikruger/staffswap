@@ -172,7 +172,11 @@ const NewSwap = () => {
 
     // get data from the database using axios with catch
     axios
-      .get(`${process.env.REACT_APP_SERVER_URL}/user/username/${newUserID}`)
+      .get(`${process.env.REACT_APP_SERVER_URL}/user/username/${newUserID}`, {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        },
+      })
       .then((res) => {
         let data = res.data.data;
 
@@ -293,7 +297,12 @@ const NewSwap = () => {
 
       const response = await axios.post(
         `${process.env.REACT_APP_SERVER_URL}/swap/new`,
-        submitObject
+        submitObject,
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+          },
+        }
       );
 
       // const response = await axios.post(
