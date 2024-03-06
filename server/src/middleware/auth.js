@@ -6,13 +6,13 @@ import APIError from '../error/ApiError.js'
 import 'express-async-errors'
 
 dotenv.config()
-const { SECRET_KEY } = process.env
 
 export const auth = async (req, res, next) => {
   try {
     const token = req.headers.authorization.split(' ')[1]
 
-    const decoded = jwt.verify(token, SECRET_KEY)
+    const decoded = jwt.verify(token, process.env.SECRET_KEY)
+
     req.user = await User.find({ userID: decoded.id })
   } catch (error) {
     console.log(error)

@@ -132,7 +132,7 @@ const Profile = () => {
         axios
 
           .put(
-            `${process.env.REACT_APP_SERVER_URL}/user/update/${user._id}`,
+            `${process.env.REACT_APP_SERVER_URL}/user/update/${user.id}`,
             submitObject,
             {
               headers: {

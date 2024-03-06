@@ -74,8 +74,9 @@ export const getUserByUserName = async (req, res) => {
 export const updateUser = async (req, res, next) => {
   const { userID, threeLetterCode, role } = req.body
   let id = req.params.id
+  console.log(req.params)
   try {
-    User.findOne({ id: id }, (err, user) => {
+    User.findById(id, (err, user) => {
       if (err || !user) {
         return res.status(400).json({
           error: 'No User found found',
@@ -170,6 +171,7 @@ export const deleteAllUser = async (req, res) => {
 // create a function that creates a jwt token from the user id from the request.body
 export const createToken = async (req, res) => {
   const { id } = req.body
-  const token = jwt.sign({ id }, SECRET_KEY, { expiresIn: '30d' })
+
+  const token = jwt.sign({ id }, SECRET_KEY, { expiresIn: '1h' })
   res.status(200).json({ token })
 }
