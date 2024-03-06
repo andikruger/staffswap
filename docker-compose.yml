@@ -22,7 +22,7 @@ services:
     environment:
       - PORT=8000
       - NODE_ENV=development
-      - MONGO_URI=
+      - MONGO_URI=mongodb+srv://vitomzev:Assetmanager1@vitomzev-cluster.wv1np.mongodb.net/staffSwap?retryWrites=true&w=majority
     # Telling docker-compose to build the client image using the Dockerfile in the server directory.
     build: ./server
     container_name: serverapp_c

@@ -20,6 +20,19 @@ const Home = () => {
 
     // create a sha256 hash of the username
     const hash = sha256(accounts[0].username).toString();
+    let token;
+    axios
+      .post(`${process.env.REACT_APP_SERVER_URL}/user/token`, {
+        id: hash,
+      })
+      .then((res) => {
+        token = res.data.token;
+
+        sessionStorage.setItem("token", token);
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
 
     // check if the hash exists in the database api endpoint https://lucky-red-robe.cyclic.app/user/username/:hash
     axios

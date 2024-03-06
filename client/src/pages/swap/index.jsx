@@ -23,7 +23,12 @@ const Swaps = () => {
     const fetchSwaps = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_SERVER_URL}/swap`
+          `${process.env.REACT_APP_SERVER_URL}/swap`,
+          {
+            headers: {
+              Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            },
+          }
         );
 
         setSwaps(response.data.data);

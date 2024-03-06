@@ -2,7 +2,7 @@
 
 import express from 'express'
 const router = express.Router()
-
+import { auth } from '../middleware/auth.js'
 import {
   createController,
   getAllController,
@@ -20,17 +20,17 @@ import {
 } from '../controllers/swap.controller.js'
 
 router.post('/new', createController)
-router.get('/', getAllController)
-router.get('/:id', getByIDController)
-router.get('/user/:id', getByUserController)
-router.get('/role/:role', getByRoleController)
-router.get('/get/count', getCountController)
-router.get('user/count/:id', getCountUserController)
-router.get('/month/user/:id', getNextMonthController)
-router.get('/search/:search', getSearchController)
-router.put('/:id', updateController)
-router.put('/status/:id', updateStatusController)
-router.delete('/:id', deleteController)
-router.delete('/old', deleteOldSwapsController)
+router.get('/', auth, getAllController)
+router.get('/:id', auth, getByIDController)
+router.get('/user/:id', auth, getByUserController)
+router.get('/role/:role', auth, getByRoleController)
+router.get('/get/count', auth, getCountController)
+router.get('user/count/:id', auth, getCountUserController)
+router.get('/month/user/:id', auth, getNextMonthController)
+router.get('/search/:search', auth, getSearchController)
+router.put('/:id', auth, updateController)
+router.put('/status/:id', auth, updateStatusController)
+router.delete('/:id', auth, deleteController)
+router.delete('/old', auth, deleteOldSwapsController)
 
 export default router

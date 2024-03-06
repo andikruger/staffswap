@@ -243,7 +243,12 @@ const Swaps = () => {
     const fetchSwaps = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_SERVER_URL}/swap`
+          `${process.env.REACT_APP_SERVER_URL}/swap`,
+          {
+            headers: {
+              Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            },
+          }
         );
 
         setSwaps(response.data.data);
@@ -251,7 +256,12 @@ const Swaps = () => {
         // Fetch individual swap if ID is provided
         if (id) {
           const individualSwapResponse = await axios.get(
-            `${process.env.REACT_APP_SERVER_URL}/swap/${id}`
+            `${process.env.REACT_APP_SERVER_URL}/swap/${id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+              },
+            }
           );
           setIndividualSwap(individualSwapResponse.data.data);
 

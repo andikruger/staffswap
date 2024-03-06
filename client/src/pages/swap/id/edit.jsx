@@ -174,13 +174,23 @@ const EditSwap = () => {
   const [displayPhoneNumber, setDisplayPhoneNumber] = useState(false);
   const [status, setStatus] = useState("Pending");
 
-  const handleStatusToggle = () => {
+  const handleStatusToggle = (e) => {
+    e.preventDefault();
+    console.log(sessionStorage.getItem("token"));
     const newStatus = status === "Pending" ? "Accepted" : "Pending";
 
     try {
-      axios.put(`${process.env.REACT_APP_SERVER_URL}/swap/status/${id}`, {
-        status: newStatus,
-      });
+      axios.put(
+        `${process.env.REACT_APP_SERVER_URL}/swap/status/${id}`,
+        {
+          status: newStatus,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+          },
+        }
+      );
       toast.success(`Swap status updated to ${newStatus}`);
       setStatus(newStatus);
     } catch (error) {
@@ -196,7 +206,12 @@ const EditSwap = () => {
         // Fetch swap details from the API
 
         const response = await axios.get(
-          `${process.env.REACT_APP_SERVER_URL}/swap/${id}`
+          `${process.env.REACT_APP_SERVER_URL}/swap/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            },
+          }
         );
 
         if (!validateUser(response.data.data.userID)) {
@@ -354,7 +369,12 @@ const EditSwap = () => {
 
       await axios.put(
         `${process.env.REACT_APP_SERVER_URL}/swap/${id}`,
-        tempObj
+        tempObj,
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+          },
+        }
       );
 
       toast.success("Swap updated successfully");

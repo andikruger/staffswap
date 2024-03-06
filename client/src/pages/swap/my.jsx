@@ -24,7 +24,12 @@ const Swaps = () => {
     const fetchSwaps = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_SERVER_URL}/swap/user/${user}`
+          `${process.env.REACT_APP_SERVER_URL}/swap/user/${user}`,
+          {
+            headers: {
+              Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            },
+          }
         );
         setSwaps(response.data.data);
       } catch (error) {
