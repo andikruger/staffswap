@@ -33,8 +33,8 @@ const RuleButton = () => {
             </p>
             <p className="mb-4">
               <ul className="list-disc">
-                <li>You must have a minimum of 11 hours off between shifts.</li>
-                <li>You must have a minimum of 36 hours off a week. .</li>
+                <li>You must have a minimum of 12 hours off between shifts.</li>
+                <li>You must have a minimum of 36 hours off a week.</li>
                 <li>You may only work a maximum of 56 hours in a week. </li>
                 <li> You may only have 10 plus or minus hours in a month. </li>
                 <li> You may only have 5 plus or minus hours in a quater. </li>
