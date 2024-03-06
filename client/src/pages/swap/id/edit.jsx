@@ -612,7 +612,7 @@ const EditSwap = () => {
             </div>
 
             {/* Email */}
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <label htmlFor="email" className="block text-sm mb-2 text-center">
                 Email
               </label>
@@ -625,18 +625,18 @@ const EditSwap = () => {
                 onChange={handleInputChange}
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500 text-center"
               />
-            </div>
+            </div> */}
 
             {/* Display Email Checkbox */}
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <DisplayEmailComponent
                 displayEmail={displayEmail}
                 setDisplayEmail={setDisplayEmail}
               />
-            </div>
+            </div> */}
 
             {/* Phone Number */}
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <label
                 htmlFor="phoneNumber"
                 className="block text-sm mb-2 text-center"
@@ -651,15 +651,15 @@ const EditSwap = () => {
                 onChange={handleInputChange}
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500 text-center"
               />
-            </div>
+            </div> */}
 
             {/* Display Phone Number Checkbox */}
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <DisplayPhoneNumberComponent
                 displayPhoneNumber={displayPhoneNumber}
                 setDisplayPhoneNumber={setDisplayPhoneNumber}
               />
-            </div>
+            </div> */}
             <div className="flex flex-col sm:flex-row justify-between">
               <button
                 type="submit"
@@ -667,15 +667,15 @@ const EditSwap = () => {
               >
                 Update Swap Details
               </button>
+              <button
+                type="button"
+                onClick={handleStatusToggle}
+                className="bg-[#e0211a] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#b41813] "
+              >
+                Update Swap to {status === "Pending" ? "Accepted" : "Pending"}
+              </button>
             </div>
           </form>
-          <button
-            type="button"
-            onClick={handleStatusToggle}
-            className="mt-4 bg-[#e0211a] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#b41813]"
-          >
-            Update Swap to {status === "Pending" ? "Accepted" : "Pending"}
-          </button>
         </div>
       </div>
 

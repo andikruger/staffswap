@@ -6,13 +6,14 @@ import Footer from "../../components/Footer";
 import AddButton from "../../components/AddButton";
 import ChangeViewButton from "../../components/ChangeViewButton";
 import SearchButton from "../../components/SearchButton";
+import RuleButton from "../../components/RuleButton";
 import SwapCard from "../../components/SwapCard";
 import SwapList from "../../components/SwapList";
 import Loading from "../../components/Loading";
 import axios from "axios";
 import "../../index.css";
 import { toast } from "react-toastify";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
+
 const Swaps = () => {
   const [swaps, setSwaps] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -100,6 +101,7 @@ const Swaps = () => {
       </Helmet>
       <Header />
       <div className="flex flex-col items-center">
+        <RuleButton />
         <ChangeViewButton
           toggleView={toggleView}
           icon={view === "grid" ? "list" : "grid"}

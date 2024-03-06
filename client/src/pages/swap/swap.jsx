@@ -202,7 +202,6 @@ const SwapDetails = () => {
           <h2 className="text-2xl font-bold mb-4 text-gray-800 text-center text-center">
             Swap Details
           </h2>
-          <p className="text-center text-gray-600 mb-4">{swapDetails.userID}</p>
 
           {/* Name and Three Letter Code in a column for smaller screens */}
           <div className="pt-4 flex flex-col sm:flex-row mb-4">
@@ -333,15 +332,15 @@ const SwapDetails = () => {
               selectedOptions={selectedOptions}
             />
           </div>
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <label htmlFor="note" className="block text-sm mb-2 text-center">
               Email
             </label>
             <p className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500 text-center">
               {email || "No email provided"}
             </p>
-          </div>
-
+          </div> */}
+          {/* 
           <div className="mb-4">
             <label htmlFor="note" className="block text-sm mb-2">
               Phone Number
@@ -349,7 +348,7 @@ const SwapDetails = () => {
             <p className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500 text-center">
               {phone || "No Phone Number provided"}
             </p>
-          </div>
+          </div> */}
           <div className="items-center justify-center content-center">
             {/* Display buttons if userID = swap.userID */}
             {userID === swapDetails.userID && (

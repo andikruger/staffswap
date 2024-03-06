@@ -566,7 +566,7 @@ const NewSwap = () => {
             </div>
 
             {/* Email */}
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <label htmlFor="email" className="block text-sm mb-2 text-center">
                 Email
               </label>
@@ -579,18 +579,18 @@ const NewSwap = () => {
                 onChange={handleInputChange}
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500 text-center"
               />
-            </div>
+            </div> */}
 
             {/* Display Email Checkbox */}
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <DisplayEmailComponent
                 displayEmail={displayEmail}
                 setDisplayEmail={setDisplayEmail}
               />
-            </div>
+            </div> */}
 
             {/* Phone Number */}
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <label
                 htmlFor="phoneNumber"
                 className="block text-sm mb-2 text-center"
@@ -604,15 +604,15 @@ const NewSwap = () => {
                 onChange={handleInputChange}
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500 text-center"
               />
-            </div>
+            </div> */}
 
             {/* Display Phone Number Checkbox */}
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <DisplayPhoneNumberComponent
                 displayPhoneNumber={displayPhoneNumber}
                 setDisplayPhoneNumber={setDisplayPhoneNumber}
               />
-            </div>
+            </div> */}
 
             <button
               type="submit"

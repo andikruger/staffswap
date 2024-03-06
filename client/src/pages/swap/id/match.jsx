@@ -6,6 +6,8 @@ import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import AddButton from "../../../components/AddButton";
 import SearchButton from "../../../components/SearchButton";
+import RuleButton from "../../../components/RuleButton";
+
 import axios from "axios";
 import "../../../index.css";
 import { toast } from "react-toastify";
@@ -296,8 +298,10 @@ const Swaps = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Helmet>
       <Header />
+      <RuleButton />
       <AddButton />
       <SearchButton />
+
       <div
         className="min-h-screen bg-cover bg-center flex items-center justify-center"
         style={{
