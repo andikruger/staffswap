@@ -8,6 +8,36 @@ import 'express-async-errors'
 dotenv.config()
 const { SECRET_KEY } = process.env
 
+export const createUser = async (req, res) => {
+  const { threeLetterCode, userID, name, role } = req.body
+  let tlc
+
+  if (!threeLetterCode || !userID || !name || !role) {
+    throw new ApiError.badRequest('All fields are required')
+  }
+
+  tlc = threeLetterCode.toUpperCase()
+
+  const userExists = await User.findOne({
+    $or: [{ threeLetterCode: tlc }, { userID }],
+  })
+  if (userExists) {
+    throw new ApiError.badRequest('User already exists')
+  }
+  const user = new User({
+    threeLetterCode: tlc,
+    userID,
+    name,
+    role,
+  })
+
+  const createdUser = await user.save()
+  res.status(201).json({
+    message: 'User created successfully',
+    data: createdUser,
+  })
+}
+
 export const getUsers = async (req, res) => {
   const users = await User.find()
 

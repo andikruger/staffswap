@@ -66,10 +66,12 @@ const Profile = () => {
       .then((res) => {
         let data = res.data.data;
 
-        setThreeLetterCode(data.threeLetterCode);
-        setSelectedOption(data.role);
-        setUser(data);
-        setUserExists(true);
+        if (data) {
+          setThreeLetterCode(data.threeLetterCode);
+          setSelectedOption(data.role);
+          setUser(data);
+          setUserExists(true);
+        }
       });
 
     localStorage.clear();
@@ -101,6 +103,7 @@ const Profile = () => {
 
       if (!userExists) {
         console.log("new user");
+        console.log(submitObject);
         axios
 
           .post(
