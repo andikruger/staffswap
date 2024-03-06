@@ -26,7 +26,7 @@ const Swaps = () => {
           `${process.env.REACT_APP_SERVER_URL}/swap/search/${query}`,
           {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              Authorization: `Bearer ${sessionStorage.getItem("token")}`,
             },
           }
         );
