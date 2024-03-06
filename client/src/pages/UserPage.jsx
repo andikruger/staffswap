@@ -20,6 +20,7 @@ import SearchResult from "../pages/swap/result/searchResult";
 import EditSwap from "../pages/swap/id/edit";
 import SwapMatch from "../pages/swap/id/match";
 import ChatWrapper from "../components/ChatWrapper";
+import Privacy from "./privacy";
 // Public Pages
 import PublicAbout from "../PublicPages/about";
 import PublicContact from "../PublicPages/contact";
@@ -136,6 +137,17 @@ const WrapperView = () => {
                 }
               />
 
+              <Route
+                path="/privacy"
+                element={
+                  <>
+                    <AuthenticatedTemplate>
+                      <Privacy />
+                    </AuthenticatedTemplate>
+                  </>
+                }
+              />
+
               {/* Redirect to Home for other routes */}
               <Route path="*" element={<Home />} />
             </Routes>
@@ -149,6 +161,7 @@ const WrapperView = () => {
               <Route path="/about" element={<PublicAbout />} />
               <Route path="/contact" element={<PublicContact />} />
               <Route path="/login" element={<PublicLogin />} />
+              <Route path="/privacy" element={<Privacy />} />
               <Route path="*" element={<PublicHome />} />
             </Routes>
           </Router>

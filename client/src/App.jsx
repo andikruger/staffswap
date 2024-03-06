@@ -7,6 +7,7 @@ import { SocketContext } from "./context/Socket";
 import { PublicClientApplication, EventType } from "@azure/msal-browser";
 import { msalConfig } from "./auth-config";
 import LoadingPage from "./pages/LoadingPage";
+import CookieConsent from "react-cookie-consent";
 
 import "./index.css";
 import UserPage from "./pages/UserPage";
@@ -64,7 +65,26 @@ function App() {
 
   if (loading) return <LoadingPage />;
   // if (!user || user?.isBlocked) return <LoginPage />;
-  else return <UserPage instance={msalInstance} />;
+  else
+    return (
+      <>
+        <UserPage instance={msalInstance} />
+        <CookieConsent
+          location="bottom"
+          buttonText="Accept"
+          cookieName="cookieConsent"
+          style={{ background: "#fefefe", color: "#000000" }}
+          buttonStyle={{
+            background: "#e0211a",
+            color: "#ffffff",
+            fontSize: "13px",
+          }}
+          expires={150}
+        >
+          This website only uses Cookies for functional purposes{" "}
+        </CookieConsent>
+      </>
+    );
 }
 
 export default App;
