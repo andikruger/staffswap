@@ -343,7 +343,7 @@ const NewSwap = () => {
           <h2 className="text-2xl font-bold mb-4 text-gray-800 text-center">
             New Swap
           </h2>
-          <p>{activeUserID}</p>
+
           <form onSubmit={handleSubmit}>
             {/* Add your form fields here */}
             {/* Name and Three Letter Code in the same line for larger screens */}
