@@ -201,6 +201,35 @@ code {
   color: white;
 }
 
+/* ChatModal  */
+
+.chat-modal-container {
+  position: fixed;
+  top: 75px;
+  left: 20px;
+  border-radius: 50%;
+  background-color: #e0211a;
+  padding: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  z-index: 999;
+  transition: background-color 0.3s;
+}
+
+.chat-modal-container:hover {
+  background-color: #b41813;
+}
+
+.chat-modal-icon {
+  color: white;
+  font-size: 32px;
+  transition: color 0.3s;
+}
+
+.chat-modal-container:hover .chat-modal-icon {
+  color: white;
+}
+
 /* Add your other styles */
 
 .exact-duration {
