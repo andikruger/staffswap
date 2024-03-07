@@ -1,0 +1,23 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install SSH key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.STAFFSWAP_SECRET }}
+
+      - name: Deploy to server
+        run: |
+          ssh -o StrictHostKeyChecking=no -i $STAFFSWAP_SECRET github@api.staffswap.app 'bash -s' < update.sh

@@ -32,5 +32,8 @@ router.put('/:id', auth, updateController)
 router.put('/status/:id', auth, updateStatusController)
 router.delete('/:id', auth, deleteController)
 router.delete('/old', auth, deleteOldSwapsController)
+router.get('/test/test', (req, res) => {
+  res.send('Swap route works')
+})
 
 export default router
