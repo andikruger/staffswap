@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 
 import { getInitials } from "../../utils/functions";
 import { FaHome } from "react-icons/fa";
+import { IoIosRefresh } from "react-icons/io";
+
 import { useMsal } from "@azure/msal-react";
 function UserPanel() {
   const { accounts } = useMsal();
@@ -28,6 +30,12 @@ function UserPanel() {
         <h5 className="text-xl font-bold ml-2">Chats</h5>
       </div>
       <div className="flex items-center">
+        <button
+          className="p-2 focus:outline-none hover:bg-gray-100"
+          onClick={() => window.location.reload()}
+        >
+          <IoIosRefresh className="h-6 w-6" />
+        </button>
         <button
           className="p-2 focus:outline-none hover:bg-gray-100"
           onClick={handleHomeClick}
