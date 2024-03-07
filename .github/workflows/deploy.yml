@@ -21,3 +21,4 @@ jobs:
           key: ${{ secrets.STAFFSWAP_SECRET }}
           script: |
             ./update.sh
+            exit
