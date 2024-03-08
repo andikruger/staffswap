@@ -5,6 +5,7 @@ import io from "socket.io-client";
 
 function WebSocketStatus() {
   const [isConnected, setIsConnected] = useState(true);
+  const [isFirstVisit, setIsFirstVisit] = useState(true);
 
   useEffect(() => {
     const socket = io(process.env.REACT_APP_SERVER_URL, {
@@ -13,19 +14,20 @@ function WebSocketStatus() {
 
     socket.on("connect", () => {
       setIsConnected(true);
-      toast.info("WebSocket connected", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      //   toast.info("WebSocket connected", {
+      //     position: "top-right",
+      //     autoClose: 3000,
+      //     hideProgressBar: false,
+      //     closeOnClick: true,
+      //     pauseOnHover: true,
+      //     draggable: true,
+      //     progress: undefined,
+      //   });
     });
 
     socket.on("disconnect", () => {
       setIsConnected(false);
+      setIsFirstVisit(false);
     });
 
     return () => {
