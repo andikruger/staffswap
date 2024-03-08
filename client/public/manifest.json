@@ -7,8 +7,8 @@
   "start_url": "/",
   "lang": "en",
   "description": "StaffSwap is a platform for staff to swap shifts with each other.",
-  "theme_color": "#efefef",
-  "background_color": "#efefef",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
   "icons": [
     {
       "src": "/android-icon-36x36.png",
