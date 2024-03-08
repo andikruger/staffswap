@@ -2,6 +2,7 @@ import React from "react";
 import Logo from "./Logo";
 import Nav from "./Nav";
 import { ToastContainer } from "react-toastify";
+import ConnectionMessage from "./ConnectionMessage";
 import "react-toastify/dist/ReactToastify.css";
 const Header = () => {
   return (
@@ -9,6 +10,7 @@ const Header = () => {
       <Logo />
       <Nav />
       <ToastContainer draggable closeOnClick />
+      <ConnectionMessage />
     </header>
   );
 };
