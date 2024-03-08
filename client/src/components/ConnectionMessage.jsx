@@ -13,7 +13,7 @@ function WebSocketStatus() {
 
     socket.on("connect", () => {
       setIsConnected(true);
-      toast.info("WebSocket connection reestablished", {
+      toast.info("WebSocket connected", {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -37,7 +37,7 @@ function WebSocketStatus() {
     <div>
       {!isConnected && (
         <div className="bg-red-500 text-white p-2 fixed top-0 left-0 right-0">
-          No WebSocket connection
+          No WebSocket connection... Chat will not work
         </div>
       )}
     </div>
