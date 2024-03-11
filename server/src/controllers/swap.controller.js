@@ -35,6 +35,8 @@ export const createController = async (req, res) => {
     displayPhoneNumber,
     role,
   } = req.body
+
+  console.log(req.body)
   let encryptedEmail = ''
   let encryptedPhoneNumber = ''
 

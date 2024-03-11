@@ -15,6 +15,7 @@ import Swaps from "../pages/swap/index";
 import Swap from "../pages/swap/swap";
 import MySwaps from "../pages/swap/my";
 import NewSwap from "../pages/swap/new";
+import QuickSubmit from "../pages/swap/quicksubmit";
 import Search from "../pages/swap/search";
 import SearchResult from "../pages/swap/result/searchResult";
 import EditSwap from "../pages/swap/id/edit";
@@ -77,6 +78,16 @@ const WrapperView = () => {
                   </AuthenticatedTemplate>
                 }
               />
+
+              <Route
+                path="/swap/quicksubmit"
+                element={
+                  <AuthenticatedTemplate>
+                    <QuickSubmit />
+                  </AuthenticatedTemplate>
+                }
+              />
+
               <Route
                 path="/swap/search"
                 element={
